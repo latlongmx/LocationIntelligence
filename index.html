@@ -70,13 +70,13 @@
       if(prop.tip_lay=='rnc'){
         style = {
             "color": "#ec1f0b",
-            "weight": 6,
+            "weight": 4,
             "opacity": 0.65
         };
       }else if(prop.tip_lay=='ejes'){
         style = {
             "color": "#ff4e0d",
-            "weight": 3,
+            "weight": 2,
             "opacity": 0.65
         };
       }else if(prop.tip_lay=='denue'){
@@ -128,7 +128,12 @@
           geoVias = L.geoJson(geojson,
             {
               onEachFeature: eachFeature,
-              style: setStyle
+              style: setStyle,
+              pointToLayer: function (feature, latlng) {
+                if(feature.properties.tip_lay=='denue'){
+                  return L.circleMarker(latlng, setStyle);
+                }
+              }
            }).addTo(map);
         }else{
           geoVias.clearLayers();
