@@ -55,7 +55,7 @@ if(!isset($_POST['vr'])){
      FROM inegi.rnc_red_vial_2015 As lg WHERE ST_DWithin(geom, ST_SetSRID(ST_Point($lng, $lat),4326),$buf) ) As f
   )  As fc;"*/
   ##RNC
-  $sql = "SELECT id_red, tipo_vial, nombre, codigo, cond_pav, recubri, carriles, estatus, condicion, nivel, peaje, administra, jurisdi,circula, escala_vis, velocidad, union_ini, union_fin, longitud, ancho,fecha_act, calirepr,
+  $sql = "SELECT 'rnc' tip_lay, id_red, tipo_vial, nombre, codigo, cond_pav, recubri, carriles, estatus, condicion, nivel, peaje, administra, jurisdi,circula, escala_vis, velocidad, union_ini, union_fin, longitud, ancho,fecha_act, calirepr,
           ST_AsGeoJSON(lg.geom)::json As geometry
   FROM inegi.rnc_red_vial_2015 As lg WHERE ST_DWithin(geom, ST_SetSRID(ST_Point($lng, $lat),4326),$buf)";
   $rs = pg_query($sql) or die('Query failed: ' . pg_last_error());
@@ -64,8 +64,8 @@ if(!isset($_POST['vr'])){
     $arr[] = $row;
   }
 
-  #VIAS
-  $sql = "SELECT gid, cvegeo, cvevial, cveseg, nomvial, tipovial, cve_ent, cve_loc, cve_mun, ambito, sentido,
+  #EJES viales
+  $sql = "SELECT 'ejes' tip_lay, cvegeo, cvevial, cveseg, nomvial, tipovial, cve_ent, cve_loc, cve_mun, ambito, sentido,
           ST_AsGeoJSON(lg.geom)::json As geometry
       FROM inegi.inter15_vias As lg WHERE ST_DWithin(geom, ST_SetSRID(ST_Point($lng, $lat),4326),$buf)";
   $rs = pg_query($sql) or die('Query failed: ' . pg_last_error());
@@ -74,14 +74,14 @@ if(!isset($_POST['vr'])){
   }
 
   #DENUE
-  $sql = "SELECT id, nom_estab, raz_social, codigo_act, nombre_act, per_ocu, tipo_vial, nom_vial, tipo_v_e_1, nom_v_e_1, tipo_v_e_2, nom_v_e_2, tipo_v_e_3, nom_v_e_3, numero_ext, letra_ext, edificio, edificio_e, numero_int, letra_int, tipo_asent, nomb_asent, tipocencom, nom_cencom, num_local, cod_postal, cve_ent, entidad, cve_mun, municipio, cve_loc, localidad, ageb, manzana, telefono, correoelec, www, tipounieco, latitud, longitud, fecha_alta,
+  $sql = "SELECT 'denue' tip_lay, id, nom_estab, raz_social, codigo_act, nombre_act, per_ocu, tipo_vial, nom_vial, tipo_v_e_1, nom_v_e_1, tipo_v_e_2, nom_v_e_2, tipo_v_e_3, nom_v_e_3, numero_ext, letra_ext, edificio, edificio_e, numero_int, letra_int, tipo_asent, nomb_asent, tipocencom, nom_cencom, num_local, cod_postal, cve_ent, entidad, cve_mun, municipio, cve_loc, localidad, ageb, manzana, telefono, correoelec, www, tipounieco, latitud, longitud, fecha_alta,
           ST_AsGeoJSON(geom)::json As geometry
       FROM inegi.denue_2016 WHERE ST_DWithin(geom, ST_SetSRID(ST_Point($lng, $lat),4326),$buf)";
   $rs = pg_query($sql) or die('Query failed: ' . pg_last_error());
   while ($row = pg_fetch_assoc($rs)) {
     $arr[] = $row;
   }
-  
+
   $res = array2GeoJSON($arr);
 
 }else{

@@ -61,11 +61,34 @@
 
     function setStyle(feature){
       console.log(feature);
+      var prop = feature.properties;
       var style = {
           "color": "#ff7800",
           "weight": 5,
           "opacity": 0.65
-      }; 
+      };
+      if(prop.tip_lay=='rnc'){
+        style = {
+            "color": "#ec1f0b",
+            "weight": 1,
+            "opacity": 0.65
+        };
+      }else if(prop.tip_lay=='ejes'){
+        style = {
+            "color": "#f48b3f",
+            "weight": 0.5,
+            "opacity": 0.65
+        };
+      }else if(prop.tip_lay=='denue'){
+        style = {
+            radius: 8,
+            fillColor: "#4bb917",
+            color: "#000",
+            weight: 1,
+            opacity: 1,
+            fillOpacity: 0.8
+        };
+      }
       return style;
     }
 
