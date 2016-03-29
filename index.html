@@ -59,6 +59,15 @@
       maxZoom: 16
     });
 
+    function setStyle(feature){
+      console.log(feature);
+      var style = {
+          "color": "#ff7800",
+          "weight": 5,
+          "opacity": 0.65
+      };
+      return style;
+    }
 
     function eachFeature(feature, layer) {
       var popupContent ="";
@@ -95,7 +104,8 @@
         if (geoVias == undefined) {
           geoVias = L.geoJson(geojson,
             {
-              onEachFeature: eachFeature
+              onEachFeature: eachFeature,
+              style: setStyle
            }).addTo(map);
         }else{
           geoVias.clearLayers();

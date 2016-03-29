@@ -81,6 +81,7 @@ if(!isset($_POST['vr'])){
   while ($row = pg_fetch_assoc($rs)) {
     $arr[] = $row;
   }
+  
   $res = array2GeoJSON($arr);
 
 }else{
