@@ -42,54 +42,10 @@ function array2GeoJSON($arr){
   return $res;
 }
 
-/*
-MANZANAS
-
-entidad, mun, loc, ageb, mza
-FROM inegi.censo_resageburb_2010 C1
-WHERE
-
-SELECT id_red, tipo_vial, nombre, codigo, cond_pav, recubri, carriles, estatus,
-    condicion, nivel, peaje, administra, jurisdi, circula, escala_vis, velocidad,
-    union_ini, union_fin, longitud, ancho, fecha_act, calirepr,
-ST_AsGeoJSON(ST_Simplify(geom,0.00001))::json As geometry
-FROM inegi.rnc_red_vial2015
-WHERE ST_DWithin(geom, ST_SetSRID(ST_Point(-102.28782176971436, 21.82656429137206),4326),0.000100);
-*/
-
-
-/*$sql = "SELECT
-   id_red, tipo_vial, nombre, codigo, cond_pav, recubri, carriles,
-   estatus, condicion, nivel, peaje, administra, jurisdi, circula,
-   escala_vis, velocidad, union_ini, union_fin, longitud, ancho,
-   fecha_act, calirepr,
-   ST_AsGeoJSON(ST_Simplify(geom,0.00001))::json As geometry
-FROM inegi.rnc_red_vial2015
-WHERE ST_DWithin(geom, ST_SetSRID(ST_Point($lng, $lat),4326),$buf) ";
-//WHERE ST_DWithin(geom::geography, ST_SetSRID(ST_Point($lng, $lat),4326)::geography,$buf) ";
-$rs = pg_query($sql) or die('Query failed: ' . pg_last_error());
-$res = array();
-$features = array();
-while ($row = pg_fetch_assoc($rs)) {
-  $properties = array();
-  $geometry = array();
-  foreach($row as $k=>$v){
-    if($k=="geometry"){
-      $geometry = (array) json_decode($v);;
-    }else{
-      $properties[$k]=$v;
-    }
-  }
-  $features[] = array("properties"=>$properties,"geometry"=>$geometry);
-}
-$res = array(
-  "type"=> "FeatureCollection",
-  "features"=> $features
-);*/
 
 $sql="";
 if(!isset($_POST['vr'])){
-  $sql = /*"SELECT row_to_json(fc)
+  /*"SELECT row_to_json(fc)
    FROM (
      SELECT 'FeatureCollection' As type, array_to_json(array_agg(f)) As features
      FROM (SELECT 'Feature' As type
@@ -98,7 +54,8 @@ if(!isset($_POST['vr'])){
         )) As properties
      FROM inegi.rnc_red_vial_2015 As lg WHERE ST_DWithin(geom, ST_SetSRID(ST_Point($lng, $lat),4326),$buf) ) As f
   )  As fc;"*/
-  "SELECT id_red, tipo_vial, nombre, codigo, cond_pav, recubri, carriles, estatus, condicion, nivel, peaje, administra, jurisdi,circula, escala_vis, velocidad, union_ini, union_fin, longitud, ancho,fecha_act, calirepr,
+  ##RNC
+  $sql = "SELECT id_red, tipo_vial, nombre, codigo, cond_pav, recubri, carriles, estatus, condicion, nivel, peaje, administra, jurisdi,circula, escala_vis, velocidad, union_ini, union_fin, longitud, ancho,fecha_act, calirepr,
           ST_AsGeoJSON(lg.geom)::json As geometry
   FROM inegi.rnc_red_vial_2015 As lg WHERE ST_DWithin(geom, ST_SetSRID(ST_Point($lng, $lat),4326),$buf)";
   $rs = pg_query($sql) or die('Query failed: ' . pg_last_error());
@@ -107,9 +64,19 @@ if(!isset($_POST['vr'])){
     $arr[] = $row;
   }
 
+  #VIAS
   $sql = "SELECT gid, cvegeo, cvevial, cveseg, nomvial, tipovial, cve_ent, cve_loc, cve_mun, ambito, sentido,
           ST_AsGeoJSON(lg.geom)::json As geometry
       FROM inegi.inter15_vias As lg WHERE ST_DWithin(geom, ST_SetSRID(ST_Point($lng, $lat),4326),$buf)";
+  $rs = pg_query($sql) or die('Query failed: ' . pg_last_error());
+  while ($row = pg_fetch_assoc($rs)) {
+    $arr[] = $row;
+  }
+
+  #DENUE
+  $sql = "SELECT id, nom_estab, raz_social, codigo_act, nombre_act, per_ocu, tipo_vial, nom_vial, tipo_v_e_1, nom_v_e_1, tipo_v_e_2, nom_v_e_2, tipo_v_e_3, nom_v_e_3, numero_ext, letra_ext, edificio, edificio_e, numero_int, letra_int, tipo_asent, nomb_asent, tipocencom, nom_cencom, num_local, cod_postal, cve_ent, entidad, cve_mun, municipio, cve_loc, localidad, ageb, manzana, telefono, correoelec, www, tipounieco, latitud, longitud, fecha_alta,
+          ST_AsGeoJSON(geom)::json As geometry
+      FROM inegi.denue_2016 WHERE ST_DWithin(geom, ST_SetSRID(ST_Point($lng, $lat),4326),$buf)";
   $rs = pg_query($sql) or die('Query failed: ' . pg_last_error());
   while ($row = pg_fetch_assoc($rs)) {
     $arr[] = $row;
