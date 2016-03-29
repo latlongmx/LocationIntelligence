@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>Leaflet example</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet/v0.7.7/leaflet.css" />
+  <script src="http://cdn.leafletjs.com/leaflet/v0.7.7/leaflet.js"></script>
+  <script src="https://code.jquery.com/jquery-1.12.2.min.js"></script>
+  <style>
+    body {
+      padding: 0;
+      margin: 0;
+    }
+
+    html,
+    body,
+    #map {
+      height: 100%;
+    }
+    .popInfo{
+      height: 300px;
+      overflow-y: auto;
+      width: 300px;
+    }
+  </style>
+</head>
+
+<body>
+  <div id="map"></div>
+  <script>
+    var circle;
+    var geoVias;
+    var geoMZA;
+    var map = L.map('map');
+    L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token=pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpandmbXliNDBjZWd2M2x6bDk3c2ZtOTkifQ._QA7i5Mpkd_m30IGElHziw', {
+      maxZoom: 18,
+      attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, ' +
+        '<a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, ' +
+        'Imagery © <a href="http://mapbox.com">Mapbox</a>',
+      id: 'mapbox.streets'
+    }).addTo(map);
+
+    function onLocationFound(e) {
+      var radius = e.accuracy / 2;
+      L.marker(e.latlng).addTo(map)
+        .bindPopup("Tu estas en: " + radius + " metros de este lugar").openPopup();
+
+      L.circle(e.latlng, radius).addTo(map);
+    }
+
+    function onLocationError(e) {
+      alert(e.message);
+    }
+    map.on('locationfound', onLocationFound);
+    map.on('locationerror', onLocationError);
+    map.locate({
+      setView: true,
+      maxZoom: 16
+    });
+
+
+    function eachFeature(feature, layer) {
+      var popupContent ="";
+      for (var k in feature.properties) {
+        var v = String(feature.properties[k]);
+        popupContent += '<strong>'+k + '</strong>  <span style="font-style: italic;">  ' + v +'</span><br/>';
+      }
+      layer.bindPopup('<div class="popInfo">'+popupContent+'</div>');
+    };
+
+    map.on('click', function(e) {
+      if (circle != undefined) {
+        map.removeLayer(circle);
+      };
+      if (geoVias != undefined) {
+        map.removeLayer(geoVias);
+      };
+      if (geoMZA != undefined) {
+        map.removeLayer(geoMZA);
+      };
+      circle = L.circle(e.latlng, 100, {
+        color: '#f07300',
+        fillColor:'#f07300',
+        fillOpacity: 0.3,
+        opacity: 0.5
+      }).addTo(map);
+
+      var buf = 0.001;
+      $.post('g.php',{
+        lat: e.latlng.lat,
+        lng: e.latlng.lng,
+        buf: buf
+      },function(geojson){
+        if (geoVias == undefined) {
+          geoVias = L.geoJson(geojson,
+            {
+              onEachFeature: eachFeature
+           }).addTo(map);
+        }else{
+          geoVias.clearLayers();
+          geoVias.addData(geojson).addTo(map);;
+        }
+      });
+
+      //MZAS
+      $.post('g.php',{
+        lat: e.latlng.lat,
+        lng: e.latlng.lng,
+        buf: buf,
+        vr:'mza'
+      },function(geojson){
+        if (geoMZA == undefined) {
+          geoMZA = L.geoJson(geojson,
+            {
+              onEachFeature: eachFeature,
+              style: {
+                weight: 1,
+                opacity: 0.2,
+                color: '#f7614b',
+                dashArray: '3',
+                fillOpacity: 0.1,
+                fillColor: '#8cb502'
+              }
+           }).addTo(map);
+        }else{
+          geoMZA.clearLayers();
+          geoMZA.addData(geojson).addTo(map);;
+        }
+      });
+
+
+    });
+  </script>
+</body>
+
+</html>
