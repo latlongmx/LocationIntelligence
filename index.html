@@ -187,7 +187,7 @@
           var aRad = a * (PI / 180);
           var x = center.lng + (rLng * cos(aRad));
           var y = center.lat + (rLat * sin(aRad));
-          var point = new GLatLng(parseFloat(y), parseFloat(x), true);
+          var point = new google.maps.LatLng(parseFloat(y), parseFloat(x), true);
 
           var marker = new google.maps.Marker({
             position: myLatLng,
