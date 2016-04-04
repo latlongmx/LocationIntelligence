@@ -182,11 +182,11 @@
       var searchPoints = Array();
       with(Math) {
         var rLat = (radius / 6371000) * (180 / PI);
-        var rLng = rLat / cos(center.lat() * (PI / 180));
+        var rLng = rLat / cos(center.lat * (PI / 180));
         for (var a = 0; a < 361; a += 20) {
           var aRad = a * (PI / 180);
-          var x = center.lng() + (rLng * cos(aRad));
-          var y = center.lat() + (rLat * sin(aRad));
+          var x = center.lng + (rLng * cos(aRad));
+          var y = center.lat + (rLat * sin(aRad));
           var point = new GLatLng(parseFloat(y), parseFloat(x), true);
 
           var marker = new google.maps.Marker({

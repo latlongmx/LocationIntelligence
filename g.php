@@ -113,7 +113,8 @@ if(!isset($_POST['vr'])){
 
 
 
-
+//curl -X POST -d "b=feature/db-testing" http://52.8.211.37/deploy/d.php
+// http://52.8.211.37/deploy/walmex/
 header('Content-Type: application/json');
 echo json_encode($res);
 ?>
