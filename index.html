@@ -18,7 +18,8 @@
     #map {
       height: 100%;
     }
-    .popInfo{
+
+    .popInfo {
       height: 300px;
       overflow-y: auto;
       width: 300px;
@@ -33,6 +34,7 @@
     var geoVias;
     var geoMZA;
     var map = L.map('map');
+    var markers = [];
     L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token=pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpandmbXliNDBjZWd2M2x6bDk3c2ZtOTkifQ._QA7i5Mpkd_m30IGElHziw', {
       maxZoom: 18,
       attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, ' +
@@ -59,46 +61,46 @@
       maxZoom: 16
     });
 
-    function setStyle(feature){
+    function setStyle(feature) {
       console.log(feature);
       var prop = feature.properties;
       var style = {
-          "color": "#ff7800",
+        "color": "#ff7800",
+        "weight": 5,
+        "opacity": 0.65
+      };
+      if (prop.tip_lay == 'rnc') {
+        style = {
+          "color": "#cb0e00",
           "weight": 5,
           "opacity": 0.65
-      };
-      if(prop.tip_lay=='rnc'){
-        style = {
-            "color": "#cb0e00",
-            "weight": 5,
-            "opacity": 0.65
         };
-      }else if(prop.tip_lay=='ejes'){
+      } else if (prop.tip_lay == 'ejes') {
         style = {
-            "color": "#0029d6",
-            "weight": 3,
-            "opacity": 0.65
+          "color": "#0029d6",
+          "weight": 3,
+          "opacity": 0.65
         };
-      }else if(prop.tip_lay=='denue'){
+      } else if (prop.tip_lay == 'denue') {
         style = {
-            radius: 8,
-            fillColor: "#4bb917",
-            color: "#000",
-            weight: 1,
-            opacity: 1,
-            fillOpacity: 0.8
+          radius: 8,
+          fillColor: "#4bb917",
+          color: "#000",
+          weight: 1,
+          opacity: 1,
+          fillOpacity: 0.8
         };
       }
       return style;
     }
 
     function eachFeature(feature, layer) {
-      var popupContent ="";
+      var popupContent = "";
       for (var k in feature.properties) {
         var v = String(feature.properties[k]);
-        popupContent += '<strong>'+k + '</strong>  <span style="font-style: italic;">  ' + v +'</span><br/>';
+        popupContent += '<strong>' + k + '</strong>  <span style="font-style: italic;">  ' + v + '</span><br/>';
       }
-      layer.bindPopup('<div class="popInfo">'+popupContent+'</div>');
+      layer.bindPopup('<div class="popInfo">' + popupContent + '</div>');
     };
 
     map.on('click', function(e) {
@@ -113,62 +115,98 @@
       };
       circle = L.circle(e.latlng, 100, {
         color: '#f07300',
-        fillColor:'#f07300',
+        fillColor: '#f07300',
         fillOpacity: 0.3,
         opacity: 0.5
       }).addTo(map);
 
       var buf = 0.000900804; // == 100 mts
-      $.post('g.php',{
+      $.post('g.php', {
         lat: e.latlng.lat,
         lng: e.latlng.lng,
         buf: buf
-      },function(geojson){
+      }, function(geojson) {
         if (geoVias == undefined) {
-          geoVias = L.geoJson(geojson,
-            {
-              onEachFeature: eachFeature,
-              style: setStyle,
-              pointToLayer: function (feature, latlng) {
-                if(feature.properties.tip_lay=='denue'){
-                  return L.circleMarker(latlng, setStyle);
-                }
+          geoVias = L.geoJson(geojson, {
+            onEachFeature: eachFeature,
+            style: setStyle,
+            pointToLayer: function(feature, latlng) {
+              if (feature.properties.tip_lay == 'denue') {
+                return L.circleMarker(latlng, setStyle);
               }
-           }).addTo(map);
-        }else{
+            }
+          }).addTo(map);
+        } else {
           geoVias.clearLayers();
           geoVias.addData(geojson).addTo(map);;
         }
       });
 
       //MZAS
-      $.post('g.php',{
+      $.post('g.php', {
         lat: e.latlng.lat,
         lng: e.latlng.lng,
         buf: buf,
-        vr:'mza'
-      },function(geojson){
+        vr: 'mza'
+      }, function(geojson) {
         if (geoMZA == undefined) {
-          geoMZA = L.geoJson(geojson,
-            {
-              onEachFeature: eachFeature,
-              style: {
-                weight: 1,
-                opacity: 0.2,
-                color: '#f7614b',
-                dashArray: '3',
-                fillOpacity: 0.1,
-                fillColor: '#8cb502'
-              }
-           }).addTo(map);
-        }else{
+          geoMZA = L.geoJson(geojson, {
+            onEachFeature: eachFeature,
+            style: {
+              weight: 1,
+              opacity: 0.2,
+              color: '#f7614b',
+              dashArray: '3',
+              fillOpacity: 0.1,
+              fillColor: '#8cb502'
+            }
+          }).addTo(map);
+        } else {
           geoMZA.clearLayers();
           geoMZA.addData(geojson).addTo(map);;
         }
       });
 
-
+      searchPoints = getCirclePoints(e.latlng, 100);
+      //drivePolyPoints = Array();
+      //getDirections();
     });
+
+
+
+    function getCirclePoints(center, radius) {
+      $.each(markers,function(i,o){
+        o.setMap(null);
+      });
+      var circlePoints = Array();
+      var searchPoints = Array();
+      with(Math) {
+        var rLat = (radius / 6371000) * (180 / PI);
+        var rLng = rLat / cos(center.lat() * (PI / 180));
+        for (var a = 0; a < 361; a += 20) {
+          var aRad = a * (PI / 180);
+          var x = center.lng() + (rLng * cos(aRad));
+          var y = center.lat() + (rLat * sin(aRad));
+          var point = new GLatLng(parseFloat(y), parseFloat(x), true);
+
+          var marker = new google.maps.Marker({
+            position: myLatLng,
+            map: map,
+            title: 'Hello World!'
+          });
+          markers.push(marker);
+
+          circlePoints.push(point);
+          if (a % pointInterval == 0) {
+            searchPoints.push(point);
+          }
+        }
+      }
+      searchPolygon = new GPolygon(circlePoints, "#A0A0A0", 1, 1, colorZone, 0.3);
+      map.addOverlay(searchPolygon);
+      map.setCenter(searchPolygon.getBounds().getCenter(), map.getBoundsZoomLevel(searchPolygon.getBounds()));
+      return searchPoints;
+    }
   </script>
 </body>
 
