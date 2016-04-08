@@ -177,9 +177,9 @@
       //DENUE
       var bounds = map.getBounds();
       $.post('g.php', {
-        lf:bounds.getWest(),
-        bt:bounds.getSouth(),
-        rg:bounds.getEast(),
+        lf: bounds.getWest(),
+        bt: bounds.getSouth(),
+        rg: bounds.getEast(),
         tp: bounds.getNorth(),
         vr: 'denue'
       }, function(geojson) {
@@ -193,14 +193,21 @@
               }
             }
           }).addTo(map);
-
-          var filtered = turf.filter(geojson, 'nombre_act', 'Comercio al por menor en tiendas de abarrotes, ultramarinos y misceláneas');
-          //heatDenue = L.heatLayer(filtered,{ radius: 20,blur: 15, maxZoom: 17});
-          console.log(filtered);
         } else {
           geoDenue.clearLayers();
-          geoDenue.addData(geojson).addTo(map);;
+          geoDenue.addData(geojson).addTo(map);
         }
+
+        var filtered = turf.filter(geojson, 'nombre_act', 'Comercio al por menor en tiendas de abarrotes, ultramarinos y misceláneas');
+        var hD = _.map(filtered.features, function(o) {
+            return [
+              o.geometry.coordinates[1],
+              o.geometry.coordinates[0],
+              300
+            ];
+          })
+        heatDenue = L.heatLayer(hD,{ radius: 20,blur: 15, maxZoom: 17});
+        heatDenue.addTo(map);
       });
 
       searchPoints = getCirclePoints(e.latlng, 100);
@@ -211,7 +218,7 @@
 
 
     function getCirclePoints(center, radius) {
-      $.each(markers,function(i,o){
+      $.each(markers, function(i, o) {
         o.setMap(null);
       });
       var circlePoints = Array();
