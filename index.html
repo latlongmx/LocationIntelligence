@@ -9,6 +9,7 @@
   <script src="https://code.jquery.com/jquery-1.12.2.min.js"></script>
   <script src="http://leaflet.github.io/Leaflet.heat/dist/leaflet-heat.js"></script>
   <script src="//api.tiles.mapbox.com/mapbox.js/plugins/turf/v2.0.0/turf.min.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/underscore.js/1.8.3/underscore-min.js"></script>
   <style>
     body {
       padding: 0;
@@ -66,7 +67,6 @@
     });
 
     function setStyle(feature) {
-      console.log(feature);
       var prop = feature.properties;
       var style = {
         "color": "#ff7800",
@@ -196,7 +196,7 @@
 
           var filtered = turf.filter(geojson, 'nombre_act', 'Comercio al por menor en tiendas de abarrotes, ultramarinos y misceláneas');
           //heatDenue = L.heatLayer(filtered,{ radius: 20,blur: 15, maxZoom: 17});
-
+          console.log(filtered);
         } else {
           geoDenue.clearLayers();
           geoDenue.addData(geojson).addTo(map);;
