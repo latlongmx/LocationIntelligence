@@ -183,13 +183,11 @@
         if (geoDenue == undefined) {
           geoDenue = L.geoJson(geojson, {
             onEachFeature: eachFeature,
-            style: {
-              weight: 1,
-              opacity: 0.2,
-              color: '#f7614b',
-              dashArray: '3',
-              fillOpacity: 0.1,
-              fillColor: '#8cb502'
+            style: setStyle,
+            pointToLayer: function(feature, latlng) {
+              if (feature.properties.tip_lay == 'denue') {
+                return L.circleMarker(latlng, setStyle);
+              }
             }
           }).addTo(map);
         } else {
