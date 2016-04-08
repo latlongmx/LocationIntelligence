@@ -33,6 +33,7 @@
     var circle;
     var geoVias;
     var geoMZA;
+    var geoDenue;
     var map = L.map('map');
     var markers = [];
     L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token=pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpandmbXliNDBjZWd2M2x6bDk3c2ZtOTkifQ._QA7i5Mpkd_m30IGElHziw', {
@@ -113,6 +114,9 @@
       if (geoMZA != undefined) {
         map.removeLayer(geoMZA);
       };
+      if (geoDenue != undefined) {
+        map.removeLayer(geoDenue);
+      };
       circle = L.circle(e.latlng, 100, {
         color: '#f07300',
         fillColor: '#f07300',
@@ -164,6 +168,33 @@
         } else {
           geoMZA.clearLayers();
           geoMZA.addData(geojson).addTo(map);;
+        }
+      });
+
+      //DENUE
+      var bounds = map.getBounds();
+      $.post('g.php', {
+        lf:bounds.getWest(),
+        bt:bounds.getSouth(),
+        rg:bounds.getEast(),
+        tp: bounds.getNorth(),
+        vr: 'denue'
+      }, function(geojson) {
+        if (geoDenue == undefined) {
+          geoDenue = L.geoJson(geojson, {
+            onEachFeature: eachFeature,
+            style: {
+              weight: 1,
+              opacity: 0.2,
+              color: '#f7614b',
+              dashArray: '3',
+              fillOpacity: 0.1,
+              fillColor: '#8cb502'
+            }
+          }).addTo(map);
+        } else {
+          geoDenue.clearLayers();
+          geoDenue.addData(geojson).addTo(map);;
         }
       });
 

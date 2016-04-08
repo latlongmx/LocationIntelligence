@@ -74,13 +74,13 @@ if(!isset($_POST['vr'])){
   }
 
   #DENUE
-  $sql = "SELECT 'denue' tip_lay, id, nom_estab, raz_social, codigo_act, nombre_act, per_ocu, tipo_vial, nom_vial, tipo_v_e_1, nom_v_e_1, tipo_v_e_2, nom_v_e_2, tipo_v_e_3, nom_v_e_3, numero_ext, letra_ext, edificio, edificio_e, numero_int, letra_int, tipo_asent, nomb_asent, tipocencom, nom_cencom, num_local, cod_postal, cve_ent, entidad, cve_mun, municipio, cve_loc, localidad, ageb, manzana, telefono, correoelec, www, tipounieco, latitud, longitud, fecha_alta,
+  /*$sql = "SELECT 'denue' tip_lay, id, nom_estab, raz_social, codigo_act, nombre_act, per_ocu, tipo_vial, nom_vial, tipo_v_e_1, nom_v_e_1, tipo_v_e_2, nom_v_e_2, tipo_v_e_3, nom_v_e_3, numero_ext, letra_ext, edificio, edificio_e, numero_int, letra_int, tipo_asent, nomb_asent, tipocencom, nom_cencom, num_local, cod_postal, cve_ent, entidad, cve_mun, municipio, cve_loc, localidad, ageb, manzana, telefono, correoelec, www, tipounieco, latitud, longitud, fecha_alta,
           ST_AsGeoJSON(geom)::json As geometry
       FROM inegi.denue_2016 WHERE ST_DWithin(geom, ST_SetSRID(ST_Point($lng, $lat),4326),$buf)";
   $rs = pg_query($sql) or die('Query failed: ' . pg_last_error());
   while ($row = pg_fetch_assoc($rs)) {
     $arr[] = $row;
-  }
+  }*/
 
   $res = array2GeoJSON($arr);
 
@@ -101,6 +101,14 @@ if(!isset($_POST['vr'])){
       ON lg.CVEGEO=(CR.entidad||CR.mun||CR.loc||CR.ageb||CR.mza)
       WHERE ST_DWithin(lg.geom, ST_SetSRID(ST_Point($lng, $lat),4326),$buf) and CR.entidad is not null";
   }else if($_POST['vr']==="denue"){
+    $lf=$_POST['lf'];
+    $bt=$_POST['bt'];
+    $rg=$_POST['rg'];
+    $tp=$_POST['tp'];
+    $sql = "SELECT 'denue' tip_lay, id, nom_estab, raz_social, codigo_act, nombre_act, per_ocu, tipo_vial, nom_vial, tipo_v_e_1, nom_v_e_1, tipo_v_e_2, nom_v_e_2, tipo_v_e_3, nom_v_e_3, numero_ext, letra_ext, edificio, edificio_e, numero_int, letra_int, tipo_asent, nomb_asent, tipocencom, nom_cencom, num_local, cod_postal, cve_ent, entidad, cve_mun, municipio, cve_loc, localidad, ageb, manzana, telefono, correoelec, www, tipounieco, latitud, longitud, fecha_alta,
+            ST_AsGeoJSON(geom)::json As geometry
+        FROM inegi.denue_2016
+        WHERE geom && ST_MakeEnvelope($lf, $bt, $rg, $tp, 4326)";
   }
 
   $rs = pg_query($sql) or die('Query failed: ' . pg_last_error());
