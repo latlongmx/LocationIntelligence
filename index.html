@@ -200,11 +200,11 @@
 
         //var filtered = turf.filter(geojson, 'nombre_act', 'Comercio al por menor en tiendas de abarrotes, ultramarinos y misceláneas');
         var filtered = _.filter(geojson.features, function(o){ return o.properties.nombre_act.indexOf('omercio')!==-1});
-        var hD = _.map(filtered.features, function(o) {
+        var hD = _.map(filtered, function(o) {
             return [
               o.geometry.coordinates[1],
               o.geometry.coordinates[0],
-              300
+              o.properties.nombre_act.length
             ];
           })
         heatDenue = L.heatLayer(hD,{ radius: 20,blur: 15, maxZoom: 17});
