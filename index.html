@@ -198,7 +198,8 @@
           geoDenue.addData(geojson).addTo(map);
         }
 
-        var filtered = turf.filter(geojson, 'nombre_act', 'Comercio al por menor en tiendas de abarrotes, ultramarinos y misceláneas');
+        //var filtered = turf.filter(geojson, 'nombre_act', 'Comercio al por menor en tiendas de abarrotes, ultramarinos y misceláneas');
+        var filtered = _.filter(geojson.features, function(o){ return o.properties.nombre_act.indexOf('omercio')!==-1});
         var hD = _.map(filtered.features, function(o) {
             return [
               o.geometry.coordinates[1],
