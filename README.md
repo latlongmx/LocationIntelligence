@@ -12,3 +12,12 @@
 $ composer global require "laravel/installer"
 $ laravel new api
 ```
+
+
+## deploying
+
+```
+composer update
+php artisan vendor:publish
+php artisan migrate
+```

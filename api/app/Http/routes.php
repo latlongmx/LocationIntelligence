@@ -12,5 +12,60 @@
 */
 
 Route::get('/', function () {
-    return view('welcome');
+    return view('api.latlong.mx');
+});
+
+/*
+$app->post('login', function() use($app) {
+    $credentials = app()->make('request')->input("credentials");
+    return $app->make('App\Auth\Proxy')->attemptLogin($credentials);
+});
+
+$app->post('refresh-token', function() use($app) {
+    return $app->make('App\Auth\Proxy')->attemptRefresh();
+});
+*/
+Route::post('oa/register',function(){
+  $usr = Request::input('u');
+  $pwd = Request::input('p');
+  $mail = Request::input('ml');
+
+  $user = new App\User();
+  $user->name=$usr;
+  $user->email=$mail;
+  $user->password = bcrypt($pwd); //\Illuminate\Support\Facades\Hash::make(“password”);
+  $user->save();
+
+  $id = DB::table('oauth_clients')->insertGetId(
+      array(
+        'id' => hash("md5",$usr),
+        'secret' => substr(hash("sha256",bcrypt($pwd)),0,39),
+        'name' => $usr,
+        'created_at' => date('Y-m-d H:i:s')
+      )
+  );
+  return Response::json(["id" => $id]);
+});
+
+Route::post('oa/accesstk', function() {
+    return Response::json(Authorizer::issueAccessToken());
+});
+
+
+/*$app->group(['prefix' => 'api', 'middleware' => 'oauth'], function($app)
+{
+    $app->get('resource', function() {
+        return response()->json([
+            "id" => 1,
+            "name" => "A resource"
+        ]);
+    });
+});
+*/
+
+Route::group(['prefix'=>'api','before' => 'oauth'], function()
+{
+    Route::get('/status', function(){
+      return Response::json(["status"=>"ok"]);
+    });
 });
