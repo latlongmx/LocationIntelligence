@@ -12,8 +12,8 @@
 */
 
 Route::get('/', function () {
-    //return view('api.latlong.mx');
-    return view('/');
+    return view('welcome');
+    //return view('/');
 });
 
 /*
