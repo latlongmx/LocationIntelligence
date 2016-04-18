@@ -32,8 +32,8 @@ Route::post('oa/register',function(){
   $mail = Request::input('ml');
 
   $user = new App\User();
-  $user->name=$usr;
-  $user->mail=$mail;
+  $user->username=$usr;
+  $user->email=$mail;
   $user->password = \Illuminate\Support\Facades\Hash::make($pwd);
   //$pwd; //\Illuminate\Support\Facades\Hash::make(“password”);
   $user->save();

@@ -11,7 +11,7 @@ class PasswordGrantVerifier
   {
       Log::info('user: '.$username);
       $credentials = [
-        'name'    => $username,
+        'username'    => $username,
         'password' => $password,
       ];
 
