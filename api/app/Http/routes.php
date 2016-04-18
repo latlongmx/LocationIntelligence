@@ -33,13 +33,14 @@ Route::post('oa/register',function(){
   $user = new App\User();
   $user->name=$usr;
   $user->email=$mail;
-  $user->password = bcrypt($pwd); //\Illuminate\Support\Facades\Hash::make(“password”);
+  $user->password = \Illuminate\Support\Facades\Hash::make($pwd);
+  //$pwd; //\Illuminate\Support\Facades\Hash::make(“password”);
   $user->save();
 
   $id = DB::table('oauth_clients')->insertGetId(
       array(
         'id' => hash("md5",$usr),
-        'secret' => substr(hash("sha256",bcrypt($pwd)),0,39),
+        'secret' => substr(hash("sha256",$pwd),0,40),
         'name' => $usr,
         'created_at' => date('Y-m-d H:i:s')
       )
