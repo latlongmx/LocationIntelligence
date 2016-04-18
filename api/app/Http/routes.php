@@ -12,7 +12,8 @@
 */
 
 Route::get('/', function () {
-    return view('api.latlong.mx');
+    //return view('api.latlong.mx');
+    return view('/');
 });
 
 /*
@@ -32,7 +33,7 @@ Route::post('oa/register',function(){
 
   $user = new App\User();
   $user->name=$usr;
-  $user->email=$mail;
+  $user->mail=$mail;
   $user->password = \Illuminate\Support\Facades\Hash::make($pwd);
   //$pwd; //\Illuminate\Support\Facades\Hash::make(“password”);
   $user->save();
