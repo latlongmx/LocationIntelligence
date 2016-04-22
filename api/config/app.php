@@ -162,6 +162,13 @@ return [
         LucaDegasperi\OAuth2Server\Storage\FluentStorageServiceProvider::class,
         LucaDegasperi\OAuth2Server\OAuth2ServerServiceProvider::class,
 
+        /*
+        API DOC Swaggervel
+        https://github.com/zircote/swagger-php
+        composer require slampenny/Swaggervel 2.0
+        php artisan vendor:publish
+        */
+        //Jlapp\Swaggervel\SwaggervelServiceProvider::class
     ],
 
     /*
