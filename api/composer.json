@@ -46,19 +46,6 @@
     ]
   },
   "config": {
-    "preferred-install": "dist",
-    "insecure": true,
-    "allow_self_signed": true
-  },
-  "repositories": [{
-    "type": "composer",
-    "url": "https://packagist.org/",
-    "options": {
-      "ssl": {
-        "verify_peer": false,
-        "allow_self_signed": true,
-        "cafile": "/home/atorres/dev/latlong/inegi.crt"
-      }
-    }
-  }]
+      "preferred-install": "dist"
+  }
 }
