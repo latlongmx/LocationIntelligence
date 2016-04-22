@@ -42,7 +42,7 @@ Route::group(['prefix'=>'geo','before' => 'oauth'], function()
                       ST_AsGeoJSON(lg.geom)::json As geometry
               FROM inegi.rnc_red_vial_2015 As lg WHERE ST_DWithin(geom, ST_SetSRID(ST_Point($lng, $lat),4326), $mts)";
         $rs = DB::select($sql,[]);
-        $rs = $rs->toArray();
+        //$rs = $rs->toArray();
         $geo = array2GeoJSON($rs);
         return Response::json($geo);
     });
