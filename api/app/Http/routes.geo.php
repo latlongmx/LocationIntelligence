@@ -44,9 +44,9 @@ Route::group(['prefix'=>'geo','before' => 'oauth', 'middleware' => 'cors'], func
         $sql = "
               WITH split AS $split
               SELECT 'rnc' tip_lay, id_red, tipo_vial, nombre, codigo, cond_pav, recubri, carriles, estatus, condicion, nivel, peaje, administra, jurisdi,circula, escala_vis, velocidad, union_ini, union_fin, longitud, ancho,fecha_act, calirepr,
-                      (ST_Split( ST_AsGeoJSON(lg.geom), split.geom  )::json As geometry
-              FROM inegi.rnc_red_vial_2015 As lg
-              WHERE ST_DWithin(geom, ST_SetSRID(ST_Point($lng, $lat),4326), $mts)
+                      ST_AsGeoJSON( ( (ST_Dump(ST_Intersection(S.geom, A.geom))).geom )::geometry)::json As geometry
+              FROM inegi.rnc_red_vial_2015 As A, split S
+              WHERE ST_DWithin(A.geom, ST_SetSRID(ST_Point($lng, $lat),4326), $mts)
               ";
         $rs = DB::select($sql,[]);
         $geo = array2GeoJSON($rs);
