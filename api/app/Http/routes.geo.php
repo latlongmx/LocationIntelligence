@@ -28,7 +28,7 @@ function array2GeoJSON($arr){
 }
 
 
-Route::group(['prefix'=>'geo','before' => 'oauth'], function()
+Route::group(['prefix'=>'geo','before' => 'oauth', 'middleware' => 'cors'], function()
 {
     Route::get('/status', function(){
       return Response::json(["status"=>"ok"]);
@@ -40,14 +40,20 @@ Route::group(['prefix'=>'geo','before' => 'oauth'], function()
         $mts = meters2dec($meters);
         //ST_Buffer(ST_GeomFromText('POINT(100 90)'), 50) As circle)
         //ST_Split(circle, line)
-        $sql = "SELECT 'rnc' tip_lay, id_red, tipo_vial, nombre, codigo, cond_pav, recubri, carriles, estatus, condicion, nivel, peaje, administra, jurisdi,circula, escala_vis, velocidad, union_ini, union_fin, longitud, ancho,fecha_act, calirepr,
-                      ST_AsGeoJSON(lg.geom)::json As geometry
-              FROM inegi.rnc_red_vial_2015 As lg,
-
+        $split = " ( SELECT buffer(ST_SetSRID(ST_Point($lng, $lat),4326) , $mts) geom ) "
+        $sql = "
+              WITH split AS $split
+              SELECT 'rnc' tip_lay, id_red, tipo_vial, nombre, codigo, cond_pav, recubri, carriles, estatus, condicion, nivel, peaje, administra, jurisdi,circula, escala_vis, velocidad, union_ini, union_fin, longitud, ancho,fecha_act, calirepr,
+                      (ST_Split( ST_AsGeoJSON(lg.geom), split.geom  )::json As geometry
+              FROM inegi.rnc_red_vial_2015 As lg
               WHERE ST_DWithin(geom, ST_SetSRID(ST_Point($lng, $lat),4326), $mts)
               ";
         $rs = DB::select($sql,[]);
         $geo = array2GeoJSON($rs);
-        return Response::json(["info"=>"","geojson"=>$geo]);
+        return Response::json([
+          "info"=>"",
+          "geojson"=>$geo,
+          "sql" => "$sql"
+        ]);
     });
 });
