@@ -40,7 +40,7 @@ Route::group(['prefix'=>'geo','before' => 'oauth', 'middleware' => 'cors'], func
         $mts = meters2dec($meters);
         //ST_Buffer(ST_GeomFromText('POINT(100 90)'), 50) As circle)
         //ST_Split(circle, line)
-        $split = " ( SELECT buffer(ST_SetSRID(ST_Point($lng, $lat),4326) , $mts) geom ) "
+        $split = " ( SELECT buffer(ST_SetSRID(ST_Point($lng, $lat),4326) , $mts) geom ) ";
         $sql = "
               WITH split AS $split
               SELECT 'rnc' tip_lay, id_red, tipo_vial, nombre, codigo, cond_pav, recubri, carriles, estatus, condicion, nivel, peaje, administra, jurisdi,circula, escala_vis, velocidad, union_ini, union_fin, longitud, ancho,fecha_act, calirepr,
