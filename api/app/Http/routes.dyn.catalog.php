@@ -15,7 +15,7 @@ Route::get('/meta', function(){
         group by sch,tbl;";
   $rs = DB::select($sql,[]);
   $cat = array();
-  foreach($reg as $rs){
+  foreach($rs as $reg){
     $sch = $reg->sch;
     if($sch=="public"){
       $sch = "";
