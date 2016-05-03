@@ -9,6 +9,7 @@ Route::get('/meta', function(){
           on C1.table_schema=C2.table_schema and C1.table_name=C2.table_name
           where C1.column_name not in ('gid','geom')
            and C2.column_name='geom'
+           and C1.table_schema not in ('catastro')
           group by C1.table_schema,C1.table_name,C1.column_name
           order by C1.table_schema,C1.table_name,C1.column_name
         )T
