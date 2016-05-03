@@ -1,0 +1,49 @@
+{
+    "swagger": "2.0",
+    "info": {
+        "title": "LATLONG API GEO",
+        "description": "LATLONG API con diferentes analisis",
+        "termsOfService": "http://helloreverb.com/terms/",
+        "contact": {
+            "email": "admin@latlong.mx"
+        },
+        "license": {
+            "name": "Apache 2.0",
+            "url": "http://www.apache.org/licenses/LICENSE-2.0.html"
+        },
+        "version": "1.0.0"
+    },
+    "host": "52.8.211.37",
+    "basePath": "/api.walmex.latlong.mx/geo",
+    "schemes": [
+        "http"
+    ],
+    "paths": {
+        "/status/": {
+            "get": {
+                "tags": [
+                    "status"
+                ],
+                "summary": "Estatus de la API",
+                "description": "Returns a single pet",
+                "operationId": "getPetById",
+                "produces": [
+                    "application/json"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "successful operation",
+                        "schema": {
+                            "$ref": "#/status"
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "definitions": {},
+    "externalDocs": {
+        "description": "Find out more about Swagger",
+        "url": "http://swagger.io"
+    }
+}

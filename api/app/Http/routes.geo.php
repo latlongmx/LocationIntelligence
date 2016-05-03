@@ -1,5 +1,30 @@
 <?php
 
+/**
+ * @SWG\Swagger(
+ *     schemes={"http"},
+ *     host="52.8.211.37",
+ *     basePath="/api.walmex.latlong.mx/geo",
+ *     @SWG\Info(
+ *         version="1.0.0",
+ *         title="LATLONG API GEO",
+ *         description="LATLONG API con diferentes analisis",
+ *         termsOfService="http://helloreverb.com/terms/",
+ *         @SWG\Contact(
+ *             email="admin@latlong.mx"
+ *         ),
+ *         @SWG\License(
+ *             name="Apache 2.0",
+ *             url="http://www.apache.org/licenses/LICENSE-2.0.html"
+ *         )
+ *     ),
+ *     @SWG\ExternalDocumentation(
+ *         description="Find out more about Swagger",
+ *         url="http://swagger.io"
+ *     )
+ * )
+ */
+
 function meters2dec($mts){
   $m100 = 0.000900804;  // 100m
   return ($mts*$m100)/100;
@@ -30,6 +55,22 @@ function array2GeoJSON($arr){
 
 Route::group(['prefix'=>'geo','before' => 'oauth', 'middleware' => 'cors'], function()
 {
+
+  /**
+     * @SWG\Get(
+     *     path="/status/",
+     *     summary="Estatus de la API",
+     *     description="Returns a single pet",
+     *     operationId="getPetById",
+     *     tags={"status"},
+     *     produces={"application/json"},
+     *     @SWG\Response(
+    *         response=200,
+    *         description="successful operation",
+    *         @SWG\Schema(ref="#/status")
+    *     ),
+     * )
+     */
     Route::get('/status', function(){
       return Response::json(["status"=>"ok"]);
     });

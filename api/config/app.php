@@ -166,11 +166,8 @@ return [
 
         /*
         API DOC Swaggervel
-        https://github.com/zircote/swagger-php
-        composer require slampenny/Swaggervel 2.0
-        php artisan vendor:publish
         */
-        //Jlapp\Swaggervel\SwaggervelServiceProvider::class
+        L5Swagger\L5SwaggerServiceProvider::class
     ],
 
     /*
