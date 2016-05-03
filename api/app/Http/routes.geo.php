@@ -25,32 +25,6 @@
  * )
  */
 
-function meters2dec($mts){
-  $m100 = 0.000900804;  // 100m
-  return ($mts*$m100)/100;
-}
-
-function array2GeoJSON($arr){
-  $features = array();
-  foreach($arr as $r){
-    $properties = array();
-    $geometry = null;
-    foreach($r as $k=>$v){
-      if($k=="geometry"){
-        $geometry = json_decode($v);
-      }else{
-        $properties[$k]=$v;
-      }
-    }
-    $features[] = array("type"=>"Feature","properties"=>$properties,"geometry"=>$geometry);
-  }
-
-  $res = array(
-    "type"=> "FeatureCollection",
-    "features"=> $features
-  );
-  return $res;
-}
 
 
 Route::group(['prefix'=>'geo','before' => 'oauth', 'middleware' => 'cors'], function()
