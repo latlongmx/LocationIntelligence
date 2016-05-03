@@ -1,7 +1,7 @@
 <?php
 
 Route::get('/meta', function(){
-  $sql = "select sch, tbl, string_agg(cols, ', ')
+  $sql = "select sch, tbl, string_agg(cols, ', ') cols
         from(
           select C1.table_schema sch,C1.table_name tbl,C1.column_name cols
           from information_schema.columns C1
