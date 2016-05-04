@@ -19,22 +19,31 @@
         "http"
     ],
     "paths": {
-        "/catalog": {
+        "/catalog/{tipo_catalogo}": {
             "get": {
                 "tags": [
                     "catalog"
                 ],
                 "summary": "Catalogo del API Geo Dinamico",
-                "description": "Regresa el catalogo de las tablas disponibles para analsis",
+                "description": "Regresa el catalogo de las tablas disponibles para analsis. Donde> /catalog/{tipo_catalogo} tipo_catalogo=(analisis|denue_cods)",
                 "operationId": "catalog",
                 "produces": [
                     "application/json"
+                ],
+                "parameters": [
+                    {
+                        "name": "tipo_catalogo",
+                        "in": "path",
+                        "description": "Tipo de catalogo, (analisis|denue_cods)",
+                        "required": true,
+                        "type": "string"
+                    }
                 ],
                 "responses": {
                     "200": {
                         "description": "successful operation",
                         "schema": {
-                            "$ref": "#/catalog"
+                            "$ref": "#/catalog/analisis"
                         }
                     }
                 }
