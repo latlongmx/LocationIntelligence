@@ -1,7 +1,5 @@
 <?php
 
-use Illuminate\Support\Facades\Input;
-
 /**
   * @SWG\Get(
   *     path="/dw?s={schema}&t={table}&c={columns}&w={column_filter}:{value_filter}&lat={latitude}&lng={longitud}&mts={meters}",

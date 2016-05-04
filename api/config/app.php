@@ -216,6 +216,8 @@ return [
         'Validator' => Illuminate\Support\Facades\Validator::class,
         'View' => Illuminate\Support\Facades\View::class,
 
+        'Input' => Illuminate\Support\Facades\Input::class,
+
         //oAuth2.0
         'Authorizer' => LucaDegasperi\OAuth2Server\Facades\Authorizer::class,
 
