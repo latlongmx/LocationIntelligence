@@ -2,7 +2,7 @@
     "swagger": "2.0",
     "info": {
         "title": "LATLONG API GEO",
-        "description": "LATLONG API con diferentes analisis",
+        "description": "LATLONG API Dinamico para analisis geograf\u00edco",
         "termsOfService": "http://helloreverb.com/terms/",
         "contact": {
             "email": "admin@latlong.mx"
@@ -14,11 +14,32 @@
         "version": "1.0.0"
     },
     "host": "52.8.211.37",
-    "basePath": "/api.walmex.latlong.mx/geo",
+    "basePath": "/api.walmex.latlong.mx/dyn",
     "schemes": [
         "http"
     ],
     "paths": {
+        "/catalog": {
+            "get": {
+                "tags": [
+                    "catalog"
+                ],
+                "summary": "Catalogo del API Geo Dinamico",
+                "description": "Regresa el catalogo de las tablas disponibles para analsis",
+                "operationId": "catalog",
+                "produces": [
+                    "application/json"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "successful operation",
+                        "schema": {
+                            "$ref": "#/catalog"
+                        }
+                    }
+                }
+            }
+        },
         "/status/": {
             "get": {
                 "tags": [

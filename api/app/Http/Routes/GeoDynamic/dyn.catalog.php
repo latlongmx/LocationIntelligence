@@ -1,6 +1,21 @@
 <?php
 
-Route::get('/meta', function(){
+/**
+  * @SWG\Get(
+  *     path="/catalog",
+  *     summary="Catalogo del API Geo Dinamico",
+  *     description="Regresa el catalogo de las tablas disponibles para analsis",
+  *     operationId="catalog",
+  *     tags={"catalog"},
+  *     produces={"application/json"},
+  *     @SWG\Response(
+  *         response=200,
+  *         description="successful operation",
+  *         @SWG\Schema(ref="#/catalog")
+  *     ),
+  * )
+  */
+Route::get('/catalog', function(){
   $sql = "select sch, tbl, string_agg(cols, ', ') cols
         from(
           select C1.table_schema sch,C1.table_name tbl,C1.column_name cols
