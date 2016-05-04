@@ -2,19 +2,19 @@
 
 /**
   * @SWG\Get(
-  *     path="/catalog",
+  *     path="/catalog/{tipo_catalogo}",
   *     summary="Catalogo del API Geo Dinamico",
   *     description="Regresa el catalogo de las tablas disponibles para analsis",
   *     operationId="catalog",
   *     tags={"catalog"},
   *     produces={"application/json"},
   *     @SWG\Parameter(
-  *         t="Tipo de catalogo, (analisis|denue_cods)"
+  *         tipo_catalogo="Tipo de catalogo, (analisis|denue_cods)"
   *     ),
   *     @SWG\Response(
   *         response=200,
   *         description="successful operation",
-  *         @SWG\Schema(ref="#/catalog")
+  *         @SWG\Schema(ref="#/catalog/analisis")
   *     ),
   * )
   */
