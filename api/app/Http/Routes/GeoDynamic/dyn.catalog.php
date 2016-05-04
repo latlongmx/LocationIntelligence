@@ -22,7 +22,7 @@ Route::get('/catalog/{tip_catalog}', function($tip_catalog){
   $cat = array();
 
   if( $tip_catalog == "denue_cods" ){
-    $sql = "select codigo_act, codigo_act from inegi.cat_denue_cod_act where codigo_act like '46%' or codigo_act like '43%';";
+    $sql = "select codigo_act, nombre_act from inegi.cat_denue_cod_act where codigo_act like '46%' or codigo_act like '43%';";
     $rs = DB::select($sql,[]);
     foreach($rs as $r){
       $cat[] = array("cod"=> $r->codigo_act, "nom"=> $r->nombre_act);
