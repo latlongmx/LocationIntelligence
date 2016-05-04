@@ -49,6 +49,85 @@
                 }
             }
         },
+        "/dw?s={schema}&t={table}&c={columns}&w={column_filter}:{value_filter}&lat={latitude}&lng={longitud}&mts={meters}": {
+            "get": {
+                "tags": [
+                    "Distance Within"
+                ],
+                "summary": "Distance Within service analisys",
+                "description": "Servicio de analisis que regresa las geometrias con la informacion solicitada",
+                "operationId": "dw",
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "name": "schema",
+                        "in": "path",
+                        "description": "Schema",
+                        "required": true,
+                        "type": "string"
+                    },
+                    {
+                        "name": "table",
+                        "in": "path",
+                        "description": "table",
+                        "required": true,
+                        "type": "string"
+                    },
+                    {
+                        "name": "columns",
+                        "in": "path",
+                        "description": "Columna a agrupar",
+                        "required": false,
+                        "type": "string"
+                    },
+                    {
+                        "name": "column_filter",
+                        "in": "path",
+                        "description": "column_filter",
+                        "required": false,
+                        "type": "string"
+                    },
+                    {
+                        "name": "value_filter",
+                        "in": "path",
+                        "description": "value_filter",
+                        "required": true,
+                        "type": "string"
+                    },
+                    {
+                        "name": "latitude",
+                        "in": "path",
+                        "description": "latitude",
+                        "required": true,
+                        "type": "number"
+                    },
+                    {
+                        "name": "longitud",
+                        "in": "path",
+                        "description": "longitud",
+                        "required": true,
+                        "type": "number"
+                    },
+                    {
+                        "name": "meters",
+                        "in": "path",
+                        "description": "meters",
+                        "required": true,
+                        "type": "integer"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "successful operation",
+                        "schema": {
+                            "$ref": "#/dw"
+                        }
+                    }
+                }
+            }
+        },
         "/status/": {
             "get": {
                 "tags": [
