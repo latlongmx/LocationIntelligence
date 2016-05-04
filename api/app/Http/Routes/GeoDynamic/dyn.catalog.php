@@ -9,7 +9,7 @@
   *     tags={"catalog"},
   *     produces={"application/json"},
   *     @SWG\Parameter(
-  *         t="Tipo de catalogo, (vacio|denue_cods)"
+  *         t="Tipo de catalogo, (analisis|denue_cods)"
   *     ),
   *     @SWG\Response(
   *         response=200,
