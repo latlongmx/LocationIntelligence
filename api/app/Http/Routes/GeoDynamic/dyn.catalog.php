@@ -18,7 +18,7 @@
   *     ),
   * )
   */
-Route::get('/catalog?t={tip_catalog}', function($tip_catalog){
+Route::get('/catalog/{tip_catalog}', function($tip_catalog){
   $cat = array();
 
   if( $tip_catalog == "denue_cods" ){
