@@ -88,11 +88,11 @@ Route::get('/dw', function(){
   $w = Input::get('w', '');
   $lat = Input::get('lat', '');
   $lng = Input::get('lng', '');
-  $mts = Input::get('mts', '');
+  $mts = Input::get('mts', 0);
 
 
 
-  $mts = meters2dec($meters);
+  $mts = meters2dec($mts);
 
   $TBL = $s.".".$t;
   $INFO = array();
