@@ -129,8 +129,8 @@ Route::get('/dw', function(){
   $geo = array2GeoJSON($rs);
 
   if($c !== 'gid'){
-    foreach($rs as $r){
-      //$r = (array) $ro;
+    foreach($rs as $ro){
+      $r = (array) $ro;
       if(isset($INFO[$r[$c]])){
         $INFO[ $r[$c] ] = $INFO[ $r[$c] ]+1;
       }else{
