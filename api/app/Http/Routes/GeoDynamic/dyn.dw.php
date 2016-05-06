@@ -134,15 +134,14 @@ Route::get('/dw', function(){
       if(isset($INFO[$r[$c]])){
         $INFO[ $r[$c] ] = $INFO[ $r[$c] ]+1;
       }else{
-        $INFO[ $r[$c] ] = 0;
+        $INFO[ $r[$c] ] = 1;
       }
     }
   }
 
   return Response::json([
     "info" => $INFO,
-    "geojson" => $geo,
-    "sql" => "$sql"
+    "geojson" => $geo
   ]);
 
 
