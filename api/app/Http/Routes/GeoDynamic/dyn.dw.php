@@ -14,6 +14,7 @@
   * 			  required=true,
   * 			  type="string",
   * 			  description="Schema",
+  *         default="inegi",
   *     ),
   *     @SWG\Parameter(
   * 		   	name="table",
@@ -21,6 +22,7 @@
   * 			  required=true,
   * 			  type="string",
   * 			  description="table",
+  *         default="rnc_red_vial_2015",
   *     ),
   *     @SWG\Parameter(
   * 		   	name="columns",
@@ -28,20 +30,23 @@
   * 			  required=false,
   * 			  type="string",
   * 			  description="Columna a agrupar",
+  *         default="tipo_vial",
   *     ),
   *     @SWG\Parameter(
   * 		   	name="column_filter",
   * 			  in="path",
   * 			  required=false,
   * 			  type="string",
-  * 			  description="column_filter",
+  * 			  description="Columna para usar en un filtro (where)",
+  *         default="",
   *     ),
   *     @SWG\Parameter(
   * 		   	name="value_filter",
   * 			  in="path",
-  * 			  required=true,
+  * 			  required=false,
   * 			  type="string",
-  * 			  description="value_filter",
+  * 			  description="valor que tendra la columna a filtrar",
+  *         default="",
   *     ),
   *     @SWG\Parameter(
   * 		   	name="latitude",
@@ -49,6 +54,7 @@
   * 			  required=true,
   * 			  type="number",
   * 			  description="latitude",
+  *         default="21.85996530350067",
   *     ),
   *     @SWG\Parameter(
   * 		   	name="longitud",
@@ -56,6 +62,7 @@
   * 			  required=true,
   * 			  type="number",
   * 			  description="longitud",
+  *         default="-102.2827363014221",
   *     ),
   *     @SWG\Parameter(
   * 		   	name="meters",
@@ -63,6 +70,7 @@
   * 			  required=true,
   * 			  type="integer",
   * 			  description="meters",
+  *         default="100",
   *     ),
   *     @SWG\Response(
   *         response=200,
@@ -74,15 +82,70 @@
 Route::get('/dw', function(){
   $response = array();
 
-  $s = Input::get('s', '');
+  $s = Input::get('s', 'public');
   $t = Input::get('t', '');
-  $c = Input::get('c', '');
+  $c = Input::get('c', 'gid');
   $w = Input::get('w', '');
   $lat = Input::get('lat', '');
   $lng = Input::get('lng', '');
   $mts = Input::get('mts', '');
 
+
+
+  $mts = meters2dec($meters);
+
+  $TBL = $s.".".$t;
+  $INFO = array();
+  $GEOM = "";
+  $SPLIT = "";
+  $GEOM_CUT_LINE = "ST_AsGeoJSON( ( (ST_Dump(ST_Intersection(S.geom, A.geom))).geom )::geometry)::json As geometry";
+  $GEOM_INTERSECT = "ST_AsGeoJSON(A.geom)::json As geometry";
+  $WHERE = "";
+
+  switch ($TBL) {
+    case 'inegi.rnc_red_vial_2015':
+        $SPLIT = " WITH split AS ( SELECT (st_buffer(ST_SetSRID(ST_Point($lng, $lat),4326) , $mts))::geometry geom ) ";
+        $TBL = "inegi.rnc_red_vial_2015 As A, split S";
+        $GEOM = $GEOM_CUT_LINE;
+      break;
+    case 'inegi.inter15_vias':
+        $SPLIT = " WITH split AS ( SELECT (st_buffer(ST_SetSRID(ST_Point($lng, $lat),4326) , $mts))::geometry geom ) ";
+        $TBL = "inegi.inter15_vias As A, split S";
+        $GEOM = $GEOM_CUT_LINE;
+    default:
+        $TBL = $TBL." As A";
+        $GEOM = $GEOM_INTERSECT;
+      break;
+  }
+
+
+  $sql = " $SPLIT
+        SELECT $INFO , $GEOM
+        FROM $TBL
+        WHERE ST_DWithin(A.geom, ST_SetSRID(ST_Point($lng, $lat),4326), $mts)
+          $WHERE";
+  $rs = DB::select($sql,[]);
+  $geo = array2GeoJSON($rs);
+
+  if($c !== 'gid'){
+    foreach($rs as $r){
+      if(isset($INFO[$rs[$c]])){
+        $INFO[ $rs[$c] ] = $INFO[ $rs[$c] ]+1;
+      }else{
+        $INFO[ $rs[$c] ] = 0;
+      }
+    }
+  }
+
   return Response::json([
+    "info" => $INFO,
+    "geojson" => $geo,
+    "sql" => "$sql"
+  ]);
+
+
+
+  /*return Response::json([
     "s"=>$s,
     "t"=>$t,
     "c"=>$c,
@@ -90,5 +153,5 @@ Route::get('/dw', function(){
     "lat"=>$lat,
     "lng"=>$lng,
     "mts"=>$mts
-  ]);
+  ]);*/
 });
