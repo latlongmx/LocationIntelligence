@@ -83,7 +83,7 @@
                         "description": "Columna a agrupar",
                         "required": false,
                         "type": "string",
-                        "default": "tipo_vial"
+                        "default": "tipovial"
                     },
                     {
                         "name": "column_filter",

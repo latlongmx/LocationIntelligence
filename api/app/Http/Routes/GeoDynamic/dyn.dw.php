@@ -30,7 +30,7 @@
   * 			  required=false,
   * 			  type="string",
   * 			  description="Columna a agrupar",
-  *         default="tipo_vial",
+  *         default="tipovial",
   *     ),
   *     @SWG\Parameter(
   * 		   	name="column_filter",
@@ -129,12 +129,12 @@ Route::get('/dw', function(){
   $geo = array2GeoJSON($rs);
 
   if($c !== 'gid'){
-    foreach($rs as $ro){
-      $r = (array) $ro;
-      if(isset($INFO[$rs[$c]])){
-        $INFO[ $rs[$c] ] = $INFO[ $rs[$c] ]+1;
+    foreach($rs as $r){
+      //$r = (array) $ro;
+      if(isset($INFO[$r[$c]])){
+        $INFO[ $r[$c] ] = $INFO[ $r[$c] ]+1;
       }else{
-        $INFO[ $rs[$c] ] = 0;
+        $INFO[ $r[$c] ] = 0;
       }
     }
   }
