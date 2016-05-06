@@ -22,7 +22,7 @@
   * 			  required=true,
   * 			  type="string",
   * 			  description="table",
-  *         default="rnc_red_vial_2015",
+  *         default="inter15_vias",
   *     ),
   *     @SWG\Parameter(
   * 		   	name="columns",
@@ -112,6 +112,7 @@ Route::get('/dw', function(){
         $SPLIT = " WITH split AS ( SELECT (st_buffer(ST_SetSRID(ST_Point($lng, $lat),4326) , $mts))::geometry geom ) ";
         $TBL = "inegi.inter15_vias As A, split S";
         $GEOM = $GEOM_CUT_LINE;
+      break;
     default:
         $TBL = $TBL." As A";
         $GEOM = $GEOM_INTERSECT;
@@ -123,7 +124,7 @@ Route::get('/dw', function(){
         SELECT $c , $GEOM
         FROM $TBL
         WHERE ST_DWithin(A.geom, ST_SetSRID(ST_Point($lng, $lat),4326), $mts)
-          $WHERE";
+        $WHERE";
   $rs = DB::select($sql,[]);
   $geo = array2GeoJSON($rs);
 

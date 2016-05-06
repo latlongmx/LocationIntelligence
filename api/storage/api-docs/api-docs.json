@@ -75,7 +75,7 @@
                         "description": "table",
                         "required": true,
                         "type": "string",
-                        "default": "rnc_red_vial_2015"
+                        "default": "inter15_vias"
                     },
                     {
                         "name": "columns",
