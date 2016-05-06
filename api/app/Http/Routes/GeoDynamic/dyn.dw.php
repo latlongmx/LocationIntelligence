@@ -120,7 +120,7 @@ Route::get('/dw', function(){
 
 
   $sql = " $SPLIT
-        SELECT $INFO , $GEOM
+        SELECT $c , $GEOM
         FROM $TBL
         WHERE ST_DWithin(A.geom, ST_SetSRID(ST_Point($lng, $lat),4326), $mts)
           $WHERE";
