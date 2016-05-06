@@ -119,6 +119,11 @@ Route::get('/dw', function(){
       break;
   }
 
+  if($w!="" && strpos($w, ':') !== false && strpos($w, '{') === false){
+    $ww = explode(":", $w);
+    $WHERE = " and ".$ww[0]."='".$ww[1]."'";
+  }
+
 
   $sql = " $SPLIT
         SELECT $c , $GEOM
@@ -141,7 +146,8 @@ Route::get('/dw', function(){
 
   return Response::json([
     "info" => $INFO,
-    "geojson" => $geo
+    "geojson" => $geo,
+    "sql" => $sql
   ]);
 
 
