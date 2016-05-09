@@ -1,8 +1,8 @@
 {
     "swagger": "2.0",
     "info": {
-        "title": "LATLONG API GEO",
-        "description": "LATLONG API Dinamico para analisis geograf\u00edco",
+        "title": "LATLONG API",
+        "description": "LATLONG",
         "termsOfService": "http://helloreverb.com/terms/",
         "contact": {
             "email": "admin@latlong.mx"
@@ -14,12 +14,12 @@
         "version": "1.0.0"
     },
     "host": "52.8.211.37",
-    "basePath": "/api.walmex.latlong.mx/dyn",
+    "basePath": "api.walmex.latlong.mx/",
     "schemes": [
         "http"
     ],
     "paths": {
-        "/catalog/{tipo_catalogo}": {
+        "/dyn/catalog/{tipo_catalogo}": {
             "get": {
                 "tags": [
                     "catalog"
@@ -49,7 +49,7 @@
                 }
             }
         },
-        "/dw?s={schema}&t={table}&c={columns}&w={column_filter}:{value_filter}&lat={latitude}&lng={longitud}&mts={meters}": {
+        "/dyn/dw?s={schema}&t={table}&c={columns}&w={column_filter}:{value_filter}&lat={latitude}&lng={longitud}&mts={meters}": {
             "get": {
                 "tags": [
                     "Distance Within"
@@ -134,6 +134,113 @@
                         }
                     }
                 }
+            }
+        },
+        "/ws/places/": {
+            "get": {
+                "tags": [
+                    "Workspace"
+                ],
+                "summary": "Obtiene las ubicaciones registradas por el usuario",
+                "description": "Obtiene los registros incluido las geometrias ingresadas por el usuario",
+                "operationId": "catalog",
+                "produces": [
+                    "application/json"
+                ],
+                "responses": {
+                    "400": {
+                        "description": "Bad request falta access_token",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": {
+                                "type": "integer",
+                                "format": "int32"
+                            }
+                        }
+                    },
+                    "200": {
+                        "description": "successful operation",
+                        "schema": {
+                            "$ref": "#/ws/up"
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "access_token": []
+                    }
+                ]
+            },
+            "post": {
+                "tags": [
+                    "Workspace"
+                ],
+                "summary": "Subir archivo para agregar a mis ubicaciones",
+                "description": "Sube un archivo csv a la seccion de mis ubicaciones del usuario registrado a traves del access_token",
+                "operationId": "catalog",
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "name": "nm",
+                        "in": "path",
+                        "description": "Nombre de mis hubicaciones",
+                        "required": true,
+                        "type": "string"
+                    },
+                    {
+                        "name": "pin",
+                        "in": "path",
+                        "description": "Url del PIN a utilizar",
+                        "required": true,
+                        "type": "string"
+                    },
+                    {
+                        "name": "file",
+                        "in": "path",
+                        "description": "Archivo csv",
+                        "required": true,
+                        "type": "file"
+                    },
+                    {
+                        "name": "lat",
+                        "in": "path",
+                        "description": "Columna con la latitud",
+                        "required": true,
+                        "type": "string"
+                    },
+                    {
+                        "name": "lng",
+                        "in": "path",
+                        "description": "Columna con la longitud",
+                        "required": true,
+                        "type": "string"
+                    }
+                ],
+                "responses": {
+                    "400": {
+                        "description": "Bad request falta access_token",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": {
+                                "type": "integer",
+                                "format": "int32"
+                            }
+                        }
+                    },
+                    "200": {
+                        "description": "successful operation",
+                        "schema": {
+                            "$ref": "#/ws/up"
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "access_token": []
+                    }
+                ]
             }
         },
         "/status/": {

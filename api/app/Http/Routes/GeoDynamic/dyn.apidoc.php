@@ -1,6 +1,5 @@
 <?php
 
-
 Route::get('/apidoc', function(){
   $path = storage_path() . '/api-docs/api-docs.json';
   error_log($path);

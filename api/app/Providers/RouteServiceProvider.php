@@ -68,6 +68,7 @@ class RouteServiceProvider extends ServiceProvider
             'namespace' => $this->namespace, 'before' => 'oauth', 'middleware' => 'web',
         ], function ($router) {
             require app_path('Http/Routes/GeoDynamic/dyn.php');
+            require app_path('Http/Routes/Workspace/ws.php');
         });
     }
 }
