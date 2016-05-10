@@ -4,8 +4,8 @@
 /**
  * @SWG\Swagger(
  *     schemes={"http"},
- *     host="52.8.211.37",
- *     basePath="api.walmex.latlong.mx/",
+ *     host="52.8.211.37/",
+ *     basePath="api.walmex.latlong.mx",
  *     @SWG\Info(
  *         version="1.0.0",
  *         title="LATLONG API",
