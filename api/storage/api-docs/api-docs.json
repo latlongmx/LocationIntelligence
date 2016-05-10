@@ -49,14 +49,14 @@
                 }
             }
         },
-        "/dyn/dw?s={schema}&t={table}&c={columns}&w={column_filter}:{value_filter}&lat={latitude}&lng={longitud}&mts={meters}": {
+        "/dyn/intersect?s={schema}&t={table}&c={columns}&w={column_filter}:{value_filter}&wkt={wkt}&mts={meters}": {
             "get": {
                 "tags": [
                     "Distance Within"
                 ],
-                "summary": "Distance Within service analisys",
-                "description": "Servicio de analisis que regresa las geometrias con la informacion solicitada",
-                "operationId": "dw",
+                "summary": "Obtener lo que intersecte",
+                "description": "Servicio de analisis que regresa las geometrias con la informacion solicitada segun el WKT enviado como parametro",
+                "operationId": "intersect",
                 "produces": [
                     "application/json"
                 ],
@@ -102,26 +102,18 @@
                         "default": ""
                     },
                     {
-                        "name": "latitude",
+                        "name": "wkt",
                         "in": "path",
-                        "description": "latitude",
+                        "description": "WKT geometry format",
                         "required": true,
-                        "type": "number",
-                        "default": "21.85996530350067"
-                    },
-                    {
-                        "name": "longitud",
-                        "in": "path",
-                        "description": "longitud",
-                        "required": true,
-                        "type": "number",
-                        "default": "-102.2827363014221"
+                        "type": "string",
+                        "default": "POINT(-102.2827363014221 21.85996530350067)"
                     },
                     {
                         "name": "meters",
                         "in": "path",
-                        "description": "meters",
-                        "required": true,
+                        "description": "Metros solo si wkt es POINT",
+                        "required": false,
                         "type": "integer",
                         "default": "100"
                     }
@@ -130,7 +122,7 @@
                     "200": {
                         "description": "successful operation",
                         "schema": {
-                            "$ref": "#/dw"
+                            "$ref": "#/intersect"
                         }
                     }
                 }
