@@ -49,27 +49,19 @@
   *         default="",
   *     ),
   *     @SWG\Parameter(
-  * 		   	name="latitude",
+  * 		   	name="wkt",
   * 			  in="path",
   * 			  required=true,
   * 			  type="number",
-  * 			  description="latitude",
-  *         default="21.85996530350067",
-  *     ),
-  *     @SWG\Parameter(
-  * 		   	name="longitud",
-  * 			  in="path",
-  * 			  required=true,
-  * 			  type="number",
-  * 			  description="longitud",
-  *         default="-102.2827363014221",
+  * 			  description="WKT geometry format",
+  *         default="POINT(-102.2827363014221 21.85996530350067)",
   *     ),
   *     @SWG\Parameter(
   * 		   	name="meters",
   * 			  in="path",
-  * 			  required=true,
+  * 			  required=false,
   * 			  type="integer",
-  * 			  description="meters",
+  * 			  description="Metros solo si wkt es POINT",
   *         default="100",
   *     ),
   *     @SWG\Response(
@@ -86,8 +78,7 @@ Route::get('/dw', function(){
   $t = Input::get('t', '');
   $c = Input::get('c', 'gid');
   $w = Input::get('w', '');
-  $lat = Input::get('lat', '');
-  $lng = Input::get('lng', '');
+  $lat = Input::get('wkt', '');
   $mts = Input::get('mts', 0);
 
 
@@ -100,15 +91,17 @@ Route::get('/dw', function(){
   $GEOM_CUT_LINE = "ST_AsGeoJSON( ( (ST_Dump(ST_Intersection(S.geom, A.geom))).geom )::geometry)::json As geometry";
   $GEOM_INTERSECT = "ST_AsGeoJSON(A.geom)::json As geometry";
   $WHERE = "";
+  $GEOM_WKT_SPLIT = "st_buffer(ST_SetSRID(ST_Point($lng, $lat),4326) , $mts)";
+  $GEOM_WKT_WHERE = "ST_DWithin(A.geom, ST_SetSRID(ST_Point($lng, $lat),4326), $mts)";
 
   switch ($TBL) {
     case 'inegi.rnc_red_vial_2015':
-        $SPLIT = " WITH split AS ( SELECT (st_buffer(ST_SetSRID(ST_Point($lng, $lat),4326) , $mts))::geometry geom ) ";
+        $SPLIT = " WITH split AS ( SELECT ($GEOM_WKT_SPLIT)::geometry geom ) ";
         $TBL = "inegi.rnc_red_vial_2015 As A, split S";
         $GEOM = $GEOM_CUT_LINE;
       break;
     case 'inegi.inter15_vias':
-        $SPLIT = " WITH split AS ( SELECT (st_buffer(ST_SetSRID(ST_Point($lng, $lat),4326) , $mts))::geometry geom ) ";
+        $SPLIT = " WITH split AS ( SELECT ($GEOM_WKT_SPLIT)::geometry geom ) ";
         $TBL = "inegi.inter15_vias As A, split S";
         $GEOM = $GEOM_CUT_LINE;
       break;
@@ -127,7 +120,7 @@ Route::get('/dw', function(){
   $sql = " $SPLIT
         SELECT $c , $GEOM
         FROM $TBL
-        WHERE ST_DWithin(A.geom, ST_SetSRID(ST_Point($lng, $lat),4326), $mts)
+        WHERE $GEOM_WKT_WHERE
         $WHERE";
   $rs = DB::select($sql,[]);
   $geo = array2GeoJSON($rs);
