@@ -113,7 +113,7 @@ Route::get('/intersect', function(){
         $c = "nom_estab, raz_social, codigo_act, nombre_act, per_ocu, tipo_vial, nom_vial, tipo_v_e_1, nom_v_e_1,
               tipo_v_e_2, nom_v_e_2, tipo_v_e_3, nom_v_e_3, numero_ext, letra_ext, edificio, edificio_e, numero_int,
               letra_int, tipo_asent, nomb_asent, tipocencom, nom_cencom, num_local, cod_postal, cve_ent, entidad,
-              cve_mun, municipio, cve_loc, localidad, ageb, manzana, telefono, correoelec, www, tipounieco, fecha_alta, ";
+              cve_mun, municipio, cve_loc, localidad, ageb, manzana, telefono, correoelec, www, tipounieco, fecha_alta ";
       break;
     default:
         $TBL = $TBL." As A";
@@ -135,7 +135,7 @@ Route::get('/intersect', function(){
   $rs = DB::select($sql,[]);
   $geo = array2GeoJSON($rs);
 
-  if($c !== 'gid' && $TBL!='inegi.denue_2016'){
+  if($c !== 'gid' && $TBL!='inegi.denue_2016' && $TBL!='inegi.pobviv2010'){
     foreach($rs as $ro){
       $r = (array) $ro;
       if(isset($INFO[$r[$c]])){
@@ -144,12 +144,20 @@ Route::get('/intersect', function(){
         $INFO[ $r[$c] ] = 1;
       }
     }
+  }else if($c !== 'gid' && $TBL!='inegi.pobviv2010'){
+    foreach($rs as $ro){
+      $r = (array) $ro;
+      if(isset($INFO[$r[$c]])){
+        $INFO[ $r[$c] ]+= $r[$c];
+      }else{
+        $INFO[ $r[$c] ] = $r[$c];
+      }
+    }
   }
 
   return Response::json([
     "info" => $INFO,
-    "geojson" => $geo,
-    "sql" => $sql
+    "geojson" => $geo
   ]);
 
 });
