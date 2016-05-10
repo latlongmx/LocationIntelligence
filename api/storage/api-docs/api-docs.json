@@ -19,7 +19,7 @@
         "http"
     ],
     "paths": {
-        "dyn/catalog/{tipo_catalogo}": {
+        "/dyn/catalog/{tipo_catalogo}": {
             "get": {
                 "tags": [
                     "catalog"
@@ -49,7 +49,7 @@
                 }
             }
         },
-        "dyn/dw?s={schema}&t={table}&c={columns}&w={column_filter}:{value_filter}&lat={latitude}&lng={longitud}&mts={meters}": {
+        "/dyn/dw?s={schema}&t={table}&c={columns}&w={column_filter}:{value_filter}&lat={latitude}&lng={longitud}&mts={meters}": {
             "get": {
                 "tags": [
                     "Distance Within"
@@ -136,7 +136,7 @@
                 }
             }
         },
-        "ws/places/": {
+        "/ws/places/": {
             "get": {
                 "tags": [
                     "Workspace"
