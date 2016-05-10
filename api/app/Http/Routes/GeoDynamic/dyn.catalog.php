@@ -2,7 +2,7 @@
 
 /**
   * @SWG\Get(
-  *     path="dyn/catalog/{tipo_catalogo}",
+  *     path="/dyn/catalog/{tipo_catalogo}",
   *     summary="Catalogo del API Geo Dinamico",
   *     description="Regresa el catalogo de las tablas disponibles para analsis. Donde> /catalog/{tipo_catalogo} tipo_catalogo=(analisis|denue_cods)",
   *     operationId="catalog",

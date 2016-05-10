@@ -2,7 +2,7 @@
 
 /**
   * @SWG\Post(
-  *     path="ws/places/",
+  *     path="/ws/places/",
   *     summary="Subir archivo para agregar a mis ubicaciones",
   *     description="Sube un archivo csv a la seccion de mis ubicaciones del usuario registrado a traves del access_token",
   *     operationId="catalog",
@@ -135,7 +135,7 @@ Route::post('/places', ['middleware' => 'oauth', function() {
 
 /**
   * @SWG\Get(
-  *     path="ws/places/",
+  *     path="/ws/places/",
   *     summary="Obtiene las ubicaciones registradas por el usuario",
   *     description="Obtiene los registros incluido las geometrias ingresadas por el usuario",
   *     operationId="catalog",

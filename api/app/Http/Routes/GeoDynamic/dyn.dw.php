@@ -2,7 +2,7 @@
 
 /**
   * @SWG\Get(
-  *     path="dyn/dw?s={schema}&t={table}&c={columns}&w={column_filter}:{value_filter}&lat={latitude}&lng={longitud}&mts={meters}",
+  *     path="/dyn/dw?s={schema}&t={table}&c={columns}&w={column_filter}:{value_filter}&lat={latitude}&lng={longitud}&mts={meters}",
   *     summary="Distance Within service analisys",
   *     description="Servicio de analisis que regresa las geometrias con la informacion solicitada",
   *     operationId="dw",
