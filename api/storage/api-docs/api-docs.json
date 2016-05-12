@@ -52,7 +52,7 @@
         "/dyn/intersect?s={schema}&t={table}&c={columns}&w={column_filter}:{value_filter}&wkt={wkt}&mts={meters}": {
             "get": {
                 "tags": [
-                    "Distance Within"
+                    "Get geometry as GeoJSON by WKT"
                 ],
                 "summary": "Obtener lo que intersecte",
                 "description": "Servicio de analisis que regresa las geometrias con la informacion solicitada segun el WKT enviado como parametro",

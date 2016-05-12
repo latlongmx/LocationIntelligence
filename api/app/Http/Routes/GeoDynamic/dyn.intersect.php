@@ -6,7 +6,7 @@
   *     summary="Obtener lo que intersecte",
   *     description="Servicio de analisis que regresa las geometrias con la informacion solicitada segun el WKT enviado como parametro",
   *     operationId="intersect",
-  *     tags={"Distance Within"},
+  *     tags={"Get geometry as GeoJSON by WKT"},
   *     produces={"application/json"},
   *     @SWG\Parameter(
   * 		   	name="schema",
