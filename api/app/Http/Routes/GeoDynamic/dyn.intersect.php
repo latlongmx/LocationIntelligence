@@ -93,8 +93,8 @@ Route::get('/intersect', function(){
   $GEOM_WKT_SPLIT = " ST_GeomFromText( '$wkt', 4326 ) ";
   $GEOM_WKT_WHERE = " ST_Intersects( A.geom, S.geom )";
   if (strpos( strtolower($wkt), 'point') !== false) {
-    $GEOM_WKT_SPLIT = "st_buffer( S.geom , $mts)";
-    $GEOM_WKT_WHERE = "ST_DWithin( A.geom, S.geom, $mts)";
+    $GEOM_WKT_WHERE = "ST_DWithin( A.geom, $GEOM_WKT_SPLIT, $mts)";
+    $GEOM_WKT_SPLIT = "st_buffer( $GEOM_WKT_SPLIT , $mts)";
   }
   $WITH= " WITH split AS ( SELECT ($GEOM_WKT_SPLIT)::geometry geom ) ";
 
