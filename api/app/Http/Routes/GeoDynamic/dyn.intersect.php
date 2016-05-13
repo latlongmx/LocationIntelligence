@@ -87,26 +87,22 @@ Route::get('/intersect', function(){
   $TBL = $s.".".$t;
   $INFO = array();
   $GEOM = "";
-  $SPLIT = "";
   $GEOM_CUT_LINE = "ST_AsGeoJSON( ( (ST_Dump(ST_Intersection(S.geom, A.geom))).geom )::geometry)::json As geometry";
   $GEOM_INTERSECT = "ST_AsGeoJSON(A.geom)::json As geometry";
   $WHERE = "";
   $GEOM_WKT_SPLIT = " ST_GeomFromText( '$wkt', 4326 ) ";
-  $GEOM_WKT_WHERE = " ST_intersects( A.geom, ST_GeomFromText('$wkt', 4326 ) )";
+  $GEOM_WKT_WHERE = " ST_Intersects( A.geom, S.geom )";
   if (strpos( strtolower($wkt), 'point') !== false) {
-    $GEOM_WKT_SPLIT = "st_buffer( ST_GeomFromText( '$wkt', 4326 ) , $mts)";
-    $GEOM_WKT_WHERE = "ST_DWithin( A.geom, ST_GeomFromText( '$wkt', 4326 ), $mts)";
+    $GEOM_WKT_SPLIT = "st_buffer( S.geom , $mts)";
+    $GEOM_WKT_WHERE = "ST_DWithin( A.geom, S.geom, $mts)";
   }
+  $WITH= " WITH split AS ( SELECT ($GEOM_WKT_SPLIT)::geometry geom ) ";
 
   switch ($TBL) {
     case 'inegi.rnc_red_vial_2015':
-        $SPLIT = " WITH split AS ( SELECT ($GEOM_WKT_SPLIT)::geometry geom ) ";
-        $TBL = "inegi.rnc_red_vial_2015 As A, split S";
         $GEOM = $GEOM_CUT_LINE;
       break;
     case 'inegi.inter15_vias':
-        $SPLIT = " WITH split AS ( SELECT ($GEOM_WKT_SPLIT)::geometry geom ) ";
-        $TBL = "inegi.inter15_vias As A, split S";
         $GEOM = $GEOM_CUT_LINE;
       break;
     case 'inegi.denue_2016':
@@ -116,7 +112,6 @@ Route::get('/intersect', function(){
               cve_mun, municipio, cve_loc, localidad, ageb, manzana, telefono, correoelec, www, tipounieco, fecha_alta ";
       break;
     default:
-        $TBL = $TBL." As A";
         $GEOM = $GEOM_INTERSECT;
       break;
   }
@@ -127,9 +122,9 @@ Route::get('/intersect', function(){
   }
 
 
-  $sql = " $SPLIT
+  $sql = " $WITH
         SELECT $c , $GEOM
-        FROM $TBL
+        FROM $TBL As A, split S
         WHERE $GEOM_WKT_WHERE
         $WHERE";
   $rs = DB::select($sql,[]);
