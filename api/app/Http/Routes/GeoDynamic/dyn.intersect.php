@@ -89,6 +89,7 @@ Route::get('/intersect', function(){
   $GEOM = "";
   $GEOM_CUT_LINE = "ST_AsGeoJSON( ( (ST_Dump(ST_Intersection(S.geom, A.geom))).geom )::geometry)::json As geometry";
   $GEOM_INTERSECT = "ST_AsGeoJSON(A.geom)::json As geometry";
+  $GEOM = $GEOM_INTERSECT;
   $WHERE = "";
   $GEOM_WKT_SPLIT = " ST_GeomFromText( '$wkt', 4326 ) ";
   $GEOM_WKT_WHERE = " ST_Intersects( A.geom, S.geom )";
