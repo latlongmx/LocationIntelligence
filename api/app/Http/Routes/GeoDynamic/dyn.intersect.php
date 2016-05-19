@@ -119,7 +119,11 @@ Route::get('/intersect', function(){
 
   if($w!="" && strpos($w, ':') !== false && strpos($w, '{') === false){
     $ww = explode(":", $w);
-    $WHERE = " and ".$ww[0]."='".$ww[1]."'";
+    $eq = "='".$ww[1]."'";
+    if(strpos($ww[1], '!') !== false){
+      $eq = " like '%".str_replace("!",""$ww[1])."%'";
+    }
+    $WHERE = " and ".$ww[0].$eq;
   }
 
 
