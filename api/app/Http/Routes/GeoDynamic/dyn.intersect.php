@@ -140,7 +140,7 @@ Route::get('/intersect', function(){
         $INFO[ $r[$c] ] = 1;
       }
     }
-  }else if($c !== 'gid' && $TBL!='inegi.pobviv2010'){
+  }else if($c !== 'gid' && strpos($c, ',') === false){
     foreach($rs as $ro){
       $r = (array) $ro;
       if(isset($INFO[$r[$c]])){
