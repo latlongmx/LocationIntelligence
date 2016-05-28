@@ -51,7 +51,7 @@ where
       }
   }
 
-  $LAY = getLayerObjConfig(&$MAP, 'Manzanas');
+  $LAY = getLayerObjConfig($MAP, 'Manzanas');
   $LAY->set('data', "geom from (select gid, cvegeo, geom from inegi.inter15_manzanas where ST_Intersects(geom,!BOX!)) as T using unique gid using srid=4326");
   $LAY->set("classitem", "cvegeo");
 
