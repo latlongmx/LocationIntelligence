@@ -3,7 +3,7 @@
 
 Route::get('/pb_wms', //['middleware' => 'oauth', function() {
 function(){
-  $userId = Authorizer::getResourceOwnerId();
+  //$userId = Authorizer::getResourceOwnerId();
   $MAP = getMapObjConfig();
 
   $req = new Owsrequestobj();
