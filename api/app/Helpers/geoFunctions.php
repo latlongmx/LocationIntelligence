@@ -46,7 +46,7 @@ function array2GeoJSON($arr){
  * @return object
  */
 function getMapObjConfig(){
-  $map=new mapObj(null);
+  $map=new \mapObj(null);
 
   $map->setFontSet(realpath("lib\\server-side\\fonts.list"));
   $map->setConfigOption("MS_ERRORFILE",__DIR__."/ms_error.log");
@@ -80,7 +80,7 @@ function getLayerObjConfig(&$map, $layerName){
   $db_dbn = env('DB_DATABASE','');
   $db_usr = env('DB_USERNAME','');
   $db_pwd = env('DB_PASSWORD','');
-  $layer = new LayerObj($map);
+  $layer = new \LayerObj($map);
   $layer->set('connection',"user=$db_usr dbname=$db_dbn host=$db_hst password=$db_pwd");
   $layer->set('name', $layerName);
   $layer->set('status', MS_DEFAULT );

@@ -6,7 +6,7 @@ function(){
   //$userId = Authorizer::getResourceOwnerId();
   $MAP = getMapObjConfig();
 
-  $req = new Owsrequestobj();
+  $req = new \Owsrequestobj();
   $req->loadparams();
 
   $COL = $req->getValueByName("col");
@@ -56,9 +56,9 @@ where
   $LAY->set("classitem", "cvegeo");
 
   foreach ($VALUES as $val){
-    $class = new ClassObj( $LAY );
+    $class = new \ClassObj( $LAY );
     $class->setExpression("(\"[cvegeo]\" = \"".$val[0]."\")");
-    $style = new StyleObj( $class );
+    $style = new \StyleObj( $class );
     if(is_numeric($val[1])){
       $v = (((int)$val[1])*100)/$MAXVAL;
       $v = $v/100;
