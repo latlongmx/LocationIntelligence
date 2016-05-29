@@ -75,7 +75,7 @@ group by p.entidad;
     $class = new \ClassObj( $LAY );
     $class->setExpression("(\"[cvegeo]\" = \"".$obj["cvegeo"]."\")");
     $style = new \StyleObj( $class );
-    if(is_numeric($obj["variable"]) && (int)$obj["variable"]) > 0){
+    if(is_numeric($obj["variable"]) && (int)$obj["variable"] > 0){
       $MAXVAL = array_search( substr($obj["cvegeo"],0,2), $MAXVALS);
       $v = (((int)$obj["variable"])*100)/$MAXVAL;
       $v = $v/100;
