@@ -2,9 +2,9 @@
 
 Route::group(['prefix'=>'dyn', 'before' => 'oauth', 'middleware' => 'cors'], function(){
 
-  if (!extension_loaded('MapScript')) {
+  /*if (!extension_loaded('MapScript')) {
     dl('php_mapscript.soo');
-  }
+  }*/
 
   //API Documentacion
   require app_path('Http/Routes/GeoDynamic/dyn.apidoc.php');
