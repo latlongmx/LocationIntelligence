@@ -13,7 +13,7 @@ function(){
   $BOX = $req->getValueByName("bbox"); //-99.1461181640625,19.45105402980001,-99.140625,19.456233596018
 
   $VALUES = array();
-  $MAXVAL = 0;
+  $MAXVALS = array();
   if($BOX!= ""){
 
 /*
@@ -25,31 +25,41 @@ where
   and E.cve_ent = P.entidad
 GROUP BY p.entidad, pea;
 
-select p.entidad || p.mun || p.loc || p.ageb || p.mza cvegeo, pea
+select p.entidad ent, max(pea)
 from inegi.censo_resageburb_2010 P,
  inegi.mgn_estados E
 where
   ST_Intersects(E.geom,ST_MakeEnvelope(-99.1461181640625,19.45105402980001,-99.140625,19.456233596018, 4326))
-  and E.cve_ent = P.entidad;
-  and pea not in('N/D','*') and pea is not null;
+  and E.cve_ent = P.entidad
+  and pea not in('N/D','*') and pea is not null
+group by p.entidad;
 */
       //$q = "SELECT $COL FROM inegi.pobviv2010 where ST_Intersects(geom,ST_MakeEnvelope('$WKT', 4326))";
 
-
-
-      $q = "select p.entidad || p.mun || p.loc || p.ageb || p.mza cvegeo, $COL variab
+      //MAXIMOS
+      $q = "select p.entidad ent, max($COL) maximo
       from inegi.censo_resageburb_2010 P,
        inegi.mgn_estados E
       where
         ST_Intersects(E.geom,ST_MakeEnvelope($BOX, 4326))
-        and E.cve_ent = P.entidad;";
+        and E.cve_ent = P.entidad
+        and pea not in('N/D','*') and pea is not null
+      group by p.entidad;";
       $rs = DB::select($q,[]);
       foreach($rs as $r){
-        $v = $r->variab; //[$COL];
-        if(is_numeric($v) && $v > $MAXVAL){
-          $MAXVAL = (int)$v;
-        }
-        $VALUES[] = array($r->cvegeo => $v);
+        $MAXVALS[] = array($r-ent => $r->maximo);
+      }
+
+
+      $q = "select E.cvegeo cvegeo, $COL variab
+      from inegi.censo_resageburb_2010 P,
+       inegi.inter15_manzanas E
+      where
+        ST_Intersects(E.geom,ST_MakeEnvelope($BOX, 4326))
+        and E.cvegeo = P.p.entidad || p.mun || p.loc || p.ageb || p.mza;";
+      $rs = DB::select($q,[]);
+      foreach($rs as $r){
+        $VALUES[] = array($r->cvegeo => $r->variab);
       }
   }
 
@@ -62,6 +72,7 @@ where
     $class->setExpression("(\"[cvegeo]\" = \"".$key."\")");
     $style = new \StyleObj( $class );
     if(is_numeric($val)){
+      $MAXVAL = array_search( substr($key,0,2), $MAXVALS);
       $v = (((int)$val)*100)/$MAXVAL;
       $v = $v/100;
       $style->color->setHex( '#'.getColorFromColToCol('ffff99', 'ff0000', $v ) );
