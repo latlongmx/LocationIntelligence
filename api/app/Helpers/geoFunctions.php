@@ -75,7 +75,7 @@ function getMapObjConfig(){
  * @param string $layerName
  * @return object
  */
-function getLayerObjConfig(&$map, $layerName){
+function getLayerObjConfig(&$map, $layerName, $COL){
   $db_hst = env('DB_HOST','');
   $db_dbn = env('DB_DATABASE','');
   $db_usr = env('DB_USERNAME','');

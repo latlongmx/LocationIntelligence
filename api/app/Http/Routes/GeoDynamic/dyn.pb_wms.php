@@ -12,7 +12,6 @@ function(){
   $COL = $req->getValueByName("col");
   $BOX = $req->getValueByName("bbox"); //-99.1461181640625,19.45105402980001,-99.140625,19.456233596018
 
-  $COL = "pea";
   $VALUES = array();
   $MAXVAL = 0;
   if($BOX!= ""){
@@ -54,7 +53,7 @@ where
       }
   }
 
-  $LAY = getLayerObjConfig($MAP, 'Manzanas');
+  $LAY = getLayerObjConfig($MAP, 'Manzanas', $COL);
   $LAY->set('data', "geom from (select gid, cvegeo, geom from inegi.inter15_manzanas where ST_Intersects(geom,!BOX!)) as T using unique gid using srid=4326");
   $LAY->set("classitem", "cvegeo");
 
