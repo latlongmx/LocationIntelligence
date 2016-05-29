@@ -47,7 +47,7 @@ where
         if(is_numeric($v) && $v > $MAXVAL){
           $MAXVAL = (int)$v;
         }
-        $VALUES[] = array($r["cvegeo"], $v);
+        $VALUES[] = array($r->cvegeo, $v);
       }
   }
 
