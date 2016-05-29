@@ -44,13 +44,13 @@ where
       where
         ST_Intersects(E.geom,ST_MakeEnvelope($BOX, 4326))
         and E.cve_ent = P.entidad;";
-      $rs = DB::select($q,[])->toArray();
+      $rs = DB::select($q,[]);
       foreach($rs as $r){
-        $v = $r[$COL];
+        $v = $r->variab; //[$COL];
         if(is_numeric($v) && $v > $MAXVAL){
           $MAXVAL = (int)$v;
         }
-        $VALUES[] = array($r["cvegeo"], $v);
+        $VALUES[] = array($r->cvegeo => $v);
       }
   }
 
@@ -58,12 +58,12 @@ where
   $LAY->set('data', "geom from (select gid, cvegeo, geom from inegi.inter15_manzanas where ST_Intersects(geom,!BOX!)) as T using unique gid using srid=4326");
   $LAY->set("classitem", "cvegeo");
 
-  foreach ($VALUES as $val){
+  foreach ($VALUES as $key => $val){
     $class = new \ClassObj( $LAY );
-    $class->setExpression("(\"[cvegeo]\" = \"".$val[0]."\")");
+    $class->setExpression("(\"[cvegeo]\" = \"".$key."\")");
     $style = new \StyleObj( $class );
-    if(is_numeric($val[1])){
-      $v = (((int)$val[1])*100)/$MAXVAL;
+    if(is_numeric($val)){
+      $v = (((int)$val)*100)/$MAXVAL;
       $v = $v/100;
       $style->color->setHex( '#'.getColorFromColToCol('ffff99', 'ff0000', $v ) );
     }else{
