@@ -59,7 +59,7 @@ group by p.entidad;
         and E.cvegeo = p.entidad || p.mun || p.loc || p.ageb || p.mza;";
       $rs = DB::select($q,[]);
       foreach($rs as $r){
-        $VALUES[] = array($r->cvegeo => $r->variab);
+        $VALUES[] = array("cvegeo" => $r->cvegeo, "variable" => $r->variab);
       }
   }
 
@@ -67,13 +67,13 @@ group by p.entidad;
   $LAY->set('data', "geom from (select gid, cvegeo, geom from inegi.inter15_manzanas where ST_Intersects(geom,!BOX!)) as T using unique gid using srid=4326");
   $LAY->set("classitem", "cvegeo");
 
-  foreach ($VALUES as $key => $val){
+  foreach ($VALUES as $obj){
     $class = new \ClassObj( $LAY );
-    $class->setExpression("(\"[cvegeo]\" = \"".$key."\")");
+    $class->setExpression("(\"[cvegeo]\" = \"".$obj->cvegeo."\")");
     $style = new \StyleObj( $class );
-    if(is_numeric($val)){
-      $MAXVAL = array_search( substr($key,0,2), $MAXVALS);
-      $v = (((int)$val)*100)/$MAXVAL;
+    if(is_numeric($obj->variable)){
+      $MAXVAL = array_search( substr($obj->cvegeo,0,2), $MAXVALS);
+      $v = (((int)$obj->variable)*100)/$MAXVAL;
       $v = $v/100;
       $style->color->setHex( '#'.getColorFromColToCol('ffff99', 'ff0000', $v ) );
     }else{
