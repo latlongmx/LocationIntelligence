@@ -73,7 +73,7 @@ where
 
   ms_ioinstallstdouttobuffer();
   #$map->save('map_exmp.map');
-  $map->owsdispatch($req);
+  $MAP->owsdispatch($req);
 
   $contenttype = ms_iostripstdoutbuffercontenttype();
   if (!empty($contenttype)){
