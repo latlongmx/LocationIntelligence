@@ -78,7 +78,7 @@ where
   $contenttype = ms_iostripstdoutbuffercontenttype();
   if (!empty($contenttype)){
       error_log($contenttype);
-      if ($request->getValueByName('REQUEST') === 'GetCapabilities') {
+      if ($req->getValueByName('REQUEST') === 'GetCapabilities') {
           $buffer = ms_iogetstdoutbufferstring();
           header('Content-type: application/xml');
           echo $buffer;
