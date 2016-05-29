@@ -56,7 +56,7 @@ group by p.entidad;
        inegi.inter15_manzanas E
       where
         ST_Intersects(E.geom,ST_MakeEnvelope($BOX, 4326))
-        and E.cvegeo = P.p.entidad || p.mun || p.loc || p.ageb || p.mza;";
+        and E.cvegeo = p.entidad || p.mun || p.loc || p.ageb || p.mza;";
       $rs = DB::select($q,[]);
       foreach($rs as $r){
         $VALUES[] = array($r->cvegeo => $r->variab);
