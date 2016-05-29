@@ -68,10 +68,14 @@ group by p.entidad;
   $LAY->set("classitem", "cvegeo");
 
   foreach ($VALUES as $obj){
+    error_log($obj["cvegeo"]);
+    error_log($obj["variable"]);
+    error_log(substr($obj["cvegeo"],0,2));
+
     $class = new \ClassObj( $LAY );
     $class->setExpression("(\"[cvegeo]\" = \"".$obj["cvegeo"]."\")");
     $style = new \StyleObj( $class );
-    if(is_numeric($obj["variable"])){
+    if(is_numeric($obj["variable"]) && (int)$obj["variable"]) > 0){
       $MAXVAL = array_search( substr($obj["cvegeo"],0,2), $MAXVALS);
       $v = (((int)$obj["variable"])*100)/$MAXVAL;
       $v = $v/100;
