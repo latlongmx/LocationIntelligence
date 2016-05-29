@@ -47,7 +47,7 @@ group by p.entidad;
       group by p.entidad;";
       $rs = DB::select($q,[]);
       foreach($rs as $r){
-        $MAXVALS[] = array($r-ent => $r->maximo);
+        $MAXVALS[] = array($r->ent => $r->maximo);
       }
 
 
