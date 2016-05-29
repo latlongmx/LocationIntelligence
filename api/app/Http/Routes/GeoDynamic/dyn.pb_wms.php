@@ -69,11 +69,11 @@ group by p.entidad;
 
   foreach ($VALUES as $obj){
     $class = new \ClassObj( $LAY );
-    $class->setExpression("(\"[cvegeo]\" = \"".$obj->cvegeo."\")");
+    $class->setExpression("(\"[cvegeo]\" = \"".$obj["cvegeo"]."\")");
     $style = new \StyleObj( $class );
-    if(is_numeric($obj->variable)){
-      $MAXVAL = array_search( substr($obj->cvegeo,0,2), $MAXVALS);
-      $v = (((int)$obj->variable)*100)/$MAXVAL;
+    if(is_numeric($obj["variable"])){
+      $MAXVAL = array_search( substr($obj["cvegeo"],0,2), $MAXVALS);
+      $v = (((int)$obj["variable"])*100)/$MAXVAL;
       $v = $v/100;
       $style->color->setHex( '#'.getColorFromColToCol('ffff99', 'ff0000', $v ) );
     }else{
