@@ -47,7 +47,7 @@ group by p.entidad;
       group by p.entidad;";
       $rs = DB::select($q,[]);
       foreach($rs as $r){
-        $MAXVALS[] = array($r->ent => $r->maximo);
+        $MAXVALS[] = array("ent" => $r->ent, "max" =>$r->maximo);
       }
 
 
@@ -76,7 +76,10 @@ group by p.entidad;
     $class->setExpression("(\"[cvegeo]\" = \"".$obj["cvegeo"]."\")");
     $style = new \StyleObj( $class );
     if(is_numeric($obj["variable"]) && (int)$obj["variable"] > 0){
-      $MAXVAL = array_search( substr($obj["cvegeo"],0,2), $MAXVALS);
+      $mo = array_filter($MAXVALS,function($o){
+        return ($o["ent"] == substr($obj["cvegeo"],0,2));
+      });
+      $MAXVAL = $mo["ent"];
       $v = (((int)$obj["variable"])*100)/$MAXVAL;
       $v = $v/100;
       $style->color->setHex( '#'.getColorFromColToCol('ffff99', 'ff0000', $v ) );
