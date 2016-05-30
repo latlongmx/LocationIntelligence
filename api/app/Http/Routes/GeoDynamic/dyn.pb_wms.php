@@ -80,8 +80,12 @@ group by p.entidad;
         return ($o["ent"] == substr($obj["cvegeo"],0,2));
       });
       $MAXVAL = $mo[0]["ent"];
+      Log::info("MAXVAL: ".$MAXVAL);
+      Log::info("variable: ".$obj["variable"]);
       $v = (((int)$obj["variable"])*100)/$MAXVAL;
+      Log::info("v: ".$v);
       $v = $v/100;
+      Log::info("v100: ".$v);
       $col = getColorFromColToCol('ffff99', 'ff0000', $v );
       $style->color->setHex( '#'.$col );
     }else{
