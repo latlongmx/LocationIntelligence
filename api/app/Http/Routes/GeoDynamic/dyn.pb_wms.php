@@ -76,7 +76,7 @@ group by p.entidad;
     $class->setExpression("(\"[cvegeo]\" = \"".$obj["cvegeo"]."\")");
     $style = new \StyleObj( $class );
     if(is_numeric($obj["variable"]) && (int)$obj["variable"] > 0){
-      $mo = array_filter($MAXVALS,function($o){
+      $mo = array_filter($MAXVALS,function($o) use ($obj){
         return ($o["ent"] == substr($obj["cvegeo"],0,2));
       });
       $MAXVAL = $mo["ent"];
