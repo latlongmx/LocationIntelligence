@@ -79,7 +79,7 @@ group by p.entidad;
       $mo = array_filter($MAXVALS,function($o) use ($obj){
         return ($o["ent"] == substr($obj["cvegeo"],0,2));
       });
-      $MAXVAL = $mo["ent"];
+      $MAXVAL = $mo[0]["ent"];
       $v = (((int)$obj["variable"])*100)/$MAXVAL;
       $v = $v/100;
       $style->color->setHex( '#'.getColorFromColToCol('ffff99', 'ff0000', $v ) );
