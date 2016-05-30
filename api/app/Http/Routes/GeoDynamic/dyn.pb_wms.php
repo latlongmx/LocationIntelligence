@@ -82,7 +82,8 @@ group by p.entidad;
       $MAXVAL = $mo[0]["ent"];
       $v = (((int)$obj["variable"])*100)/$MAXVAL;
       $v = $v/100;
-      $style->color->setHex( '#'.getColorFromColToCol('ffff99', 'ff0000', $v ) );
+      $col = getColorFromColToCol('ffff99', 'ff0000', $v );
+      $style->color->setHex( '#'.$col );
     }else{
       $style->color->setHex('#ffff99');
     }
