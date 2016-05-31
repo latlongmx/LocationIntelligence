@@ -49,7 +49,7 @@ function getMapObjConfig(){
   $map=new \mapObj(null);
 
   $map->setFontSet(realpath("lib\\server-side\\fonts.list"));
-  $map->setConfigOption("MS_ERRORFILE",__DIR__."/ms_error.log");
+  $map->setConfigOption("MS_ERRORFILE","/var/www/sites/api.walmex.latlong.mx/api/app/Http/Routes/GeoDynamic/ms_error.log");
   $map->setConfigOption('ows_enable_request','*');
   $map->set('debug', 1);
   $map->setConfigOption('size','800 600');
