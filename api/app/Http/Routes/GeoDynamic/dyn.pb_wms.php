@@ -125,7 +125,7 @@ group by p.entidad;
   $style->set('opacity',100);
 
   ms_ioinstallstdouttobuffer();
-  $MAP->save('/var/www/sites/api.walmex.latlong.mx/api/app/Http/Routes/GeoDynamic/map_exmp.map');
+  $MAP->save('/var/log/apache2/ms_file.map');
   $MAP->owsdispatch($req);
 
   $contenttype = ms_iostripstdoutbuffercontenttype();
