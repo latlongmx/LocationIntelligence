@@ -106,7 +106,6 @@ group by p.entidad;
     $i=1;
     while($r<$MAXVALUE){
       $r2 = $GG*$i;
-      echo "$r <".$r2."\n";
       $class = new \ClassObj( $LAY );
       $class->setExpression("((\"[cve_ent]\" >= \"".$ENT."\") AND (\"[variab]\" >= \"".$r."\") AND (\"[variab]\" < \"".$r2."\"))");
       $style = new \StyleObj( $class );
