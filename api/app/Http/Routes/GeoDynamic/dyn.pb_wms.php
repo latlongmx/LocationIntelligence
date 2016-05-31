@@ -79,7 +79,7 @@ group by p.entidad;
       $mo = array_filter($MAXVALS,function($o) use ($obj){
         return ($o["ent"] == substr($obj["cvegeo"],0,2));
       });
-      $MAXVAL = $mo[0]["ent"];
+      $MAXVAL = (int)$mo[0]["max"];
       Log::info("MAXVAL: ".$MAXVAL);
       Log::info("variable: ".$obj["variable"]);
       $v = (((int)$obj["variable"])*100)/$MAXVAL;
