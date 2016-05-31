@@ -70,7 +70,7 @@ group by p.entidad;
       select E.gid gid, E.cve_ent cve_ent, E.cvegeo cvegeo,
           CASE
              WHEN P.$COL IN ('N/D','*') OR P.$COL is null THEN 0
-             else cast(P.$COL as number)
+             else cast(P.$COL as numeric)
           END AS pbvar,
           geom
       from inegi.censo_resageburb_2010 P
