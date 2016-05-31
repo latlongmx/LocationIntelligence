@@ -66,12 +66,9 @@ group by p.entidad;
   $LAY = getLayerObjConfig($MAP, 'Manzanas', $COL);
   $LAY->set('data', "geom from (select gid, cvegeo, geom from inegi.inter15_manzanas where ST_Intersects(geom,!BOX!)) as T using unique gid using srid=4326");
   $LAY->set("classitem", "cvegeo");
+  $LAY->set('type', MS_LAYER_POLYGON);
 
   foreach ($VALUES as $obj){
-    error_log($obj["cvegeo"]);
-    error_log($obj["variable"]);
-    error_log(substr($obj["cvegeo"],0,2));
-
     $class = new \ClassObj( $LAY );
     $class->setExpression("(\"[cvegeo]\" = \"".$obj["cvegeo"]."\")");
     $style = new \StyleObj( $class );
@@ -80,12 +77,8 @@ group by p.entidad;
         return ($o["ent"] == substr($obj["cvegeo"],0,2));
       });
       $MAXVAL = (int)$mo[0]["max"];
-      Log::info("MAXVAL: ".$MAXVAL);
-      Log::info("variable: ".$obj["variable"]);
       $v = (((int)$obj["variable"])*100)/$MAXVAL;
-      Log::info("v: ".$v);
       $v = $v/100;
-      Log::info("v100: ".$v);
       $col = getColorFromColToCol('ffff99', 'ff0000', $v );
       $style->color->setHex( '#'.$col );
     }else{
@@ -100,15 +93,15 @@ group by p.entidad;
 
   $contenttype = ms_iostripstdoutbuffercontenttype();
   if (!empty($contenttype)){
-      error_log($contenttype);
-      if ($req->getValueByName('REQUEST') === 'GetCapabilities') {
-          $buffer = ms_iogetstdoutbufferstring();
-          header('Content-type: application/xml');
-          echo $buffer;
-      }else{
-          header('Content-type: $contenttype');
-          ms_iogetStdoutBufferBytes();
-      }
+    error_log($contenttype);
+    if ($req->getValueByName('REQUEST') === 'GetCapabilities') {
+      $buffer = ms_iogetstdoutbufferstring();
+      header('Content-type: application/xml');
+      echo $buffer;
+    }else{
+      header('Content-type: $contenttype');
+      ms_iogetStdoutBufferBytes();
+    }
   }
   else
       echo "Fail to render!";
