@@ -49,10 +49,10 @@ function getMapObjConfig(){
   $map=new \mapObj(null);
 
   $map->setFontSet(realpath("lib\\server-side\\fonts.list"));
-  $err_file = storage_path("logs/ms_error.log");
-  $map->setConfigOption("MS_ERRORFILE", "stderr" );
+  #$err_file = storage_path("logs/ms_error.log");
+  #$map->setConfigOption("MS_ERRORFILE", "stderr" );
+  #$map->set('debug', 5);
   $map->setConfigOption('ows_enable_request','*');
-  $map->set('debug', 5);
   $map->setConfigOption('size','800 600');
   $map->setConfigOption('extent','-118.407653808594 14.532097816008417 -86.7086486816406 32.71865463170993');
   $map->setExtent(-118.407653808594, 14.532097816008417, -86.7086486816406, 32.71865463170993);

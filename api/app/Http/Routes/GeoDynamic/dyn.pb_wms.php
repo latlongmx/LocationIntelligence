@@ -91,7 +91,7 @@ group by p.entidad;
     $style->set('opacity',100);
   }*/
 
-  /*foreach ($MAXVALS as $mx){
+  foreach ($MAXVALS as $mx){
     $MAXVALUE = (int)$mx["max"];
     $ENT = $mx["ent"];
     $GG = round($MAXVALUE/$GROUPS);
@@ -112,7 +112,7 @@ group by p.entidad;
       $r = $GG*$i;
       $i++;
     }
-  }*/
+  }
 
   $class = new \ClassObj( $LAY );
   $style = new \StyleObj( $class );
@@ -121,7 +121,7 @@ group by p.entidad;
 
   ms_ioinstallstdouttobuffer();
   $map_file = storage_path("logs/ms_file.map");
-  $MAP->save( $map_file );
+  #$MAP->save( $map_file );
   $MAP->owsdispatch($req);
 
   $contenttype = ms_iostripstdoutbuffercontenttype();
