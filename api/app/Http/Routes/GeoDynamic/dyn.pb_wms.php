@@ -99,7 +99,7 @@ group by p.entidad;
     $style->set('opacity',100);
   }*/
 
-  foreach ($MAXVALS as $mx){
+  /*foreach ($MAXVALS as $mx){
     $MAXVALUE = (int)$mx["max"];
     $ENT = $mx["ent"];
     $GG = round($MAXVALUE/$GROUPS);
@@ -110,7 +110,7 @@ group by p.entidad;
     while($r<$MAXVALUE){
       $r2 = $GG*$i;
       $class = new \ClassObj( $LAY );
-      $class->setExpression("((\"[cve_ent]\" >= \"".$ENT."\") AND (\"[variab]\" >= \"".$r."\") AND (\"[variab]\" < \"".$r2."\"))");
+      $class->setExpression("((\"[cve_ent]\" == \"".$ENT."\") AND (\"[variab]\" >= \"".$r."\") AND (\"[variab]\" < \"".$r2."\"))");
       $style = new \StyleObj( $class );
       $ncol = ((($i*100)/$GROUPS)*0.01);
       $col = getColorFromColToCol('ffff99', 'ff0000', $ncol );
@@ -120,7 +120,7 @@ group by p.entidad;
       $r = $GG*$i;
       $i++;
     }
-  }
+  }*/
 
   $class = new \ClassObj( $LAY );
   $style = new \StyleObj( $class );
