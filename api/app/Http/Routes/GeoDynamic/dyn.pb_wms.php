@@ -86,7 +86,7 @@ group by p.entidad;
       where  ST_Intersects(E.geom, !BOX!) and E.gid is not null
     ) as T using unique gid using srid=4326";
   $LAY->set('data', $qry_data);
-  $LAY->set("classitem", "pbvar");
+  //$LAY->set("classitem", "pbvar");
   $LAY->set('type', MS_LAYER_POLYGON);
 
   /*foreach ($VALUES as $obj){
@@ -109,7 +109,7 @@ group by p.entidad;
   }*/
   $date = date('m/d/Y h:i:s a', time());
   Log::info("Config Styles:".$date);
-  foreach ($MAXVALS as $mx){
+  /*foreach ($MAXVALS as $mx){
     $MAXVALUE = (int)$mx["max"];
     $ENT = $mx["ent"];
     $GG = round($MAXVALUE/$GROUPS);
@@ -130,7 +130,7 @@ group by p.entidad;
       $r = $GG*$i;
       $i++;
     }
-  }
+  }*/
   $date = date('m/d/Y h:i:s a', time());
   Log::info("End Styles:".$date);
 
@@ -140,12 +140,14 @@ group by p.entidad;
   $style->set('opacity',100);
 
   $date = date('m/d/Y h:i:s a', time());
-  Log::info("Dispatch:".$date);
+  Log::info("Buffer:".$date);
 
   ms_ioinstallstdouttobuffer();
-  $map_file = storage_path("logs/ms_file.map");
-  $MAP->save( $map_file );
+  #$map_file = storage_path("logs/ms_file.map");
+  #$MAP->save( $map_file );
+  Log::info("Dispatch:".$date);
   $MAP->owsdispatch($req);
+    Log::info("Dispatch2:".$date);
 
   $contenttype = ms_iostripstdoutbuffercontenttype();
   if (!empty($contenttype)){
@@ -156,7 +158,7 @@ group by p.entidad;
       echo $buffer;
     }else{
       $date = date('m/d/Y h:i:s a', time());
-      Log::info("Resolv:".$date); 
+      Log::info("Resolv:".$date);
       header('Content-type: $contenttype');
       ms_iogetStdoutBufferBytes();
     }
