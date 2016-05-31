@@ -14,6 +14,7 @@ function(){
 
   $VALUES = array();
   $MAXVALS = array();
+  $GROUPS = 10;
   if($BOX!= ""){
 
 /*
@@ -51,7 +52,7 @@ group by p.entidad;
       }
 
 
-      $q = "select E.cvegeo cvegeo, $COL variab
+      /*$q = "select E.cvegeo cvegeo, $COL variab
       from inegi.censo_resageburb_2010 P,
        inegi.inter15_manzanas E
       where
@@ -60,15 +61,23 @@ group by p.entidad;
       $rs = DB::select($q,[]);
       foreach($rs as $r){
         $VALUES[] = array("cvegeo" => $r->cvegeo, "variable" => $r->variab);
-      }
+      }*/
   }
 
   $LAY = getLayerObjConfig($MAP, 'Manzanas', $COL);
-  $LAY->set('data', "geom from (select gid, cvegeo, geom from inegi.inter15_manzanas where ST_Intersects(geom,!BOX!)) as T using unique gid using srid=4326");
-  $LAY->set("classitem", "cvegeo");
+  #$LAY->set('data', "geom from (select gid, cvegeo, geom from inegi.inter15_manzanas where ST_Intersects(geom,!BOX!)) as T using unique gid using srid=4326");
+  $LAY->set('data', "geom from (
+      select E.gid, E.cve_ent, E.cvegeo cvegeo, P.$COL variab, geom
+      from inegi.censo_resageburb_2010 P,
+       inegi.inter15_manzanas E
+      where
+        ST_Intersects(E.geom,ST_MakeEnvelope(!BOX!, 4326))
+        and E.cvegeo = p.entidad || p.mun || p.loc || p.ageb || p.mza
+    ) as T using unique gid using srid=4326");
+  $LAY->set("classitem", "variab");
   $LAY->set('type', MS_LAYER_POLYGON);
 
-  foreach ($VALUES as $obj){
+  /*foreach ($VALUES as $obj){
     $class = new \ClassObj( $LAY );
     $class->setExpression("(\"[cvegeo]\" = \"".$obj["cvegeo"]."\")");
     $style = new \StyleObj( $class );
@@ -85,7 +94,36 @@ group by p.entidad;
       $style->color->setHex('#ffff99');
     }
     $style->set('opacity',100);
+  }*/
+
+  foreach ($MAXVALS as $mx){
+    $MAXVALUE = int($mx["max"]);
+    $ENT = int($mx["ent"]);
+    $GG = round($MAXVALUE/$GROUPS);
+
+    $r=0;
+    $r2=1;
+    $i=1;
+    while($r<$MAXVALUE){
+      $r2 = $GG*$i;
+      echo "$r <".$r2."\n";
+      $class = new \ClassObj( $LAY );
+      $class->setExpression("((\"[variab]\" >= \"".$r."\") AND (\"[variab]\" < \"".$r2."\"))");
+      $style = new \StyleObj( $class );
+      $ncol = ((($i*100)/$GROUPS)*0.01);
+      $col = getColorFromColToCol('ffff99', 'ff0000', $ncol );
+      $style->color->setHex( '#'.$col );
+      $style->set('opacity',100);
+
+      $r = $GG*$i;
+      $i++;
+    }
   }
+
+  $class = new \ClassObj( $LAY );
+  $style = new \StyleObj( $class );
+  $style->color->setHex('#ffff99');
+  $style->set('opacity',100);
 
   ms_ioinstallstdouttobuffer();
   $MAP->save('/var/www/sites/api.walmex.latlong.mx/api/app/Http/Routes/GeoDynamic/map_exmp.map');
