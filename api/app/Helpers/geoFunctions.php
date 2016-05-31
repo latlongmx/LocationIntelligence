@@ -86,7 +86,7 @@ function getLayerObjConfig(&$map, $layerName, $COL){
   $layer->set('name', $layerName);
   $layer->set('status', MS_DEFAULT );
   $layer->set("status", MS_ON);
-  $layer->set("classitem", $COL);
+  #$layer->set("classitem", $COL);
   $layer->setConnectionType(MS_POSTGIS);
   $layer->setProcessing('CLOSE_CONNECTION=DEFER');
   $layer->setProjection("init=epsg:4326");
