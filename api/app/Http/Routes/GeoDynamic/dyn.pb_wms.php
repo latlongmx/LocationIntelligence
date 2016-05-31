@@ -75,10 +75,7 @@ group by p.entidad;
   #$LAY->set('data', "geom from (select gid, cvegeo, geom from inegi.inter15_manzanas where ST_Intersects(geom,!BOX!)) as T using unique gid using srid=4326");
   $qry_data = "geom from (
       select E.gid gid, E.cve_ent cve_ent, E.cvegeo cvegeo,
-          CASE
-             WHEN P.$COL IN ('N/D','*') OR P.$COL is null THEN 0
-             else cast(P.$COL as numeric)
-          END AS pbvar,
+          CASE WHEN P.$COL~E'^\\d+$' THEN P.$COL::numeric ELSE 0 END AS pbvar,
           geom
       from inegi.censo_resageburb_2010 P
       left join inegi.inter15_manzanas E

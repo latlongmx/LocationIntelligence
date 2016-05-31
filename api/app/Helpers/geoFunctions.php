@@ -84,8 +84,8 @@ function getLayerObjConfig(&$map, $layerName, $COL){
   $layer = new \LayerObj($map);
   $layer->set('connection',"user=$db_usr dbname=$db_dbn host=$db_hst password=$db_pwd");
   $layer->set('name', $layerName);
-  $layer->set('status', MS_DEFAULT );
-  $layer->set("status", MS_ON);
+  #$layer->set('status', MS_DEFAULT );
+  #$layer->set("status", MS_ON);
   #$layer->set("classitem", $COL);
   $layer->setConnectionType(MS_POSTGIS);
   $layer->setProcessing('CLOSE_CONNECTION=DEFER');
