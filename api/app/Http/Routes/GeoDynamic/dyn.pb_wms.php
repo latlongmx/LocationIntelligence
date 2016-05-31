@@ -66,8 +66,13 @@ group by p.entidad;
 
   $LAY = getLayerObjConfig($MAP, 'Manzanas', $COL);
   #$LAY->set('data', "geom from (select gid, cvegeo, geom from inegi.inter15_manzanas where ST_Intersects(geom,!BOX!)) as T using unique gid using srid=4326");
-  $qry_data = "geom from ( select E.gid gid, E.cve_ent cve_ent, E.cvegeo cvegeo, P.pea pbvar, geom from inegi.censo_resageburb_2010 P left join inegi.inter15_manzanas E on E.cvegeo = P.entidad || P.mun || P.loc || P.ageb || P.mza where  ST_Intersects(E.geom, !BOX!) and E.gid is not null) as T using unique gid using srid=4326";
-  Log::info($qry_data);
+  $qry_data = "geom from (
+      select E.gid gid, E.cve_ent cve_ent, E.cvegeo cvegeo, P.$COL pbvar, geom
+      from inegi.censo_resageburb_2010 P
+      left join inegi.inter15_manzanas E
+      on E.cvegeo = P.entidad || P.mun || P.loc || P.ageb || P.mza
+      where  ST_Intersects(E.geom, !BOX!) and E.gid is not null
+    ) as T using unique gid using srid=4326";
   $LAY->set('data', $qry_data);
   $LAY->set("classitem", "pbvar");
   $LAY->set('type', MS_LAYER_POLYGON);
@@ -102,7 +107,7 @@ group by p.entidad;
     while($r<$MAXVALUE){
       $r2 = $GG*$i;
       $class = new \ClassObj( $LAY );
-      $class->setExpression("((\"[cve_ent]\" == \"".$ENT."\") AND (\"[variab]\" >= \"".$r."\") AND (\"[variab]\" < \"".$r2."\"))");
+      $class->setExpression("((\"[cve_ent]\" == \"".$ENT."\") AND (\"[pbvar]\" >= \"".$r."\") AND (\"[pbvar]\" < \"".$r2."\"))");
       $style = new \StyleObj( $class );
       $ncol = ((($i*100)/$GROUPS)*0.01);
       $col = getColorFromColToCol('ffff99', 'ff0000', $ncol );
@@ -121,7 +126,7 @@ group by p.entidad;
 
   ms_ioinstallstdouttobuffer();
   $map_file = storage_path("logs/ms_file.map");
-  #$MAP->save( $map_file );
+  $MAP->save( $map_file );
   $MAP->owsdispatch($req);
 
   $contenttype = ms_iostripstdoutbuffercontenttype();
