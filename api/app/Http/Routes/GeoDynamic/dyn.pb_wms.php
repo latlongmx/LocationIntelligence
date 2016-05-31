@@ -66,14 +66,14 @@ group by p.entidad;
 
   $LAY = getLayerObjConfig($MAP, 'Manzanas', $COL);
   #$LAY->set('data', "geom from (select gid, cvegeo, geom from inegi.inter15_manzanas where ST_Intersects(geom,!BOX!)) as T using unique gid using srid=4326");
-  $LAY->set('data', "geom from (
-      select E.gid, E.cve_ent, E.cvegeo cvegeo, P.$COL variab, geom
-      from inegi.censo_resageburb_2010 P,
-       inegi.inter15_manzanas E
-      where
-        ST_Intersects(E.geom,ST_MakeEnvelope(!BOX!, 4326))
-        and E.cvegeo = p.entidad || p.mun || p.loc || p.ageb || p.mza
-    ) as T using unique gid using srid=4326");
+  $LAY->set('data', "geom from ( ".
+    " select E.gid, E.cve_ent, E.cvegeo cvegeo, P.$COL variab, geom ".
+    " from inegi.censo_resageburb_2010 P, ".
+    "   inegi.inter15_manzanas E ".
+    " where ".
+    "   ST_Intersects(E.geom,ST_MakeEnvelope(!BOX!, 4326)) ".
+    "   and E.cvegeo = p.entidad || p.mun || p.loc || p.ageb || p.mza ".
+    " ) as T using unique gid using srid=4326");
   $LAY->set("classitem", "variab");
   $LAY->set('type', MS_LAYER_POLYGON);
 
