@@ -44,7 +44,7 @@ group by p.entidad;
       where
         ST_Intersects(E.geom,ST_MakeEnvelope($BOX, 4326))
         and E.cve_ent = P.entidad
-        and pea not in('N/D','*') and pea is not null
+        and $COL not in('N/D','*') and $COL is not null
       group by p.entidad;";
       $rs = DB::select($q,[]);
       foreach($rs as $r){
@@ -97,8 +97,8 @@ group by p.entidad;
   }*/
 
   foreach ($MAXVALS as $mx){
-    $MAXVALUE = int($mx["max"]);
-    $ENT = int($mx["ent"]);
+    $MAXVALUE = (int)$mx["max"];
+    $ENT = $mx["ent"];
     $GG = round($MAXVALUE/$GROUPS);
 
     $r=0;
@@ -108,7 +108,7 @@ group by p.entidad;
       $r2 = $GG*$i;
       echo "$r <".$r2."\n";
       $class = new \ClassObj( $LAY );
-      $class->setExpression("((\"[variab]\" >= \"".$r."\") AND (\"[variab]\" < \"".$r2."\"))");
+      $class->setExpression("((\"[cve_ent]\" >= \"".$ENT."\") AND (\"[variab]\" >= \"".$r."\") AND (\"[variab]\" < \"".$r2."\"))");
       $style = new \StyleObj( $class );
       $ncol = ((($i*100)/$GROUPS)*0.01);
       $col = getColorFromColToCol('ffff99', 'ff0000', $ncol );
