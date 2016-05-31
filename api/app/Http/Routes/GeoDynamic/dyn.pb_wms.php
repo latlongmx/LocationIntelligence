@@ -125,7 +125,8 @@ group by p.entidad;
   $style->set('opacity',100);
 
   ms_ioinstallstdouttobuffer();
-  $MAP->save('/var/log/apache2/ms_file.map');
+  $map_file = storage_path("ms_file.map");
+  $MAP->save( $map_file );
   $MAP->owsdispatch($req);
 
   $contenttype = ms_iostripstdoutbuffercontenttype();

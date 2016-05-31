@@ -49,7 +49,8 @@ function getMapObjConfig(){
   $map=new \mapObj(null);
 
   $map->setFontSet(realpath("lib\\server-side\\fonts.list"));
-  $map->setConfigOption("MS_ERRORFILE","/var/log/apache2/ms_error.log");
+  $err_file = storage_path("ms_error.log");
+  $map->setConfigOption("MS_ERRORFILE", $err_file );
   $map->setConfigOption('ows_enable_request','*');
   $map->set('debug', 1);
   $map->setConfigOption('size','800 600');
