@@ -67,7 +67,12 @@ group by p.entidad;
   $LAY = getLayerObjConfig($MAP, 'Manzanas', $COL);
   #$LAY->set('data', "geom from (select gid, cvegeo, geom from inegi.inter15_manzanas where ST_Intersects(geom,!BOX!)) as T using unique gid using srid=4326");
   $qry_data = "geom from (
-      select E.gid gid, E.cve_ent cve_ent, E.cvegeo cvegeo, P.$COL pbvar, geom
+      select E.gid gid, E.cve_ent cve_ent, E.cvegeo cvegeo,
+          CASE
+             WHEN P.$COL IN ('N/D','*') OR P.$COL is null THEN 0
+             else cast(P.$COL as number)
+          END AS pbvar,
+          geom
       from inegi.censo_resageburb_2010 P
       left join inegi.inter15_manzanas E
       on E.cvegeo = P.entidad || P.mun || P.loc || P.ageb || P.mza
@@ -107,7 +112,7 @@ group by p.entidad;
     while($r<$MAXVALUE){
       $r2 = $GG*$i;
       $class = new \ClassObj( $LAY );
-      $class->setExpression("((\"[cve_ent]\" == \"".$ENT."\") AND (\"[pbvar]\" >= \"".$r."\") AND (\"[pbvar]\" < \"".$r2."\"))");
+      $class->setExpression("((\"[cve_ent]\" == \"".$ENT."\") AND ([pbvar] >= ".$r.") AND ([pbvar] < ".$r2."))");
       $style = new \StyleObj( $class );
       $ncol = ((($i*100)/$GROUPS)*0.01);
       $col = getColorFromColToCol('ffff99', 'ff0000', $ncol );
