@@ -49,21 +49,21 @@ function getMapObjConfig(){
   $map=new \mapObj(null);
 
   $map->setFontSet(realpath("lib\\server-side\\fonts.list"));
-  #$err_file = storage_path("logs/ms_error.log");
-  #$map->setConfigOption("MS_ERRORFILE", "stderr" );
-  #$map->set('debug', 5);
+  $err_file = storage_path("logs/ms_error.log");
+  $map->setConfigOption("MS_ERRORFILE", "$err_file" );
+  $map->set('debug', 5);
   $map->setConfigOption('ows_enable_request','*');
   $map->setConfigOption('size','800 600');
-  $map->setConfigOption('extent','-118.407653808594 14.532097816008417 -86.7086486816406 32.71865463170993');
-  $map->setExtent(-118.407653808594, 14.532097816008417, -86.7086486816406, 32.71865463170993);
+#  $map->setConfigOption('extent','-118.407653808594 14.532097816008417 -86.7086486816406 32.71865463170993');
+#  $map->setExtent(-118.407653808594, 14.532097816008417, -86.7086486816406, 32.71865463170993);
 
   $map->setMetaData('wms_enable_request','GetCapabilities GetMap GetFeatureInfo');
   $map->setMetaData('wms_getmap_formatlist','image/png,png,png8,png24');
   $map->setMetaData('wms_title','WMS Dynamic LatLong.mx');
-  $map->setMetaData('wms_abstract','WMS Dynamic LatLong.mx');
+#  $map->setMetaData('wms_abstract','WMS Dynamic LatLong.mx');
   $map->setMetaData('wms_onlineresource','http://52.8.211.37/test/wms.php?');
   $map->setMetaData('wms_extent', "-118.407653808594 14.532097816008417 -86.7086486816406 32.71865463170993");
-  $map->setMetaData('wms_srs', "EPSG:4326");
+#  $map->setMetaData('wms_srs', "EPSG:4326");
   $map->setProjection("init=epsg:4326");
 
   return $map;
@@ -76,7 +76,7 @@ function getMapObjConfig(){
  * @param string $layerName
  * @return object
  */
-function getLayerObjConfig(&$map, $layerName, $COL){
+function getLayerObjConfig(&$map, $layerName){
   $db_hst = env('DB_HOST','');
   $db_dbn = env('DB_DATABASE','');
   $db_usr = env('DB_USERNAME','');
@@ -84,12 +84,9 @@ function getLayerObjConfig(&$map, $layerName, $COL){
   $layer = new \LayerObj($map);
   $layer->set('connection',"user=$db_usr dbname=$db_dbn host=$db_hst password=$db_pwd");
   $layer->set('name', $layerName);
-  #$layer->set('status', MS_DEFAULT );
-  #$layer->set("status", MS_ON);
-  #$layer->set("classitem", $COL);
+  $layer->set("status", MS_ON);
   $layer->setConnectionType(MS_POSTGIS);
   $layer->setProcessing('CLOSE_CONNECTION=DEFER');
-  $layer->setProjection("init=epsg:4326");
   $layer->setMetaData('wms_extent', "-118.407653808594 14.532097816008417 -86.7086486816406 32.71865463170993");
   $layer->setMetaData('wms_srs', "EPSG:4326");
   $layer->setMetaData('wms_title', $layerName);
