@@ -35,6 +35,17 @@ function(){
       }
   }
 
+  $LAY_MZA_HEAT = new \LayerObj($MAP);
+  $LAY_MZA_HEAT->set('name', 'Manzanas_Heat');
+  $LAY_MZA_HEAT->set('connection', 'Manzanas_Points');
+  $LAY_MZA_HEAT->setProcessing("RANGE_COLORSPACE=HSL");
+  $LAY_MZA_HEAT->setProcessing("KERNELDENSITY_RADIUS=20");
+  $LAY_MZA_HEAT->setProcessing("KERNELDENSITY_ATTRIBUTE=pbvar");
+  $LAY_MZA_HEAT->setProcessing("KERNELDENSITY_COMPUTE_BORDERS=ON");
+  $LAY_MZA_HEAT->setProcessing("KERNELDENSITY_NORMALIZATION=AUTO");
+
+
+  //Configurar Layer con puntos de las manzanas (ST_PointOnSurface)
   $LAY_MZA = getLayerObjConfig($MAP, 'Manzanas_Points');
   $qry_data = "geom from (select gid, entidad ent, ".
       "(CASE WHEN $COL not in('N/D','*') and $COL is not null THEN $COL::int ELSE 0 END)::int AS pbvar, ".
