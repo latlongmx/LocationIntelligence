@@ -38,11 +38,16 @@ function(){
   $LAY_MZA_HEAT = new \LayerObj($MAP);
   $LAY_MZA_HEAT->set('name', 'Manzanas_Heat');
   $LAY_MZA_HEAT->set('connection', 'Manzanas_Points');
+  $LAY_MZA_HEAT->set('type', MS_LAYER_RASTER);
+  $LAY_MZA_HEAT->setMetaData('wms_extent', "-118.407653808594 14.532097816008417 -86.7086486816406 32.71865463170993");
+  $LAY_MZA_HEAT->setMetaData('wms_srs', "EPSG:4326");
+  $LAY_MZA_HEAT->setMetaData('wms_title', 'Manzanas_Heat');
   $LAY_MZA_HEAT->setProcessing("RANGE_COLORSPACE=HSL");
   $LAY_MZA_HEAT->setProcessing("KERNELDENSITY_RADIUS=20");
   $LAY_MZA_HEAT->setProcessing("KERNELDENSITY_ATTRIBUTE=pbvar");
   $LAY_MZA_HEAT->setProcessing("KERNELDENSITY_COMPUTE_BORDERS=ON");
   $LAY_MZA_HEAT->setProcessing("KERNELDENSITY_NORMALIZATION=AUTO");
+  $LAY_MZA_HEAT->offsite->setRGB(0,0,0);
 
 
   //Configurar Layer con puntos de las manzanas (ST_PointOnSurface)
