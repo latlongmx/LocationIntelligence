@@ -36,7 +36,7 @@ function(){
   }
 
   //HEAT LAYER
-  $LAY_MZA_HEAT = new \LayerObj($MAP);
+  /*$LAY_MZA_HEAT = new \LayerObj($MAP);
   $LAY_MZA_HEAT->set('name', 'Manzanas_Heat');
   $LAY_MZA_HEAT->set('connection', 'Manzanas_Points');
   $LAY_MZA_HEAT->set('type', MS_LAYER_RASTER);
@@ -54,7 +54,7 @@ function(){
   $LAY_MZA_HEAT->offsite->setRGB(0,0,0);
   $HEAT_class = new \ClassObj( $LAY_MZA_HEAT );
   $stl1 = new \StyleObj( $HEAT_class );
-  $stl1->set("COLORRANGE",'"#0000ff00"  "#0000ffff"');
+  $stl1->set("COLORRANGE",'"#0000ff00"  "#0000ffff"');*/
 
 
   //Configurar Layer con puntos de las manzanas (ST_PointOnSurface)
