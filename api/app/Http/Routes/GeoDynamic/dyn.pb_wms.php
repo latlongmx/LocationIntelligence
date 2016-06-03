@@ -35,8 +35,17 @@ function(){
       }
   }
 
+  $LAY_MZA = getLayerObjConfig($MAP, 'Manzanas_Points');
+  $qry_data = "geom from (select gid, entidad ent, ".
+      "(CASE WHEN $COL not in('N/D','*') and $COL is not null THEN $COL::int ELSE 0 END)::int AS pbvar, ".
+      " ST_PointOnSurface(geom) geom from inegi.pobviv2010 where ST_Intersects(geom,!BOX!) ) as T using unique gid using srid=4326";
+  $LAY_MZA->set('data', $qry_data);
+  $LAY_MZA->set('type', MS_LAYER_POINT);
+
+
+  //Layer Manzanas
   $LAY = getLayerObjConfig($MAP, 'Manzanas');
-  $qry_data = "geom from (select gid, entidad cve_ent, ".
+  $qry_data = "geom from (select gid, entidad ent, ".
       "(CASE WHEN $COL not in('N/D','*') and $COL is not null THEN $COL::int ELSE 0 END)::int AS pbvar, ".
       "geom from inegi.pobviv2010 where ST_Intersects(geom,!BOX!) ) as T using unique gid using srid=4326";
   $LAY->set('data', $qry_data);
@@ -54,7 +63,7 @@ function(){
     while($i<=$GROUPS){ #$MAXVALUE){
       $r2 = $GG*$i;
       $class = new \ClassObj( $LAY );
-      $class->setExpression("([pbvar] < ".$r2.")");
+      $class->setExpression("([pbvar] < ".$r2." && '[ent]'='".$ENT."')");
       $style = new \StyleObj( $class );
       $ncol = ((($i*100)/$GROUPS)*0.01);
       $col = getColorFromColToCol("ffff99", "ff0000", $ncol );
