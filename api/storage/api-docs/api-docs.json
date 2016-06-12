@@ -128,6 +128,96 @@
                 }
             }
         },
+        "/ws/icon/{name}": {
+            "get": {
+                "tags": [
+                    "Workspace"
+                ],
+                "summary": "Obtiene las ubicaciones registradas por el usuario",
+                "description": "Obtiene los registros incluido las geometrias ingresadas por el usuario",
+                "operationId": "catalog",
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "name": "name",
+                        "in": "path",
+                        "description": "nombre del icono guardado en el perfile del usuario",
+                        "required": true,
+                        "type": "integer"
+                    }
+                ],
+                "responses": {
+                    "400": {
+                        "description": "Bad request falta access_token",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": {
+                                "type": "integer",
+                                "format": "int32"
+                            }
+                        }
+                    },
+                    "200": {
+                        "description": "successful operation",
+                        "schema": {
+                            "$ref": "#/ws/up"
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "access_token": []
+                    }
+                ]
+            }
+        },
+        "/ws/places/{id}": {
+            "delete": {
+                "tags": [
+                    "Workspace"
+                ],
+                "summary": "Elimina la ubicacion que se envia como parametro",
+                "description": "Elimina la ubicacion que se envia como parametro",
+                "operationId": "catalog",
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "id de la ubicaciones a elimianr",
+                        "required": true,
+                        "type": "integer"
+                    }
+                ],
+                "responses": {
+                    "400": {
+                        "description": "Bad request falta access_token",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": {
+                                "type": "integer",
+                                "format": "int32"
+                            }
+                        }
+                    },
+                    "200": {
+                        "description": "successful operation",
+                        "schema": {
+                            "$ref": "#/ws/up"
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "access_token": []
+                    }
+                ]
+            }
+        },
         "/ws/places/": {
             "get": {
                 "tags": [
@@ -209,40 +299,6 @@
                         "required": true,
                         "type": "string"
                     }
-                ],
-                "responses": {
-                    "400": {
-                        "description": "Bad request falta access_token",
-                        "schema": {
-                            "type": "object",
-                            "additionalProperties": {
-                                "type": "integer",
-                                "format": "int32"
-                            }
-                        }
-                    },
-                    "200": {
-                        "description": "successful operation",
-                        "schema": {
-                            "$ref": "#/ws/up"
-                        }
-                    }
-                },
-                "security": [
-                    {
-                        "access_token": []
-                    }
-                ]
-            },
-            "delete": {
-                "tags": [
-                    "Workspace"
-                ],
-                "summary": "Elimina la ubicacion que se envia como parametro",
-                "description": "Elimina la ubicacion que se envia como parametro",
-                "operationId": "catalog",
-                "produces": [
-                    "application/json"
                 ],
                 "responses": {
                     "400": {

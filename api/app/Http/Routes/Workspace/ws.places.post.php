@@ -78,9 +78,24 @@ Route::post('/places', ['middleware' => 'oauth', function() {
   if(!isset($NAME)){
     return Response::json([ "error" => "Falta parametro 'nm'"]);
   }
-  $pin = Input::get('pin');
+  /*$pin = Input::get('pin');
   if(!isset($pin)){
     return Response::json([ "error" => "Falta parametro 'pin'"]);
+  }*/
+  $pinURL = '';
+  if(Request::file('pin')->isValid()){
+    $pin = Request::file('pin');
+    $pinURL = $pin->getClientOriginalName();
+    $path = storage_path() . '/pins';
+    $result = File::makeDirectory($path);
+    $path = storage_path() . '/pins/' . $userId;
+    $result = File::makeDirectory($path);
+    Storage::put(
+      'pins/'.$userId.'/'.$pin->getClientOriginalName(),
+      file_get_contents($pin->getRealPath())
+    );
+  }else{
+    return Response::json([ "error" => "Icono no valido"]);
   }
   if(Request::file('file')->isValid()){
     $f = Request::file('file')->openFile();
@@ -106,7 +121,7 @@ Route::post('/places', ['middleware' => 'oauth', function() {
             unset($row[$lngF]);
             $HEAD = $row;
             $idLayer = DB::table('users_layers')->insertGetId(
-                ['id_user' => $userId, 'name_layer' => $NAME, 'pin_url' => $pin],
+                ['id_user' => $userId, 'name_layer' => $NAME, 'pin_url' => $pinURL],
                 'id_layer'
             );
           }else{

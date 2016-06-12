@@ -1,10 +1,10 @@
 <?php
 
 /**
-  * @SWG\Delete(
-  *     path="/ws/places/{id}",
-  *     summary="Elimina la ubicacion que se envia como parametro",
-  *     description="Elimina la ubicacion que se envia como parametro",
+  * @SWG\Get(
+  *     path="/ws/icon/{name}",
+  *     summary="Obtiene las ubicaciones registradas por el usuario",
+  *     description="Obtiene los registros incluido las geometrias ingresadas por el usuario",
   *     operationId="catalog",
   *     tags={"Workspace"},
   *     produces={"application/json"},
@@ -20,11 +20,11 @@
   *         )
   *     ),
   *     @SWG\Parameter(
-  * 		   	name="id",
+  * 		   	name="name",
   * 			  in="path",
   * 			  required=true,
   * 			  type="integer",
-  * 			  description="id de la ubicaciones a elimianr"
+  * 			  description="nombre del icono guardado en el perfile del usuario"
   *     ),
   *     @SWG\Response(
   *         response=200,
@@ -36,9 +36,16 @@
   *   }}
   * )
   */
-Route::delete('/places/{id}', ['middleware' => 'oauth', function($id) {
+Route::get('/icon/{icoName}', ['middleware' => 'oauth', function($icoName) {
   $userId = Authorizer::getResourceOwnerId();
-  $delLayDat = DB::table('users_layers_data')->where('id_layer', '=', $id)->delete();
-  $delLay = DB::table('users_layers')->where('id_layer', '=', $id)->delete();
-  return Response::json(["delLayer"=>$delLay, "delData"=>$delLayDat]);
+  $path = storage_path() . '/pins/'.$userId.'/'.$icoName;
+  
+  if(!File::exists($path)) abort(404);
+
+  $file = File::get($path);
+  $type = File::mimeType($path);
+
+  $response = Response::make($file, 200);
+  $response->header("Content-Type", $type);
+  return $response;
 }]);
