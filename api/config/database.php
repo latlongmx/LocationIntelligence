@@ -68,11 +68,11 @@ return [
 
         'pgsql' => [
             'driver' => 'pgsql',
-            'host' => env('DB_HOST', 'walmex.cdpzlqvniluk.us-west-1.rds.amazonaws.com'),
-            'port' => env('DB_PORT', '5432'),
-            'database' => env('DB_DATABASE', 'walmex'),
-            'username' => env('DB_USERNAME', 'walmex'),
-            'password' => env('DB_PASSWORD', ",F'ZB4}<+tsD<75*"),
+            'host' => env('DB_HOST', '127.0.0.1'),
+            'port' => env('DB_PORT', '5433'),
+            'database' => env('DB_DATABASE', 'db_walmex'),
+            'username' => env('DB_USERNAME', 'walmexusr'),
+            'password' => env('DB_PASSWORD', "N98Fdt?^C#mp{B6p"),
             'charset' => 'utf8',
             'prefix' => '',
             'schema' => 'public',
