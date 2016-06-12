@@ -46,9 +46,9 @@ Route::get('/icon', ['middleware' => 'oauth', function() {
   $file = File::get($path);
   $type = File::mimeType($path);
 
-  /*$response = Response::make($file, 200);
+  $response = Response::make($file, 200);
   $response->header("Content-Type", $type);
-  return $response;*/
+  return $response;
 
-  return Response::json(["icoName"=>$icoName, "path" => $path]);
+  //return Response::json(["icoName"=>$icoName, "path" => $path]);
 }]);
