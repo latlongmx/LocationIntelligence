@@ -35,8 +35,8 @@
   *     "access_token":{}
   *   }}
   * )
-  */
-Route::get('/icon?nm={nm}&access_token={token_id}', ['middleware' => 'oauth', function() {
+  */ //?nm={nm}&access_token={token_id}
+Route::get('/icon', ['middleware' => 'oauth', function() {
   $userId = Authorizer::getResourceOwnerId();
   $icoName = Input::get('nm', '');
   $path = storage_path() . '/pins/'.$userId.'/'.$icoName;
