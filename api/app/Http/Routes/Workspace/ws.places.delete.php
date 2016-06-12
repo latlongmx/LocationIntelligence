@@ -31,10 +31,7 @@
   */
 Route::delete('/places/{id}', ['middleware' => 'oauth', function($id) {
   $userId = Authorizer::getResourceOwnerId();
-  $loc = array();
-  $loc[] = [
-    "usr_id"=>$userId,
-    "id2del"=>$id
-  ];
-  return Response::json(["places"=>$loc]);
+  $delLay = DB::table('users_layers')->where('id_layer', '=', $id)->delete();
+  $delLayDat = DB::table('users_layers_data')->where('id_layer', '=', $id)->delete();
+  return Response::json(["delLayer"=>$delLay, "delData"=>$delLayDat]);
 }]);
