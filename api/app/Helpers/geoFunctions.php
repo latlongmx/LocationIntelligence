@@ -81,8 +81,9 @@ function getLayerObjConfig(&$map, $layerName){
   $db_dbn = env('DB_DATABASE','');
   $db_usr = env('DB_USERNAME','');
   $db_pwd = env('DB_PASSWORD','');
+  $db_prt = env('DB_PORT','');
   $layer = new \LayerObj($map);
-  $layer->set('connection',"user=$db_usr dbname=$db_dbn host=$db_hst password=$db_pwd");
+  $layer->set('connection',"user=$db_usr dbname=$db_dbn host=$db_hst posrt=$db_prt password=$db_pwd");
   $layer->set('name', $layerName);
   $layer->set("status", MS_ON);
   $layer->setConnectionType(MS_POSTGIS);
