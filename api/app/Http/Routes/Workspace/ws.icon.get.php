@@ -2,7 +2,7 @@
 
 /**
   * @SWG\Get(
-  *     path="/ws/icon/{name}",
+  *     path="/ws/icon?nm={name}&access_token={token_id}",
   *     summary="Obtiene las ubicaciones registradas por el usuario",
   *     description="Obtiene los registros incluido las geometrias ingresadas por el usuario",
   *     operationId="catalog",
@@ -20,7 +20,7 @@
   *         )
   *     ),
   *     @SWG\Parameter(
-  * 		   	name="name",
+  * 		   	name="nm",
   * 			  in="path",
   * 			  required=true,
   * 			  type="integer",
@@ -36,10 +36,11 @@
   *   }}
   * )
   */
-Route::get('/icon/{icoName}', ['middleware' => 'oauth', function($icoName) {
+Route::get('/icon?nm={nm}', ['middleware' => 'oauth', function() {
   $userId = Authorizer::getResourceOwnerId();
+  $icoName = Input::get('nm', '');
   $path = storage_path() . '/pins/'.$userId.'/'.$icoName;
-  
+
   if(!File::exists($path)) abort(404);
 
   $file = File::get($path);
