@@ -39,7 +39,7 @@
 Route::get('/icon', ['middleware' => 'oauth', function() {
   $userId = Authorizer::getResourceOwnerId();
   $icoName = Input::get('nm', '');
-  $path = storage_path() . '/pins/'.$userId.'/'.$icoName;
+  $path = env('FILES_PATH',storage_path()) . '/pins/'.$userId.'/'.$icoName;
 
   if(!File::exists($path)) abort(404);
 

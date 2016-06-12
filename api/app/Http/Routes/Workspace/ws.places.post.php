@@ -86,14 +86,15 @@ Route::post('/places', ['middleware' => 'oauth', function() {
   if(Request::file('pin')->isValid()){
     $pin = Request::file('pin');
     $pinURL = $pin->getClientOriginalName();
-    $path = storage_path() . '/pins';
+    $path = env('FILES_PATH',storage_path()) . '/pins';
     $result = File::makeDirectory($path);
-    $path = storage_path() . '/pins/' . $userId;
+    $path = env('FILES_PATH',storage_path()) . '/pins/' . $userId;
     $result = File::makeDirectory($path);
-    Storage::put(
+    move_uploaded_file( $pin->getRealPath(), $path.'/'.$pin->getClientOriginalName());
+    /*Storage::put(
       'pins/'.$userId.'/'.$pin->getClientOriginalName(),
       file_get_contents($pin->getRealPath())
-    );
+    );*/
   }else{
     return Response::json([ "error" => "Icono no valido"]);
   }
