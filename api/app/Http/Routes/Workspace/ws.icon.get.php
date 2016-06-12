@@ -41,12 +41,14 @@ Route::get('/icon?nm={nm}&access_token={token_id}', ['middleware' => 'oauth', fu
   $icoName = Input::get('nm', '');
   $path = storage_path() . '/pins/'.$userId.'/'.$icoName;
 
-  if(!File::exists($path)) abort(404);
+  /*if(!File::exists($path)) abort(404);
 
   $file = File::get($path);
   $type = File::mimeType($path);
 
   $response = Response::make($file, 200);
   $response->header("Content-Type", $type);
-  return $response;
+  return $response;*/
+
+  return Response::json(["icoName"=>$icoName, "path" => $path]);
 }]);
