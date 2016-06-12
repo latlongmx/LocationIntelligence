@@ -128,7 +128,7 @@
                 }
             }
         },
-        "/ws/icon/{name}": {
+        "/ws/icon?nm={name}&access_token={token_id}": {
             "get": {
                 "tags": [
                     "Workspace"
@@ -141,7 +141,7 @@
                 ],
                 "parameters": [
                     {
-                        "name": "name",
+                        "name": "nm",
                         "in": "path",
                         "description": "nombre del icono guardado en el perfile del usuario",
                         "required": true,
@@ -160,7 +160,7 @@
                         }
                     },
                     "200": {
-                        "description": "successful operation",
+                        "description": "icono seleccionado",
                         "schema": {
                             "$ref": "#/ws/up"
                         }

@@ -28,7 +28,7 @@
   *     ),
   *     @SWG\Response(
   *         response=200,
-  *         description="successful operation",
+  *         description="icono seleccionado",
   *         @SWG\Schema(ref="#/ws/up")
   *     ),
   *   security={{
@@ -36,7 +36,7 @@
   *   }}
   * )
   */
-Route::get('/icon?nm={nm}', ['middleware' => 'oauth', function() {
+Route::get('/icon?nm={nm}&access_token={token_id}', ['middleware' => 'oauth', function() {
   $userId = Authorizer::getResourceOwnerId();
   $icoName = Input::get('nm', '');
   $path = storage_path() . '/pins/'.$userId.'/'.$icoName;
