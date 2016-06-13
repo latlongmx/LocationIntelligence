@@ -39,8 +39,7 @@
 Route::get('/icon', ['middleware' => 'oauth', function() {
   $userId = Authorizer::getResourceOwnerId();
   $icoName = Input::get('nm', '');
-  Log::info(env("FILES_PATH",storage_path()));
-  $path = env("FILES_PATH",storage_path()) . '/pins/'.$userId.'/'.$icoName;
+  $path = '/var/www/laravel-storage/pins/'.$userId.'/'.$icoName;
 
   if(!File::exists($path)) abort(404);
 
