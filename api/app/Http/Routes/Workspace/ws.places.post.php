@@ -87,9 +87,13 @@ Route::post('/places', ['middleware' => 'oauth', function() {
     $pin = Request::file('pin');
     $pinURL = $pin->getClientOriginalName();
     $path = '/var/www/laravel-storage/pins';
-    $result = File::makeDirectory($path);
+    if(!file_exists($path)) {
+      $result = File::makeDirectory($path);
+    }
     $path = '/var/www/laravel-storage/pins/' . $userId;
-    $result = File::makeDirectory($path);
+    if(!file_exists($path)) {
+      $result = File::makeDirectory($path);
+    }
     move_uploaded_file( $pin->getRealPath(), $path.'/'.$pin->getClientOriginalName());
     /*Storage::put(
       'pins/'.$userId.'/'.$pin->getClientOriginalName(),
