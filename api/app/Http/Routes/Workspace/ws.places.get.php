@@ -44,7 +44,7 @@ Route::get('/places', ['middleware' => 'oauth', function() {
       left join users_layers_data D
       on L.id_layer=D.id_layer
       where id_user=$userId and D.id_layer is not null
-      ".($id!==""?" and users_layers=".$id:"")."
+      ".($id!==""?" and L.id_layer=".$id:"")."
       order by id_layer";
   $rs = DB::select($sql,[]);
   $places = array();
