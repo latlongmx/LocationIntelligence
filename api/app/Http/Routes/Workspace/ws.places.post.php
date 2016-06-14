@@ -83,6 +83,7 @@ Route::post('/places', ['middleware' => 'oauth', function() {
     return Response::json([ "error" => "Falta parametro 'pin'"]);
   }*/
   $pinURL = '';
+  $idLayer = 0;
   if(Request::file('pin')->isValid()){
     $pin = Request::file('pin');
     $pinURL = $pin->getClientOriginalName();
@@ -95,10 +96,6 @@ Route::post('/places', ['middleware' => 'oauth', function() {
       $result = File::makeDirectory($path);
     }
     move_uploaded_file( $pin->getRealPath(), $path.'/'.$pin->getClientOriginalName());
-    /*Storage::put(
-      'pins/'.$userId.'/'.$pin->getClientOriginalName(),
-      file_get_contents($pin->getRealPath())
-    );*/
   }else{
     return Response::json([ "error" => "Icono no valido"]);
   }
@@ -139,13 +136,14 @@ Route::post('/places', ['middleware' => 'oauth', function() {
               $desc[] = array($HEAD[$k] => $row[$k]);
             }
             DB::table('users_layers_data')->insert(
-                ['id_layer' => $idLayer, 'data_values' => json_encode($desc), 'geom' => DB::raw("ST_SetSRID(ST_Point($ln, $la),4326)::geometry")]
+              ['id_layer' => $idLayer, 'data_values' => json_encode($desc),
+               'geom' => DB::raw("ST_SetSRID(ST_Point($ln, $la),4326)::geometry")]
             );
           }
         }
       }
     }
-    return Response::json([ "res" => "correcto"]);
+    return Response::json([ "res" => "correcto", "id_layer"=>$idLayer]);
   }else{
     return Response::json([ "error" => "File no valido"]);
   }
