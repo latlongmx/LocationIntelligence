@@ -218,7 +218,7 @@
                 ]
             }
         },
-        "/ws/places/": {
+        "/ws/places?p={id_ubicacion}": {
             "get": {
                 "tags": [
                     "Workspace"
@@ -228,6 +228,15 @@
                 "operationId": "catalog",
                 "produces": [
                     "application/json"
+                ],
+                "parameters": [
+                    {
+                        "name": "id_layer",
+                        "in": "path",
+                        "description": "id de la ubicacion a actualizar si no se manda se obtendran todos",
+                        "required": false,
+                        "type": "integer"
+                    }
                 ],
                 "responses": {
                     "400": {
@@ -252,7 +261,9 @@
                         "access_token": []
                     }
                 ]
-            },
+            }
+        },
+        "/ws/places/": {
             "post": {
                 "tags": [
                     "Workspace"
@@ -298,6 +309,65 @@
                         "description": "Columna con la longitud",
                         "required": true,
                         "type": "string"
+                    }
+                ],
+                "responses": {
+                    "400": {
+                        "description": "Bad request falta access_token",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": {
+                                "type": "integer",
+                                "format": "int32"
+                            }
+                        }
+                    },
+                    "200": {
+                        "description": "successful operation",
+                        "schema": {
+                            "$ref": "#/ws/up"
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "access_token": []
+                    }
+                ]
+            }
+        },
+        "/ws/places/{id}?nom={nom}&pin={pin}": {
+            "put": {
+                "tags": [
+                    "Workspace"
+                ],
+                "summary": "Actualiza el icono o nombre de una ubicacion",
+                "description": "Elimina la ubicacion que se envia como parametro",
+                "operationId": "catalog",
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "Id de la ubicacion a actualizar",
+                        "required": false,
+                        "type": "string"
+                    },
+                    {
+                        "name": "nom",
+                        "in": "path",
+                        "description": "Nombre de la ubicacion a actualizar",
+                        "required": false,
+                        "type": "string"
+                    },
+                    {
+                        "name": "pin",
+                        "in": "path",
+                        "description": "Archivo del icono",
+                        "required": false,
+                        "type": "file"
                     }
                 ],
                 "responses": {
