@@ -59,7 +59,7 @@ limit 10;
   $ents = array();
   foreach($rs as $r){
     $data[] = [$r->lat,$r->lng,$r->val_data];
-    if(in_array($r->cve_ent, $ents)){
+    if(!in_array($r->cve_ent, $ents)){
       array_push($ents, $r->cve_ent);
     }
   }
