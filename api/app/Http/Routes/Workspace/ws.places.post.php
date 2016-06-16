@@ -130,12 +130,12 @@ Route::post('/places', ['middleware' => 'oauth', function() {
             unset($row[$latF]);
             unset($row[$lngF]);
             $HEAD = $row;
-            $competence = Input::get('competence');
             $data = ['id_user' => $userId, 'name_layer' => $NAME, 'pin_url' => $pinURL];
 
             //es competencia
-            if($competence == 1){
-              array_merge($data, array("is_competence"=>true));
+            $competence = Input::get('competence','');
+            if($competence == "1"){
+              $data = array_merge($data, array("is_competence"=>true));
             }
             $idLayer = DB::table('users_layers')->insertGetId( $data, 'id_layer' );
           }else{
