@@ -46,7 +46,7 @@ ST_Intersects(E.geom, ST_GeomFromText( 'POLYGON((-99.15652513504028 19.416957838
 and D.nom_estab ilike '%oxxo%'
 limit 10;
 */
-  $sql = "SELECT st_xmax(D.geom) lat, st_ymax(D.geom) lng, 1.0 val_data, D.cve_ent
+  $sql = "SELECT st_ymax(D.geom) lat, st_xmax(D.geom) lng, 1.0 val_data, D.cve_ent
     FROM inegi.denue_2016 D
     LEFT JOIN inegi.mgn_estados E
     ON E.cve_ent = D.cve_ent
