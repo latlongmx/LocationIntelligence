@@ -56,7 +56,7 @@ Route::put('/places/{id}', ['middleware' => 'oauth', function($id) {
 
   $upd = array();
   if($nom != ""){
-    array_push($upd, array("name_layer"=>$nom));
+    $upd = array_merge($upd, array("name_layer"=>$nom));
   }
 
   $pinURL = "";
@@ -72,7 +72,7 @@ Route::put('/places/{id}', ['middleware' => 'oauth', function($id) {
       $result = File::makeDirectory($path);
     }
     move_uploaded_file( $pin->getRealPath(), $path.'/'.$pin->getClientOriginalName());
-    array_push($upd, array("pin_url"=>$pinURL));
+    $upd = array_merge($upd, array("pin_url"=>$pinURL));
   }
   $updated = 0;
   if(sizeof($upd)>0){
