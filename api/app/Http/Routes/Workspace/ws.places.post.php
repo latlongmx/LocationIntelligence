@@ -43,6 +43,13 @@
   * 			  type="string",
   * 			  description="Columna con la longitud",
   *     ),
+  *     @SWG\Parameter(
+  * 		   	name="competence",
+  * 			  in="path",
+  * 			  required=false,
+  * 			  type="integer",
+  * 			  description="Si es competencia se requiere el parametro competence=1 si no se manda el parametro por default es false",
+  *     ),
   *     @SWG\Response(
   *         response=400,
   *         description="Bad request falta access_token",
@@ -122,10 +129,14 @@ Route::post('/places', ['middleware' => 'oauth', function() {
             unset($row[$latF]);
             unset($row[$lngF]);
             $HEAD = $row;
-            $idLayer = DB::table('users_layers')->insertGetId(
-                ['id_user' => $userId, 'name_layer' => $NAME, 'pin_url' => $pinURL],
-                'id_layer'
-            );
+            $competence = Input::get('competence');
+            $data = ['id_user' => $userId, 'name_layer' => $NAME, 'pin_url' => $pinURL];
+
+            //es competencia
+            if($competence == "1"){
+              array_push($data, array("is_competence"=>true));
+            }
+            $idLayer = DB::table('users_layers')->insertGetId( $data, 'id_layer' );
           }else{
             $la = $row[$latF];
             $ln = $row[$lngF];

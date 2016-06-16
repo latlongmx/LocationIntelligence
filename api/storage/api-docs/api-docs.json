@@ -236,6 +236,13 @@
                         "description": "id de la ubicacion a actualizar si no se manda se obtendran todos",
                         "required": false,
                         "type": "integer"
+                    },
+                    {
+                        "name": "competence",
+                        "in": "path",
+                        "description": "si se requiere traer todos las competencias competence=1",
+                        "required": false,
+                        "type": "integer"
                     }
                 ],
                 "responses": {
@@ -309,6 +316,13 @@
                         "description": "Columna con la longitud",
                         "required": true,
                         "type": "string"
+                    },
+                    {
+                        "name": "competence",
+                        "in": "path",
+                        "description": "Si es competencia se requiere el parametro competence=1 si no se manda el parametro por default es false",
+                        "required": false,
+                        "type": "integer"
                     }
                 ],
                 "responses": {

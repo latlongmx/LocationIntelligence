@@ -26,6 +26,13 @@
   * 			  type="integer",
   * 			  description="id de la ubicacion a actualizar si no se manda se obtendran todos"
   *     ),
+  *     @SWG\Parameter(
+  * 		   	name="competence",
+  * 			  in="path",
+  * 			  required=false,
+  * 			  type="integer",
+  * 			  description="si se requiere traer todos las competencias competence=1"
+  *     ),
   *     @SWG\Response(
   *         response=200,
   *         description="successful operation",
@@ -39,12 +46,14 @@
 Route::get('/places', ['middleware' => 'oauth', function() {
   $userId = Authorizer::getResourceOwnerId();
   $id = Input::get('id_layer', '');
+  $competence = Input::get('competence', '');
   $sql = "select L.id_layer, name_layer, pin_url, creation_dt, id_data, data_values, st_xmax(geom) x, st_ymax(geom) y
       from users_layers L
       left join users_layers_data D
       on L.id_layer=D.id_layer
       where id_user=$userId and D.id_layer is not null
       ".($id!==""?" and L.id_layer=".$id:"")."
+      and L.is_competence is ".($competence!==""?"true":"false")."
       order by id_layer";
   $rs = DB::select($sql,[]);
   $places = array();
