@@ -134,7 +134,7 @@ Route::post('/places', ['middleware' => 'oauth', function() {
 
             //es competencia
             if($competence == "1"){
-              array_merge($data, array("is_competence"=>DB::raw("true")));
+              array_merge($data, array("is_competence"=>true));
             }
             $idLayer = DB::table('users_layers')->insertGetId( $data, 'id_layer' );
           }else{
