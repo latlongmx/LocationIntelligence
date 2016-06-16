@@ -106,6 +106,7 @@ Route::post('/places', ['middleware' => 'oauth', function() {
   }else{
     return Response::json([ "error" => "Icono no valido"]);
   }
+  $data = [];
   if(Request::file('file')->isValid()){
     $f = Request::file('file')->openFile();
     $f->setFlags(SplFileObject::READ_CSV);
@@ -133,7 +134,7 @@ Route::post('/places', ['middleware' => 'oauth', function() {
             $data = ['id_user' => $userId, 'name_layer' => $NAME, 'pin_url' => $pinURL];
 
             //es competencia
-            if($competence == "1"){
+            if($competence == 1){
               array_merge($data, array("is_competence"=>true));
             }
             $idLayer = DB::table('users_layers')->insertGetId( $data, 'id_layer' );
@@ -154,7 +155,7 @@ Route::post('/places', ['middleware' => 'oauth', function() {
         }
       }
     }
-    return Response::json([ "res" => "correcto", "id_layer"=>$idLayer]);
+    return Response::json([ "res" => "correcto", "id_layer"=>$idLayer, "datos" => $data]);
   }else{
     return Response::json([ "error" => "File no valido"]);
   }
