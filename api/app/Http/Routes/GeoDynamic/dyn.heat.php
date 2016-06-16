@@ -55,10 +55,16 @@ limit 10;
       and D.nom_estab ilike '%?%'
     ";
   $rs = DB::select($sql,[$filter, $wkt]);
+  $data = array();
+  $ents = array();
+  foreach($rs as $r){
+    $data[] = [$r->lat,$r->lng,$r->val_data];
+    array_push($ents, $r->cve_ent);
+  }
 
   return Response::json([
-    "data" => $rs,
-    "sql"=>$sql
+    "data" => $data,
+    "ents" => $ents,
   ]);
 
 }]);
