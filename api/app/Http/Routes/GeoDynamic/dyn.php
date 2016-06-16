@@ -14,5 +14,7 @@ Route::group(['prefix'=>'dyn', 'before' => 'oauth', 'middleware' => 'cors'], fun
   require app_path('Http/Routes/GeoDynamic/dyn.intersect.php');
   //PobViv WMS
   require app_path('Http/Routes/GeoDynamic/dyn.pb_wms.php');
+  //Heat DATA
+  require app_path('Http/Routes/GeoDynamic/dyn.heat.php');
 
 });
