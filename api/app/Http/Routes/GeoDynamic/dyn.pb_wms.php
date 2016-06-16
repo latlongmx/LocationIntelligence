@@ -1,6 +1,37 @@
 <?php
-
-
+/**
+  * @SWG\Get(
+  *     path="/dyn/pb_wms?col={column}&WMS={WMS}",
+  *     summary="WMS con estilo dinamico segun la columna",
+  *     description="Servicio dinamico WMS que coloriza segun la columna solicitada",
+  *     operationId="pb_wms",
+  *     tags={"pb_wms"},
+  *     produces={"image/png"},
+  *     @SWG\Parameter(
+  * 		   	name="WMS",
+  * 			  in="path",
+  * 			  required=true,
+  * 			  type="string",
+  * 			  description="Parametros estandar WMS",
+  *         default="inegi",
+  *     ),
+  *     @SWG\Parameter(
+  * 		   	name="col",
+  * 			  in="path",
+  * 			  required=true,
+  * 			  type="string",
+  * 			  description="Columna de pob y viv a colorizar",
+  *     ),
+  *     @SWG\Response(
+  *         response=200,
+  *         description="successful operation",
+  *         @SWG\Schema(ref="#/intersect")
+  *     ),
+  *   security={{
+  *     "access_token":{}
+  *   }}
+  * )
+  */
 Route::get('/pb_wms', //['middleware' => 'oauth', function() {
 function(){
 
