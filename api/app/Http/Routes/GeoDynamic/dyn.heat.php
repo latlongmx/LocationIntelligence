@@ -63,10 +63,15 @@ limit 10;
       array_push($ents, $r->cve_ent);
     }
   }
-
+/*json_encode
   return Response::json([
     "data" => $data,
     "ents" => $ents,
-  ]);
+  ]);*/
+
+  return response()->json([
+    "data" => $data,
+    "ents" => $ents,
+  ], 200, [], JSON_NUMERIC_CHECK);
 
 }]);
