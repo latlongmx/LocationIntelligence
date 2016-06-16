@@ -51,10 +51,10 @@ limit 10;
     LEFT JOIN inegi.mgn_estados E
     ON E.cve_ent = D.cve_ent
     WHERE
-      ST_Intersects(E.geom, ST_GeomFromText( '?', 4326 ) )
-      and D.nom_estab ilike '%?%'
+      ST_Intersects(E.geom, ST_GeomFromText( '$wkt', 4326 ) )
+      and D.nom_estab ilike '%$filter%'
     ";
-  $rs = DB::select($sql,[$filter, $wkt]);
+  $rs = DB::select($sql,[]);
   $data = array();
   $ents = array();
   foreach($rs as $r){
