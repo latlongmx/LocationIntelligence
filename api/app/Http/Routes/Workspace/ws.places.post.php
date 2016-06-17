@@ -18,7 +18,7 @@
   *     @SWG\Parameter(
   * 		   	name="pin",
   * 			  in="path",
-  * 			  required=true,
+  * 			  required=false,
   * 			  type="string",
   * 			  description="Url del PIN a utilizar",
   *     ),
@@ -103,9 +103,8 @@ Route::post('/places', ['middleware' => 'oauth', function() {
       $result = File::makeDirectory($path);
     }
     move_uploaded_file( $pin->getRealPath(), $path.'/'.$pin->getClientOriginalName());
-  }else{
-    return Response::json([ "error" => "Icono no valido"]);
   }
+  
   $data = [];
   if(Request::file('file')->isValid()){
     $f = Request::file('file')->openFile();
