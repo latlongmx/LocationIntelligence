@@ -75,10 +75,9 @@ Route::get('/places', ['middleware' => 'oauth', function() {
       ) tmp;"
   $rs = DB::select($sql,[]);
   $places = array();
-  $places_data = array();
-  $last_layer=-1;
   foreach($rs as $r){
-    $places_data[] = [
+    $places[] = $r;
+    /*$places_data[] = [
       "id_data"=>$r->id_data,
       "data_values"=>$r->data_values,
       "pin_url"=>$r->pin_url,
@@ -93,15 +92,15 @@ Route::get('/places', ['middleware' => 'oauth', function() {
         "data"=>$places_data
       ];
       $places_data = array();
-    }
+    }*/
   }
-  if(sizeof($places)==0 && sizeof($places_data)>0){
+  /*if(sizeof($places)==0 && sizeof($places_data)>0){
     $places[] = [
       "id_layer"=>$r->id_layer,
       "name_layer"=>$r->name_layer,
       "data"=>$places_data
     ];
-  }
+  }*/
 
   return Response::json(["places"=>$places]);
 }]);
