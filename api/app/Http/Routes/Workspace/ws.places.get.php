@@ -72,7 +72,7 @@ Route::get('/places', ['middleware' => 'oauth', function() {
         WHERE id_user=$userId
         and is_competence is ".($competence!==""?"true":"false")."
         ORDER BY id_layer
-      ) tmp;"
+      ) tmp;";
   $rs = DB::select($sql,[]);
   $places = array();
   foreach($rs as $r){
