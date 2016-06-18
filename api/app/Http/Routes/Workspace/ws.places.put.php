@@ -60,7 +60,7 @@ Route::put('/places/{id}', ['middleware' => 'oauth', function($id) {
   }
 
   $pinURL = "";
-  if(Request::file('pin')->isValid()){
+  if(Request::file('pin') != null && Request::file('pin')->isValid()){
     $pin = Request::file('pin');
     $pinURL = $pin->getClientOriginalName();
     $path = '/var/www/laravel-storage/pins';
