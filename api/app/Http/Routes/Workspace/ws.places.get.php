@@ -55,7 +55,7 @@ Route::get('/places', ['middleware' => 'oauth', function() {
       ".($id!==""?" and L.id_layer=".$id:"")."
       and L.is_competence is ".($competence!==""?"true":"false")."
       order by id_layer";*/
-  $sql = "SELECT row_to_json(tmp)
+  $sql = "SELECT row_to_json(tmp) json
       FROM
       (
         SELECT id_layer, name_layer, pin_url, creation_dt,
@@ -76,7 +76,7 @@ Route::get('/places', ['middleware' => 'oauth', function() {
   $rs = DB::select($sql,[]);
   $places = array();
   foreach($rs as $r){
-    $places[] = $r;
+    $places[] = json_decode($r->json);
     /*$places_data[] = [
       "id_data"=>$r->id_data,
       "data_values"=>$r->data_values,
