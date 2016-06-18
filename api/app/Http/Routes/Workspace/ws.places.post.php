@@ -19,7 +19,7 @@
   * 		   	name="pin",
   * 			  in="path",
   * 			  required=false,
-  * 			  type="string",
+  * 			  type="file",
   * 			  description="Url del PIN a utilizar",
   *     ),
   *     @SWG\Parameter(
@@ -104,7 +104,7 @@ Route::post('/places', ['middleware' => 'oauth', function() {
     }
     move_uploaded_file( $pin->getRealPath(), $path.'/'.$pin->getClientOriginalName());
   }
-  
+
   $data = [];
   if(Request::file('file')->isValid()){
     $f = Request::file('file')->openFile();
