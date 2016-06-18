@@ -47,22 +47,37 @@ Route::get('/places', ['middleware' => 'oauth', function() {
   $userId = Authorizer::getResourceOwnerId();
   $id = Input::get('id_layer', '');
   $competence = Input::get('competence', '');
-  $sql = "select L.id_layer, name_layer, pin_url, creation_dt, id_data, data_values, st_xmax(geom) x, st_ymax(geom) y
+  /*$sql = "select L.id_layer, name_layer, pin_url, creation_dt, id_data, data_values, st_xmax(geom) x, st_ymax(geom) y
       from users_layers L
       left join users_layers_data D
       on L.id_layer=D.id_layer
       where id_user=$userId and D.id_layer is not null
       ".($id!==""?" and L.id_layer=".$id:"")."
       and L.is_competence is ".($competence!==""?"true":"false")."
-      order by id_layer";
+      order by id_layer";*/
+  $sql = "SELECT row_to_json(tmp)
+      FROM
+      (
+        SELECT id_layer, name_layer, pin_url, creation_dt,
+          (
+            select array_to_json(array_agg(row_to_json(d)))
+            from (
+              select id_data, data_values, st_xmax(geom) x, st_ymax(geom) y
+              from users_layers_data
+              where id_layer=L.id_layer
+              order by id_data
+            ) d
+          ) as data
+        FROM users_layers L
+        WHERE id_user=$userId
+        and is_competence is ".($competence!==""?"true":"false")."
+        ORDER BY id_layer
+      ) tmp;"
   $rs = DB::select($sql,[]);
   $places = array();
   $places_data = array();
   $last_layer=-1;
   foreach($rs as $r){
-    if($last_layer == -1){
-      $last_layer = $r->id_layer;
-    }
     $places_data[] = [
       "id_data"=>$r->id_data,
       "data_values"=>$r->data_values,
