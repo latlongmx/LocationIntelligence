@@ -91,7 +91,7 @@ Route::post('/places', ['middleware' => 'oauth', function() {
   }*/
   $pinURL = '';
   $idLayer = 0;
-  if(Request::file('pin')->isValid()){
+  if(Request::file('pin') != null && Request::file('pin')->isValid()){
     $pin = Request::file('pin');
     $pinURL = $pin->getClientOriginalName();
     $path = '/var/www/laravel-storage/pins';
