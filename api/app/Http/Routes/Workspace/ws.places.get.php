@@ -58,11 +58,11 @@ Route::get('/places', ['middleware' => 'oauth', function() {
   $sql = "SELECT row_to_json(tmp) json
       FROM
       (
-        SELECT id_layer, name_layer, pin_url, creation_dt,
+        SELECT id_layer, name_layer, creation_dt,
           (
             select array_to_json(array_agg(row_to_json(d)))
             from (
-              select id_data, data_values, st_xmax(geom) x, st_ymax(geom) y
+              select id_data, data_values, L.pin_url, st_xmax(geom) x, st_ymax(geom) y
               from users_layers_data
               where id_layer=L.id_layer
               order by id_data
