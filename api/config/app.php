@@ -169,7 +169,12 @@ return [
         /*
         API DOC Swaggervel
         */
-        L5Swagger\L5SwaggerServiceProvider::class
+        L5Swagger\L5SwaggerServiceProvider::class,
+
+        /*
+        excel
+        */
+        Maatwebsite\Excel\ExcelServiceProvider::class
     ],
 
     /*
@@ -220,6 +225,8 @@ return [
 
         //oAuth2.0
         'Authorizer' => LucaDegasperi\OAuth2Server\Facades\Authorizer::class,
+
+        'Excel' => Maatwebsite\Excel\Facades\Excel::class,
 
     ],
 
