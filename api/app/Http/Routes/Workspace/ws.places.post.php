@@ -96,7 +96,7 @@ Route::post('/places', ['middleware' => 'oauth', function() {
   }
 
   $idLayer = 0;
-  if( isset(Input::get('qf')) && isset(Input::get('qb')) && Input::get('competence','') == "1" ){
+  if( Input::get('qf','')!='' && Input::get('qb','')!='' && Input::get('competence','') == "1" ){
     /*LAYER BY QUERY*/
     /*LAYER BY QUERY*/
     /*LAYER BY QUERY*/
