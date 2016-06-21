@@ -111,9 +111,9 @@ Route::get('/places', ['middleware' => 'oauth', function() {
         (
           SELECT id_layer, name_layer, creation_dt,
             (
-              select array_to_json(json_agg(array_agg(row_to_json(d))))
+              select array_to_json(json_agg(row_to_json(d)))
               from (
-                select D.gid id_data, json_build_object('nom_estab', D.nom_estab, 'nombre_act', D.nombre_act) data_values, st_xmax(D.geom) x, st_ymax(D.geom) y
+                select D.gid id_data, json_agg(json_build_object('nom_estab', D.nom_estab, 'nombre_act', D.nombre_act)) data_values, st_xmax(D.geom) x, st_ymax(D.geom) y
                 from inegi.denue_2016 D,
                      inegi.mgn_estados E
                 where
@@ -126,7 +126,7 @@ Route::get('/places', ['middleware' => 'oauth', function() {
                         4326))
                     and E.cve_ent = D.cve_ent
                     and D.nom_estab ilike '%'|| L.query_filter ||'%'
-                order by D.gid
+                group by D.gid
               ) d
             ) as data
           FROM (
