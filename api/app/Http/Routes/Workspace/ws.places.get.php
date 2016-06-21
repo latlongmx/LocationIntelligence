@@ -104,7 +104,37 @@ Route::get('/places', ['middleware' => 'oauth', function() {
   }*/
 
 
-
+/* -- MEJORAR QUERY BY EXPLAIN
+SELECT row_to_json(tmp) json
+FROM
+(
+  SELECT id_layer, name_layer, creation_dt,
+    (
+      select array_to_json(array_agg(row_to_json(d)))
+      from (
+        select D.gid id_data, json_agg(json_build_object('nom_estab', D.nom_estab, 'nombre_act', D.nombre_act)) data_values, st_xmax(D.geom) x, st_ymax(D.geom) y
+        from inegi.denue_2016 D,
+             inegi.mgn_estados E
+        where
+            ST_Intersects(E.geom,
+                ST_MakeEnvelope(
+                    L.bbox[1]::numeric,
+                    L.bbox[2]::numeric,
+                    L.bbox[3]::numeric,
+                    L.bbox[4]::numeric,
+                4326))
+            and E.cve_ent = D.cve_ent
+            and D.nom_estab ilike '%'|| L.query_filter ||'%'
+        group by D.gid
+        limit 10
+      ) d
+    ) as data
+  FROM (
+    SELECT *, regexp_split_to_array(bbox_filter,',') bbox  FROM users_layers WHERE id_user=4 and is_competence is true and is_query is true
+  ) L
+  ORDER BY L.id_layer
+) tmp;
+*/
   if($competence!==""){
     $sql = "SELECT row_to_json(tmp) json
         FROM
