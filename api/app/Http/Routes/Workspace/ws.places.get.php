@@ -113,7 +113,7 @@ Route::get('/places', ['middleware' => 'oauth', function() {
             (
               select array_to_json(array_agg(row_to_json(d)))
               from (
-                select D.gid, D.nom_estab, st_xmax(D.geom) x, st_ymax(D.geom) y
+                select D.gid id_data, json_build_object('nom_estab', D.nom_estab, 'nombre_act', D.nombre_act) data_values, st_xmax(D.geom) x, st_ymax(D.geom) y
                 from inegi.denue_2016 D,
                      inegi.mgn_estados E
                 where
