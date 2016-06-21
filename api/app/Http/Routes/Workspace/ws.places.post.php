@@ -109,8 +109,8 @@ Route::post('/places', ['middleware' => 'oauth', function() {
       'pin_url' => $pinURL,
       'is_competence'=>true,
       'is_query'=>true,
-      'query_filter'=> $BBOX,
-      'bbox_filter'=> $FILTER
+      'query_filter'=> $FILTER,
+      'bbox_filter'=> $BBOX
     ];
     $idLayer = DB::table('users_layers')->insertGetId( $data, 'id_layer' );
     return Response::json([ "res" => "correcto", "id_layer"=>$idLayer]);

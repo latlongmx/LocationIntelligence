@@ -52,7 +52,7 @@ Route::get('/places', ['middleware' => 'oauth', function() {
       left join users_layers_data D
       on L.id_layer=D.id_layer
       where id_user=$userId and D.id_layer is not null
-      ".($id!==""?" and L.id_layer=".$id:"")."
+      ".($id!==""?" and L.id_layer=".$id:"")."is_Query
       and L.is_competence is ".($competence!==""?"true":"false")."
       order by id_layer";*/
   $sql = "SELECT row_to_json(tmp) json
@@ -71,6 +71,7 @@ Route::get('/places', ['middleware' => 'oauth', function() {
         FROM users_layers L
         WHERE id_user=$userId
         and is_competence is ".($competence!==""?"true":"false")."
+        and is_query is false
         ORDER BY id_layer
       ) tmp;";
   $rs = DB::select($sql,[]);
