@@ -1,9 +1,8 @@
-# Proyecto WALMEX
+# Proyecto WALMEX API Server
 
 
 
 ## Instalación y configuración
-
 ```
 # curl -sS https://getcomposer.org/installer | php
 # mv composer.phar /usr/local/bin/composer
@@ -14,12 +13,59 @@ $ laravel new api
 ```
 
 
-## deploying
-
+### deploying
 ```
 composer update
 php artisan vendor:publish
 php artisan migrate
 
 php artisan serve
+```
+
+### Generar API doc
+```
+php artisan l5-swagger:generate
+```
+
+
+## Estructura de archivos
+
+```
+|-- app
+|   |-- Console
+|   |   `-- Commands
+|   |-- Events
+|   |-- Exceptions
+|   |-- Helpers             <-- Funciones globales
+|   |-- Http
+|   |   |-- Controllers
+|   |   |   `-- Auth
+|   |   |-- Middleware
+|   |   |-- Requests
+|   |   `-- Routes          <-- Rutas de la API
+|   |       |-- GeoDynamic
+|   |       `-- Workspace
+|   |-- Jobs
+|   |-- Listeners
+|   |-- Models
+|   |-- Policies
+|   `-- Providers
+|-- bootstrap
+|-- config                  <-- Archivos de configuración
+|-- database
+|   |-- factories
+|   |-- migrations
+|   `-- seeds
+|-- public
+|-- resources
+|-- storage
+|   |-- api-docs
+|   |-- app
+|   |   `-- public
+|   |-- framework
+|   |   |-- cache
+|   |   |-- sessions
+|   |   `-- views
+|   `-- logs
+`-- tests
 ```
