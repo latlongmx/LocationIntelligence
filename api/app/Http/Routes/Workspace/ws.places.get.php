@@ -126,7 +126,7 @@ Route::get('/places', ['middleware' => 'oauth', function() {
                         4326))
                     and E.cve_ent = D.cve_ent
                     and D.nom_estab ilike '%'|| L.query_filter ||'%'
-                order by gid
+                order by D.gid
               ) d
             ) as data
           FROM (
