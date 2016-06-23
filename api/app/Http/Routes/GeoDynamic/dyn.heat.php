@@ -6,7 +6,7 @@
   *     summary="Obtiene datos para usar en un leafelt usando heatmap",
   *     description="Genera los datos necesarios para utilizar en un heatmap de leaflet se requiere mandar el codigo y si se quiere que contenga una palabra mandar filter",
   *     operationId="intersect",
-  *     tags={"Get geometry as GeoJSON by WKT"},
+  *     tags={"HeatMap data"},
   *     produces={"application/json"},
   *     @SWG\Parameter(
   * 		   	name="filter",
