@@ -17,14 +17,14 @@
   *     ),
   *     @SWG\Parameter(
   * 		   	name="pin",
-  * 			  in="path",
+  * 			  in="formData",
   * 			  required=false,
   * 			  type="file",
   * 			  description="Url del PIN a utilizar",
   *     ),
   *     @SWG\Parameter(
   * 		   	name="file",
-  * 			  in="path",
+  * 			  in="formData",
   * 			  required=true,
   * 			  type="file",
   * 			  description="Archivo csv",

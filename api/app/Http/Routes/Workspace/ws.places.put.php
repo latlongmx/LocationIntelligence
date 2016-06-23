@@ -35,7 +35,7 @@
   *     ),
   *     @SWG\Parameter(
   * 		   	name="pin",
-  * 			  in="path",
+  * 			  in="formData",
   * 			  required=false,
   * 			  type="file",
   * 			  description="Archivo del icono"

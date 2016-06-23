@@ -49,6 +49,55 @@
                 }
             }
         },
+        "/dyn/heat?filter={filter}&wkt={wkt}": {
+            "get": {
+                "tags": [
+                    "Get geometry as GeoJSON by WKT"
+                ],
+                "summary": "Obtiene datos para usar en un leafelt usando heatmap",
+                "description": "Genera los datos necesarios para utilizar en un heatmap de leaflet se requiere mandar el codigo y si se quiere que contenga una palabra mandar filter",
+                "operationId": "intersect",
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "name": "filter",
+                        "in": "path",
+                        "description": "Filtro para obtener los datos",
+                        "required": false,
+                        "type": "string"
+                    },
+                    {
+                        "name": "cod",
+                        "in": "path",
+                        "description": "Codigo a filtrar",
+                        "required": false,
+                        "type": "string"
+                    },
+                    {
+                        "name": "wkt",
+                        "in": "path",
+                        "description": "WKT para filtro geometrico",
+                        "required": true,
+                        "type": "string"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "successful operation",
+                        "schema": {
+                            "$ref": "#/heat"
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "access_token": []
+                    }
+                ]
+            }
+        },
         "/dyn/intersect?s={schema}&t={table}&c={columns}&w={column_filter}:{value_filter}&wkt={wkt}&mts={meters}": {
             "get": {
                 "tags": [
@@ -126,6 +175,49 @@
                         }
                     }
                 }
+            }
+        },
+        "/dyn/pb_wms?col={column}&WMS={WMS}": {
+            "get": {
+                "tags": [
+                    "pb_wms"
+                ],
+                "summary": "WMS con estilo dinamico segun la columna",
+                "description": "Servicio dinamico WMS que coloriza segun la columna solicitada",
+                "operationId": "pb_wms",
+                "produces": [
+                    "image/png"
+                ],
+                "parameters": [
+                    {
+                        "name": "WMS",
+                        "in": "path",
+                        "description": "Parametros estandar WMS",
+                        "required": true,
+                        "type": "string",
+                        "default": "inegi"
+                    },
+                    {
+                        "name": "col",
+                        "in": "path",
+                        "description": "Columna de pob y viv a colorizar",
+                        "required": true,
+                        "type": "string"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "successful operation",
+                        "schema": {
+                            "$ref": "#/intersect"
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "access_token": []
+                    }
+                ]
             }
         },
         "/ws/icon?nm={name}&access_token={token_id}": {
@@ -291,14 +383,14 @@
                     },
                     {
                         "name": "pin",
-                        "in": "path",
+                        "in": "formData",
                         "description": "Url del PIN a utilizar",
-                        "required": true,
-                        "type": "string"
+                        "required": false,
+                        "type": "file"
                     },
                     {
                         "name": "file",
-                        "in": "path",
+                        "in": "formData",
                         "description": "Archivo csv",
                         "required": true,
                         "type": "file"
@@ -378,7 +470,7 @@
                     },
                     {
                         "name": "pin",
-                        "in": "path",
+                        "in": "formData",
                         "description": "Archivo del icono",
                         "required": false,
                         "type": "file"
