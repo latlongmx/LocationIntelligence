@@ -37,6 +37,14 @@
                         "description": "Tipo de catalogo, (analisis|denue_cods)",
                         "required": true,
                         "type": "string"
+                    },
+                    {
+                        "name": "cod",
+                        "in": "path",
+                        "description": "Regresa el catalogo de codigos segun el integer enviado ",
+                        "required": false,
+                        "type": "integer",
+                        "default": "43"
                     }
                 ],
                 "responses": {
