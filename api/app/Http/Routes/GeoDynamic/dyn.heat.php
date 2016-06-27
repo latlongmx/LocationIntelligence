@@ -66,6 +66,9 @@ Route::get('/heat', ['middleware' => 'oauth', function() {
       ".($filter==''?'':"and D.nom_estab ilike '%$filter%'")."
       ".$w_cod."
     ";
+
+  Log::info($sql);
+
   $rs = DB::select($sql,[]);
   $data = array();
   $ents = array();
@@ -81,7 +84,7 @@ Route::get('/heat', ['middleware' => 'oauth', function() {
     "ents" => $ents,
   ]);*/
 
-  Log:info($sql);
+
 
   return response()->json([
     "data" => $data,
