@@ -155,7 +155,7 @@ FROM
                             L.bbox[4]::numeric,
                         4326))
                     and E.cve_ent = D.cve_ent
-                    and D.nom_estab ilike '%'|| L.query_filter ||'%'
+                    and D.tsv @@ to_tsquery(unaccent(L.query_filter))
                 group by D.gid
               ) d
             ) as data
