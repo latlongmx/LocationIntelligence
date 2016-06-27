@@ -44,6 +44,19 @@ Route::get('/heat', ['middleware' => 'oauth', function() {
   $filter = Input::get('filter', '');
   $cod = Input::get('cod', '');
   $wkt = Input::get('wkt', '');
+  $w_cod = "";
+  if($cod != ""){
+    $w_cod = "and (";
+    $ar = explode(",",$cod);
+    foreach ($ar as $c) {
+      if($c != ""){
+        $w_cod .= "D.codigo_act like '$cod%' or ";
+      }
+    }
+    $w_cod = substr($w_cod, 0, -4);
+    $w_cod .= ")";
+  }
+
   $sql = "SELECT st_ymax(D.geom) lat, st_xmax(D.geom) lng, 1.0 val_data, D.cve_ent
     FROM inegi.denue_2016 D
     LEFT JOIN inegi.mgn_estados E
@@ -51,7 +64,7 @@ Route::get('/heat', ['middleware' => 'oauth', function() {
     WHERE
       ST_Intersects(E.geom, ST_GeomFromText( '$wkt', 4326 ) )
       ".($filter==''?'':"and D.nom_estab ilike '%$filter%'")."
-      ".($cod==''?'':"and D.codigo_act like '$cod%'")."
+      ".$w_cod."
     ";
   $rs = DB::select($sql,[]);
   $data = array();
