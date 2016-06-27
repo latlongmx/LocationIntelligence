@@ -50,7 +50,7 @@ Route::get('/heat', ['middleware' => 'oauth', function() {
     $ar = explode(",",$cod);
     foreach ($ar as $c) {
       if($c != ""){
-        $w_cod .= "D.codigo_act like '$cod%' or ";
+        $w_cod .= "D.codigo_act like '$c%' or ";
       }
     }
     $w_cod = substr($w_cod, 0, -4);
