@@ -57,13 +57,14 @@ Route::get('/heat', ['middleware' => 'oauth', function() {
     $w_cod .= ")";
   }
 
+//      ".($filter==''?'':"and D.nom_estab ilike '%$filter%'")."
   $sql = "SELECT st_ymax(D.geom) lat, st_xmax(D.geom) lng, 1.0 val_data, D.cve_ent
     FROM inegi.denue_2016 D
     LEFT JOIN inegi.mgn_estados E
     ON E.cve_ent = D.cve_ent
     WHERE
       ST_Intersects(E.geom, ST_GeomFromText( '$wkt', 4326 ) )
-      ".($filter==''?'':"and D.nom_estab ilike '%$filter%'")."
+      ".($filter==''?'':"and D.tsv @@ to_tsquery(unaccent('$filter'))")."
       ".$w_cod."
     ";
 
