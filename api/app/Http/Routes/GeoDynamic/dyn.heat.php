@@ -81,6 +81,8 @@ Route::get('/heat', ['middleware' => 'oauth', function() {
     "ents" => $ents,
   ]);*/
 
+  error_log($sql);
+
   return response()->json([
     "data" => $data,
     "ents" => $ents,
