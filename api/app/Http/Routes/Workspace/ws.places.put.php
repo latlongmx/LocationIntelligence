@@ -78,5 +78,5 @@ Route::put('/places/{id}', ['middleware' => 'oauth', function($id) {
   if(sizeof($upd)>0){
     $updated = DB::table('users_layers')->where('id_layer', '=', $id)->update($upd);
   }
-  return Response::json(["id_layer"=>$id, "updated"=>$updated]);
+  return Response::json(["id_layer"=>$id, "updated"=>$updated, "upd"=>$upd]);
 }]);
