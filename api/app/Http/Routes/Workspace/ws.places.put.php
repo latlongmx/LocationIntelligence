@@ -54,6 +54,13 @@ Route::put('/places/{id}', ['middleware' => 'oauth', function($id) {
   $userId = Authorizer::getResourceOwnerId();
   $nom = Input::get('nom', '');
 
+  if($_SERVER['REQUEST_METHOD'] == 'PUT') {
+    parse_str(file_get_contents("php://input"),$put_vars);
+    if(isset($put_vars["nom"])){
+      $nom = $put_vars["nom"];
+    }
+  }
+
   $upd = array();
   if($nom != ""){
     $upd = array_merge($upd, array("name_layer"=>$nom));
