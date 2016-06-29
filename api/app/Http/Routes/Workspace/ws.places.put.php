@@ -1,8 +1,8 @@
 <?php
 
 /**
-  * @SWG\Put(
-  *     path="/ws/places/{id}?nom={nom}&pin={pin}",
+  * @SWG\Post(
+  *     path="/ws/places_u/{id}?nom={nom}&pin={pin}",
   *     summary="Actualiza el icono o nombre de una ubicacion",
   *     description="Elimina la ubicacion que se envia como parametro",
   *     operationId="catalog",
@@ -50,16 +50,9 @@
   *   }}
   * )
   */
-Route::put('/places/{id}', ['middleware' => 'oauth', function($id) {
+Route::post('/places_u/{id}', ['middleware' => 'oauth', function($id) {
   $userId = Authorizer::getResourceOwnerId();
   $nom = Input::get('nom', '');
-
-  if($_SERVER['REQUEST_METHOD'] == 'PUT') {
-    parse_str(file_get_contents("php://input"),$put_vars);
-    if(isset($put_vars["nom"])){
-      $nom = $put_vars["nom"];
-    }
-  }
 
   $upd = array();
   if($nom != ""){
