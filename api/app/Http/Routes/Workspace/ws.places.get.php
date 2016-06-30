@@ -106,9 +106,7 @@ FROM
 */
   if($competence!==""){
 
-    $sql_denue = "SELECT array_to_json(array_agg(row_to_json(d)))
-      from (
-        select
+    $sql_denue = "SELECT
           D.gid id_data,
           json_agg(
             json_build_object('nom_estab', D.nom_estab, 'nombre_act', D.nombre_act)
@@ -118,31 +116,28 @@ FROM
              inegi.mgn_estados E
         where
             ST_Intersects(E.geom,
-                ST_MakeEnvelope(
-                    L.bbox[1]::numeric,
-                    L.bbox[2]::numeric,
-                    L.bbox[3]::numeric,
-                    L.bbox[4]::numeric,
-                4326))
+                ST_MakeEnvelope( L.bbox[1]::numeric, L.bbox[2]::numeric, L.bbox[3]::numeric, L.bbox[4]::numeric, 4326))
             and E.cve_ent = D.cve_ent
             &FILTER&
-        group by D.gid
-      ) d";
+        group by D.gid";
 
     $sql = "SELECT row_to_json(tmp) json
         FROM
         (
           SELECT id_layer, name_layer, creation_dt,
             (
-              ".str_replace("&FILTER&",
-                  " and substring(L.query_filter,1,4)<>'cod:'
-                    and D.tsv @@ to_tsquery(unaccent(L.query_filter)) "
-                  ,$sql_denue)."
-              UNION
-              ".str_replace("&FILTER&",
-                  " and substring(L.query_filter,1,4)='cod:'
-                   and D.codigo_act like substring(L.query_filter,5) ||'%' "
-                  ,$sql_denue)."
+              SELECT array_to_json(array_agg(row_to_json(d)))
+                from (
+                  ".str_replace("&FILTER&",
+                      " and substring(L.query_filter,1,4)<>'cod:'
+                        and D.tsv @@ to_tsquery(unaccent(L.query_filter)) "
+                      ,$sql_denue)."
+                  UNION
+                  ".str_replace("&FILTER&",
+                      " and substring(L.query_filter,1,4)='cod:'
+                       and D.codigo_act like substring(L.query_filter,5) ||'%' "
+                      ,$sql_denue)."
+              ) d
             ) as data
           FROM (
             SELECT *, regexp_split_to_array(bbox_filter,',') bbox
