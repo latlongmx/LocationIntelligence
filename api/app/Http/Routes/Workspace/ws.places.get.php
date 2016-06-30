@@ -47,14 +47,6 @@ Route::get('/places', ['middleware' => 'oauth', function() {
   $userId = Authorizer::getResourceOwnerId();
   $id = Input::get('id_layer', '');
   $competence = Input::get('competence', '');
-  /*$sql = "select L.id_layer, name_layer, pin_url, creation_dt, id_data, data_values, st_xmax(geom) x, st_ymax(geom) y
-      from users_layers L
-      left join users_layers_data D
-      on L.id_layer=D.id_layer
-      where id_user=$userId and D.id_layer is not null
-      ".($id!==""?" and L.id_layer=".$id:"")."is_Query
-      and L.is_competence is ".($competence!==""?"true":"false")."
-      order by id_layer";*/
   $sql = "SELECT row_to_json(tmp) json
       FROM
       (
@@ -78,30 +70,7 @@ Route::get('/places', ['middleware' => 'oauth', function() {
   $places = array();
   foreach($rs as $r){
     $places[] = json_decode($r->json);
-    /*$places_data[] = [
-      "id_data"=>$r->id_data,
-      "data_values"=>$r->data_values,
-      "pin_url"=>$r->pin_url,
-      "x"=>$r->x,
-      "y"=>$r->y
-    ];
-    if($last_layer != $r->id_layer){
-      $last_layer = $r->id_layer;
-      $places[] = [
-        "id_layer"=>$r->id_layer,
-        "name_layer"=>$r->name_layer,
-        "data"=>$places_data
-      ];
-      $places_data = array();
-    }*/
   }
-  /*if(sizeof($places)==0 && sizeof($places_data)>0){
-    $places[] = [
-      "id_layer"=>$r->id_layer,
-      "name_layer"=>$r->name_layer,
-      "data"=>$places_data
-    ];
-  }*/
 
 
 /* -- MEJORAR QUERY BY EXPLAIN
@@ -136,28 +105,44 @@ FROM
 ) tmp;
 */
   if($competence!==""){
+
+    $sql_denue = "SELECT array_to_json(array_agg(row_to_json(d)))
+      from (
+        select
+          D.gid id_data,
+          json_agg(
+            json_build_object('nom_estab', D.nom_estab, 'nombre_act', D.nombre_act)
+          ) data_values,
+          st_xmax(D.geom) x, st_ymax(D.geom) y
+        from inegi.denue_2016 D,
+             inegi.mgn_estados E
+        where
+            ST_Intersects(E.geom,
+                ST_MakeEnvelope(
+                    L.bbox[1]::numeric,
+                    L.bbox[2]::numeric,
+                    L.bbox[3]::numeric,
+                    L.bbox[4]::numeric,
+                4326))
+            and E.cve_ent = D.cve_ent
+            &FILTER&
+        group by D.gid
+      ) d";
+
     $sql = "SELECT row_to_json(tmp) json
         FROM
         (
           SELECT id_layer, name_layer, creation_dt,
             (
-              select array_to_json(array_agg(row_to_json(d)))
-              from (
-                select D.gid id_data, json_agg(json_build_object('nom_estab', D.nom_estab, 'nombre_act', D.nombre_act)) data_values, st_xmax(D.geom) x, st_ymax(D.geom) y
-                from inegi.denue_2016 D,
-                     inegi.mgn_estados E
-                where
-                    ST_Intersects(E.geom,
-                        ST_MakeEnvelope(
-                            L.bbox[1]::numeric,
-                            L.bbox[2]::numeric,
-                            L.bbox[3]::numeric,
-                            L.bbox[4]::numeric,
-                        4326))
-                    and E.cve_ent = D.cve_ent
-                    and D.tsv @@ to_tsquery(unaccent(L.query_filter))
-                group by D.gid
-              ) d
+              ".str_replace("&FILTER&",
+                  " and substring(L.query_filter,1,4)<>'cod:'
+                    and D.tsv @@ to_tsquery(unaccent(L.query_filter)) "
+                  ,$sql_denue)."
+              UNION
+              ".str_replace("&FILTER&",
+                  " and substring(L.query_filter,1,4)='cod:'
+                   and D.codigo_act like substring(L.query_filter,5) ||'%' "
+                  ,$sql_denue)."
             ) as data
           FROM (
             SELECT *, regexp_split_to_array(bbox_filter,',') bbox
@@ -172,5 +157,5 @@ FROM
     }
   }
 
-  return Response::json(["places"=>$places]);
+  return Response::json(["places"=>$places, "sql" => $sql]);
 }]);
