@@ -33,6 +33,29 @@ Route::get('/ws_wms', ['middleware' => 'oauth', function() {
       "where id_layer=".$idLayer.
       ") as T using unique id_data using srid=4326";
 
+    if($is_competence=="1"){
+      $bbox = explode(",",$r->bbox_filter);
+      $qf = $r->query_filter;
+      $filter = "";
+      if (strpos($qf, 'cod:') !== false) {
+        echo 'true';
+      }else{
+        $filter = "and D.codigo_act like substring(L.query_filter,5) ||'%'";
+      }
+      $qry_data = "geom from (
+            SELECT
+              D.gid, D.nom_estab, D.nombre_act,
+              st_xmax(D.geom) x, st_ymax(D.geom) y
+            from inegi.denue_2016 D,
+                 inegi.mgn_estados E
+            where
+                ST_Intersects(E.geom,
+                    ST_MakeEnvelope(".$bbox[0].",".$bbox[1].",".$bbox[2].",".$bbox[3].", 4326))
+                and E.cve_ent = D.cve_ent
+                ".$filter."
+        ) as T using unique id_data using srid=4326";
+    }
+
     $file_contents = str_replace("&IMAGE&", $img_path, $file_contents);
     $file_contents = str_replace("&QUERY&", $qry_data, $file_contents);
   }
