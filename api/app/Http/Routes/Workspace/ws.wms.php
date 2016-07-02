@@ -26,13 +26,11 @@ Route::get('/ws_wms', ['middleware' => 'oauth', function() {
   }
   $rs = DB::select($q,[]);
   foreach($rs as $r){
-    $img_path = "/var/www/laravel-storage/pins/".$userId."/".$r->pin_url;
     $qry_data = "geom from (".
       "select id_data, geom ".
       "from users_layers_data ".
       "where id_layer=".$idLayer.
       ") as T using unique id_data using srid=4326";
-
     if($is_competence=="1"){
       $bbox = explode(",",$r->bbox_filter);
       $qf = $r->query_filter;
@@ -54,15 +52,16 @@ Route::get('/ws_wms', ['middleware' => 'oauth', function() {
                 ".$filter."
         ) as T using unique gid using srid=4326";
     }
+    Log::info($qry_data);
+    $file_contents = str_replace("&QUERY&", $qry_data, $file_contents);
 
+    $img_path = "/var/www/laravel-storage/pins/".$userId."/".$r->pin_url;
+    $file_contents = str_replace("&IMAGE&", $img_path, $file_contents);
     if($r->pin_url === null || $r->pin_url === ""){
       $file_contents = str_replace("&SYMBOL&", "symbol_".$idLayer, $file_contents);
     }else{
       $file_contents = str_replace("&SYMBOL&", "point", $file_contents);
     }
-
-    $file_contents = str_replace("&IMAGE&", $img_path, $file_contents);
-    $file_contents = str_replace("&QUERY&", $qry_data, $file_contents);
 
   }
   file_put_contents($user_map_file, $file_contents);
