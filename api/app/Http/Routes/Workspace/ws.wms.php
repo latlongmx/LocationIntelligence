@@ -21,7 +21,6 @@ Route::get('/ws_wms', ['middleware' => 'oauth', function() {
       "where id_layer=".$idLayer.
       ") as T using unique id_data using srid=4326";
     if($r->is_competence=="t"){
-      $bbox = explode(",",$r->bbox_filter);
       $qf = $r->query_filter;
       $filter = "";
       if (strpos($qf, 'cod:') !== false) {
@@ -36,7 +35,8 @@ Route::get('/ws_wms', ['middleware' => 'oauth', function() {
                  inegi.mgn_estados E
             where
                 ST_Intersects(E.geom,
-                    ST_MakeEnvelope(".$bbox[0].",".$bbox[1].",".$bbox[2].",".$bbox[3].", 4326))
+                    ST_MakeEnvelope(".$r->bbox_filter.", 4326)
+                )
                 and E.cve_ent = D.cve_ent
                 ".$filter."
         ) as T using unique gid using srid=4326";
