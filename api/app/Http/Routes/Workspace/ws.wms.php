@@ -22,6 +22,14 @@ function(){
     $id = $r->id_layer;
     $layer = getLayerObjConfig($MAP, 'U'.$id);
     $layer->set('type', MS_LAYER_POINT);
+
+    $qry_data = "geom from (".
+      "select id_data, geom ".
+      "from inegi.pobviv2010 ".
+      "where id_layer=".$id.
+      ") as T using unique id_data using srid=4326";
+    $layer->set('data', $qry_data);
+
     $class = new \ClassObj( $layer );
     $style = new \StyleObj( $class );
 
