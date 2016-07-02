@@ -89,6 +89,8 @@ MAP
     CLASS
       STYLE
         SYMBOL "symbol_&ID&"
+        SIZE 20
+        GAP -30
       END # STYLE
     END # CLASS
   END # LAYER
