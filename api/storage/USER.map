@@ -64,6 +64,7 @@ MAP
       "wms_getmap_formatlist"	"image/png,png,png8,png24"
       "wms_extent"	"-118.407653808594 14.532097816008417 -86.7086486816406 32.71865463170993"
       "wms_title"	"WMS Dynamic LatLong.mx"
+      WMS_ENABLE_REQUEST "*" 
     END # METADATA
   END # WEB
 
@@ -75,6 +76,7 @@ MAP
       "wms_srs"	"EPSG:4326"
       "wms_extent"	"-118.407653808594 14.532097816008417 -86.7086486816406 32.71865463170993"
       "wms_title"	"U&ID&"
+      WMS_ENABLE_REQUEST "*"
     END # METADATA
     NAME "U&ID&"
     PROCESSING "CLOSE_CONNECTION=DEFER"
