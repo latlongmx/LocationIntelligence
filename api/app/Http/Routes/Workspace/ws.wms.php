@@ -36,7 +36,9 @@ Route::get('/ws_wms', ['middleware' => 'oauth', function() {
     $symbol->setImagePath("/var/www/laravel-storage/pins/".$userId."/".$r->pin_url);
     $symbol->set("sizex", 1);
     $symbol->set("sizey", 1);
-    $style->set("symbol", $symbol);
+    $symbol->set("inmapfile", MS_TRUE);
+
+    $style->set("symbol", "symbol_".$id);
   }
 
 
