@@ -21,9 +21,10 @@ Route::get('/ws_wms', ['middleware' => 'oauth', function() {
       "where id_layer=".$idLayer.
       ") as T using unique id_data using srid=4326";
     if($r->is_competence=="t"){
+      Log::info("competencia");
       $qf = $r->query_filter;
       $filter = "";
-      if (strpos($qf, 'cod:') !== false) {
+      if (strpos($qf, "cod:") !== false) {
         $filter = "and D.codigo_act like '".str_replace("cod:","",$qf)."%'";
       }else{
         $filter = "and D.tsv @@ to_tsquery(unaccent('$qf'))";
@@ -44,11 +45,13 @@ Route::get('/ws_wms', ['middleware' => 'oauth', function() {
     Log::info($qry_data);
     $file_contents = str_replace("&QUERY&", $qry_data, $file_contents);
 
-    $img_path = "/var/www/laravel-storage/pins/".$userId."/".$r->pin_url;
-    $file_contents = str_replace("&IMAGE&", $img_path, $file_contents);
+
     if($r->pin_url === null || $r->pin_url === ""){
+      $file_contents = str_replace("&IMAGE&", "", $file_contents);
       $file_contents = str_replace("&SYMBOL&", "symbol_".$idLayer, $file_contents);
     }else{
+      $img_path = "/var/www/laravel-storage/pins/".$userId."/".$r->pin_url;
+      $file_contents = str_replace("&IMAGE&", $img_path, $file_contents);
       $file_contents = str_replace("&SYMBOL&", "point", $file_contents);
     }
 
