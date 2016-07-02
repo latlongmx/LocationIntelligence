@@ -7,7 +7,7 @@ Route::get('/ws_wms', ['middleware' => 'oauth', function() {
 
 
   $is_competence =  Input::get('COMPETENCE', '');
-  $layer =  Input::get('LAYER', '');
+  $layer =  Input::get('LAYERS', '');
 
   $idLayer = str_replace("U","",$layer);
 
