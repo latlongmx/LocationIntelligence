@@ -13,7 +13,7 @@ Route::get('/ws_wms', ['middleware' => 'oauth', function() {
 
 
   $map_file = storage_path('USER.map');
-  $user_map_file = storage_path("MAPS/".$layer.".map");
+  $user_map_file = storage_path("MAPS_TMP/".$layer.".map");
 
   $file_contents = file_get_contents($map_file);
   $file_contents = str_replace("&ID&", $idLayer, $file_contents);
