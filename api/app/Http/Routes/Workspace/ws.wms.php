@@ -33,10 +33,15 @@ Route::get('/ws_wms', ['middleware' => 'oauth', function() {
     $style = new \StyleObj( $class );
 
     $symbol = new \SymbolObj($MAP, "symbol_".$id);
-    $symbol->setImagePath("/var/www/laravel-storage/pins/".$userId."/".$r->pin_url);
-    $symbol->set("sizex", 1);
-    $symbol->set("sizey", 1);
+    $img_path = "/var/www/laravel-storage/pins/".$userId."/".$r->pin_url;
+    Log:info($img_path);
+    $symbol->setImagePath($img_path);
+    $symbol->set("sizex", 32);
+    $symbol->set("sizey", 32);
+    $symbol->set("transparent", 1);
     $symbol->set("inmapfile", MS_TRUE);
+
+
 
     $style->set("symbol", "symbol_".$id);
   }
