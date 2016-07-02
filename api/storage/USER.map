@@ -26,6 +26,15 @@ MAP
     TRANSPARENT 0
   END
 
+  SYMBOL
+    NAME "point"
+    TYPE ellipse
+    FILLED true
+    POINTS
+      1 1
+    END
+  END
+
   PROJECTION
     "init=epsg:4326"
   END # PROJECTION
@@ -88,7 +97,7 @@ MAP
     UNITS METERS
     CLASS
       STYLE
-        SYMBOL "symbol_&ID&"
+        SYMBOL "&SYMBOL&"
         SIZE 34
         MAXSIZE 34
       END # STYLE

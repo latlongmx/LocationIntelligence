@@ -56,8 +56,15 @@ Route::get('/ws_wms', ['middleware' => 'oauth', function() {
         ) as T using unique id_data using srid=4326";
     }
 
+    if($r->pin_url === null || $r->pin_url === ""){
+      $file_contents = str_replace("&SYMBOL&", "symbol_".$idLayer, $file_contents);
+    }else{
+      $file_contents = str_replace("&SYMBOL&", "point", $file_contents);
+    }
+
     $file_contents = str_replace("&IMAGE&", $img_path, $file_contents);
     $file_contents = str_replace("&QUERY&", $qry_data, $file_contents);
+
   }
   file_put_contents($user_map_file, $file_contents);
 
