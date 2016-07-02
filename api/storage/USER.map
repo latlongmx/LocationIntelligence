@@ -1,5 +1,6 @@
 MAP
   CONFIG "ows_enable_request" "*"
+  CONFIG "wms_enable_request" "*"
   CONFIG "MS_ERRORFILE" "/var/www/sites/api.walmex.latlong.mx/api/storage/logs/ms_error.log"
   CONFIG "size" "800 600"
   DEBUG 5
@@ -60,11 +61,12 @@ MAP
   WEB
     METADATA
       "wms_onlineresource"	"http://52.8.211.37/test/wms.php?"
-      "wms_enable_request"	"GetCapabilities GetMap GetFeatureInfo"
+      "ows_onlineresource"	"http://52.8.211.37/test/wms.php?"
       "wms_getmap_formatlist"	"image/png,png,png8,png24"
       "wms_extent"	"-118.407653808594 14.532097816008417 -86.7086486816406 32.71865463170993"
       "wms_title"	"WMS Dynamic LatLong.mx"
-      WMS_ENABLE_REQUEST "*" 
+      "ows_enable_request"   "*"
+      "wms_enable_request"   "*"
     END # METADATA
   END # WEB
 
@@ -76,12 +78,12 @@ MAP
       "wms_srs"	"EPSG:4326"
       "wms_extent"	"-118.407653808594 14.532097816008417 -86.7086486816406 32.71865463170993"
       "wms_title"	"U&ID&"
-      WMS_ENABLE_REQUEST "*"
+      "ows_enable_request"   "*"
+      "wms_enable_request"   "*"
     END # METADATA
     NAME "U&ID&"
     PROCESSING "CLOSE_CONNECTION=DEFER"
     STATUS ON
-    TILEITEM "location"
     TYPE POINT
     UNITS METERS
     CLASS

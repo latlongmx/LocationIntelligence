@@ -38,7 +38,7 @@ Route::get('/ws_wms', ['middleware' => 'oauth', function() {
   }
   file_put_contents($user_map_file, $file_contents);
 
-  $MAP = getMapObjConfig($user_map_file);
+  $MAP = new \mapObj($user_map_file);
   $req = new \Owsrequestobj();
   $req->loadparams();
 
