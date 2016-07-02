@@ -44,8 +44,7 @@ Route::get('/ws_wms', ['middleware' => 'oauth', function() {
       }
       $qry_data = "geom from (
             SELECT
-              D.gid, D.nom_estab, D.nombre_act,
-              st_xmax(D.geom) x, st_ymax(D.geom) y
+              D.gid, D.nom_estab, D.nombre_act, D.geom
             from inegi.denue_2016 D,
                  inegi.mgn_estados E
             where
@@ -53,7 +52,7 @@ Route::get('/ws_wms', ['middleware' => 'oauth', function() {
                     ST_MakeEnvelope(".$bbox[0].",".$bbox[1].",".$bbox[2].",".$bbox[3].", 4326))
                 and E.cve_ent = D.cve_ent
                 ".$filter."
-        ) as T using unique id_data using srid=4326";
+        ) as T using unique gid using srid=4326";
     }
 
     if($r->pin_url === null || $r->pin_url === ""){
