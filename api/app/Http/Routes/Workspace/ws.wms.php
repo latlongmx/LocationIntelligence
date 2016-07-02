@@ -3,14 +3,8 @@
 
 Route::get('/ws_wms', ['middleware' => 'oauth', function() {
   $userId = Authorizer::getResourceOwnerId();
-
-
-
-  $is_competence =  Input::get('competence', '');
   $layer =  Input::get('layers', '');
-
   $idLayer = str_replace("U","",$layer);
-
 
   $map_file = storage_path('USER.map');
   $user_map_file = storage_path("MAPS_TMP/".$layer.".map");
@@ -18,12 +12,7 @@ Route::get('/ws_wms', ['middleware' => 'oauth', function() {
   $file_contents = file_get_contents($map_file);
   $file_contents = str_replace("&ID&", $idLayer, $file_contents);
 
-  $q = "SELECT * FROM users_layers WHERE id_user=".$userId." and id_layer=".$idLayer." and is_competence is ";
-  if($is_competence != "" && $is_competence == "1"){
-    $q .= "true";
-  }else{
-    $q .= "false";
-  }
+  $q = "SELECT * FROM users_layers WHERE id_user=".$userId." and id_layer=".$idLayer;
   $rs = DB::select($q,[]);
   foreach($rs as $r){
     $qry_data = "geom from (".
@@ -31,7 +20,7 @@ Route::get('/ws_wms', ['middleware' => 'oauth', function() {
       "from users_layers_data ".
       "where id_layer=".$idLayer.
       ") as T using unique id_data using srid=4326";
-    if($is_competence=="1"){
+    if($r->is_competence=="t"){
       $bbox = explode(",",$r->bbox_filter);
       $qf = $r->query_filter;
       $filter = "";
