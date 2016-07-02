@@ -24,7 +24,7 @@ Route::get('/ws_wms', ['middleware' => 'oauth', function() {
 
     $qry_data = "geom from (".
       "select id_data, geom ".
-      "from inegi.pobviv2010 ".
+      "from users_layers_data ".
       "where id_layer=".$id.
       ") as T using unique id_data using srid=4326";
     $layer->set('data', $qry_data);
