@@ -30,7 +30,7 @@ Route::get('/ws_wms', ['middleware' => 'oauth', function() {
     $qry_data = "geom from (".
       "select id_data, geom ".
       "from users_layers_data ".
-      "where id_layer=".$id.
+      "where id_layer=".$idLayer.
       ") as T using unique id_data using srid=4326";
 
     $file_contents = str_replace("&IMAGE&", $img_path, $file_contents);
