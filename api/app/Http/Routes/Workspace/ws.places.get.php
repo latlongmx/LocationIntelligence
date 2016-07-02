@@ -51,15 +51,7 @@ Route::get('/places', ['middleware' => 'oauth', function() {
       FROM
       (
         SELECT id_layer, name_layer, creation_dt,
-          (
-            select array_to_json(array_agg(row_to_json(d)))
-            from (
-              select id_data, data_values, L.pin_url, st_xmax(geom) x, st_ymax(geom) y
-              from users_layers_data
-              where id_layer=L.id_layer
-              order by id_data
-            ) d
-          ) as data
+          '{}' as data
         FROM users_layers L
         WHERE id_user=$userId
         and is_competence is ".($competence!==""?"true":"false")."
@@ -116,34 +108,36 @@ FROM
                 ST_MakeEnvelope( L.bbox[1]::numeric, L.bbox[2]::numeric, L.bbox[3]::numeric, L.bbox[4]::numeric, 4326))
             and E.cve_ent = D.cve_ent
             &FILTER& ";
-
+/*
+(
+  SELECT array_to_json(array_agg(row_to_json(d)))
+    from (
+      SELECT
+            tt.gid id_data,
+            json_agg(
+              json_build_object('nom_estab', tt.nom_estab, 'nombre_act', tt.nombre_act)
+            ) data_values,
+            tt.x, tt.y
+      FROM (
+        ".str_replace("&FILTER&",
+            " and substring(L.query_filter,1,4)<>'cod:'
+              and D.tsv @@ to_tsquery(unaccent(L.query_filter)) "
+            ,$sql_denue)."
+        UNION
+        ".str_replace("&FILTER&",
+            " and substring(L.query_filter,1,4)='cod:'
+             and D.codigo_act like substring(L.query_filter,5) ||'%' "
+            ,$sql_denue)."
+      ) tt
+      group by tt.gid,tt.x, tt.y
+  ) d
+)
+*/
     $sql = "SELECT row_to_json(tmp) json
         FROM
         (
           SELECT id_layer, name_layer, creation_dt,
-            (
-              SELECT array_to_json(array_agg(row_to_json(d)))
-                from (
-                  SELECT
-                        tt.gid id_data,
-                        json_agg(
-                          json_build_object('nom_estab', tt.nom_estab, 'nombre_act', tt.nombre_act)
-                        ) data_values,
-                        tt.x, tt.y
-                  FROM (
-                    ".str_replace("&FILTER&",
-                        " and substring(L.query_filter,1,4)<>'cod:'
-                          and D.tsv @@ to_tsquery(unaccent(L.query_filter)) "
-                        ,$sql_denue)."
-                    UNION
-                    ".str_replace("&FILTER&",
-                        " and substring(L.query_filter,1,4)='cod:'
-                         and D.codigo_act like substring(L.query_filter,5) ||'%' "
-                        ,$sql_denue)."
-                  ) tt
-                  group by tt.gid,tt.x, tt.y
-              ) d
-            ) as data
+            '{}' as data
           FROM (
             SELECT *, regexp_split_to_array(bbox_filter,',') bbox
             FROM users_layers
