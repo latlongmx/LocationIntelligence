@@ -2,7 +2,6 @@
 
 
 Route::get('/ws_wms', ['middleware' => 'oauth', function() {
-function(){
   $userId = Authorizer::getResourceOwnerId();
 
   $MAP = getMapObjConfig();
