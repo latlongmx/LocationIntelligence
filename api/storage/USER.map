@@ -1,9 +1,9 @@
 MAP
   CONFIG "ows_enable_request" "*"
   CONFIG "wms_enable_request" "*"
-  CONFIG "MS_ERRORFILE" "/var/www/sites/api.walmex.latlong.mx/api/storage/logs/ms_error.log"
+  #CONFIG "MS_ERRORFILE" "/var/www/sites/api.walmex.latlong.mx/api/storage/logs/ms_error.log"
   CONFIG "size" "800 600"
-  DEBUG 5
+  #DEBUG 5
   IMAGETYPE "png"
   NAME "MS"
   SIZE -1 -1
