@@ -48,11 +48,12 @@ Route::get('/ws_wms', ['middleware' => 'oauth', function() {
 
     if($r->pin_url === null || $r->pin_url === ""){
       $file_contents = str_replace("&IMAGE&", "", $file_contents);
-      $file_contents = str_replace("&SYMBOL&", "symbol_".$idLayer, $file_contents);
+      $file_contents = str_replace("&SYMBOL&", "point", $file_contents);
     }else{
       $img_path = "/var/www/laravel-storage/pins/".$userId."/".$r->pin_url;
       $file_contents = str_replace("&IMAGE&", $img_path, $file_contents);
-      $file_contents = str_replace("&SYMBOL&", "point", $file_contents);
+      $file_contents = str_replace("&SYMBOL&", "symbol_".$idLayer, $file_contents);
+
     }
 
   }
