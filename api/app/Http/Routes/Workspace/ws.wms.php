@@ -4,13 +4,21 @@
 Route::get('/ws_wms', ['middleware' => 'oauth', function() {
   $userId = Authorizer::getResourceOwnerId();
 
-  $MAP = getMapObjConfig();
-  $req = new \Owsrequestobj();
-  $req->loadparams();
 
-  $is_competence = $req->getValueByName("competence");
 
-  $q = "SELECT * FROM users_layers WHERE id_user=".$userId." and is_competence is ";
+  $is_competence =  Input::get('COMPETENCE', '');
+  $layer =  Input::get('LAYER', '');
+
+  $idLayer = str_replace("U","",$layer);
+
+
+  $map_file = storage_path('USER.map');
+  $user_map_file = storage_path("MAPS/".$layer.".map");
+
+  $file_contents = file_get_contents($map_file);
+  $file_contents = str_replace("&ID&", $idLayer, $file_contents);
+
+  $q = "SELECT * FROM users_layers WHERE id_user=".$userId." and id_layer=".$idLayer." and is_competence is ";
   if($is_competence != "" && $is_competence == "1"){
     $q .= "true";
   }else{
@@ -18,32 +26,21 @@ Route::get('/ws_wms', ['middleware' => 'oauth', function() {
   }
   $rs = DB::select($q,[]);
   foreach($rs as $r){
-    $id = $r->id_layer;
-    $layer = getLayerObjConfig($MAP, 'U'.$id);
-    $layer->set('type', MS_LAYER_POINT);
-
+    $img_path = "/var/www/laravel-storage/pins/".$userId."/".$r->pin_url;
     $qry_data = "geom from (".
       "select id_data, geom ".
       "from users_layers_data ".
       "where id_layer=".$id.
       ") as T using unique id_data using srid=4326";
-    $layer->set('data', $qry_data);
 
-    $class = new \ClassObj( $layer );
-    $style = new \StyleObj( $class );
-
-    $symbol = new \SymbolObj($MAP, "symbol_".$id);
-    $img_path = "/var/www/laravel-storage/pins/".$userId."/".$r->pin_url;
-    Log:info($img_path);
-    $symbol->setImagePath($img_path);
-    $symbol->set("sizex", 32);
-    $symbol->set("sizey", 32);
-    $symbol->set("transparent", MS_TRUE);
-    $symbol->set("inmapfile", MS_TRUE);
-
-    $style->set("symbolname", "symbol_".$id);
+    $file_contents = str_replace("&IMAGE&", $img_path, $file_contents);
+    $file_contents = str_replace("&QUERY&", $qry_data, $file_contents);
   }
+  file_put_contents($user_map_file, $file_contents);
 
+  $MAP = getMapObjConfig($user_map_file);
+  $req = new \Owsrequestobj();
+  $req->loadparams();
 
   ms_ioinstallstdouttobuffer();
   $map_file = storage_path("logs/ms_file_user.map");
