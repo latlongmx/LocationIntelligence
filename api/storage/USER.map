@@ -98,6 +98,7 @@ MAP
     CLASS
       STYLE
         SYMBOL "&SYMBOL&"
+        &EXTRAS&
         SIZE 34
         MAXSIZE 34
       END # STYLE
