@@ -1,5 +1,5 @@
 // mapserver template
-[resultset layer="userMap" nodata=""]
+[resultset layer="usermap" nodata=""]
 {
   "type": "FeatureCollection",
   "features": [
