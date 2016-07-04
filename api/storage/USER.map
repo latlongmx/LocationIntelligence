@@ -97,9 +97,11 @@ MAP
       "ows_enable_request"   "*"
       "wms_enable_request"   "*"
       "wms_include_items" "all"
+      "wms_getfeatureinfo_formatlist" "text/plain,text/html,application/json,geojson"
     END # METADATA
-    NAME "U&ID&"
+    NAME "userMap"
     TEMPLATE "geojson"
+    TOLERANCEUNITS 15
     PROCESSING "CLOSE_CONNECTION=DEFER"
     STATUS ON
     TYPE POINT

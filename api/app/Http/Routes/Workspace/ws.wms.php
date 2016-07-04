@@ -3,8 +3,8 @@
 
 Route::get('/ws_wms', ['middleware' => 'oauth', function() {
   $userId = Authorizer::getResourceOwnerId();
-  $layer =  Input::get('layers', Input::get('LAYERS','') );
-  $idLayer = str_replace("U","",$layer);
+  $layer =  "U".Input::get('LID', '' );
+  $idLayer = $layer;
 
   $map_file = storage_path('USER.map');
   $user_map_file = storage_path("MAPS_TMP/".$layer.".map");
