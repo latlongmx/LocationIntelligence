@@ -56,6 +56,7 @@ Route::get('/places', ['middleware' => 'oauth', function() {
         WHERE id_user=$userId
         and is_competence is ".($competence!==""?"true":"false")."
         and is_query is false
+        ".($id!=""?" and id_layer=".$id:"")."
         ORDER BY id_layer
       ) tmp;";
   $rs = DB::select($sql,[]);
@@ -142,6 +143,7 @@ FROM
             SELECT *, regexp_split_to_array(bbox_filter,',') bbox
             FROM users_layers
             WHERE id_user=$userId and is_competence is true and is_query is true
+            ".($id!=""?" and id_layer=".$id:"")."
           ) L
           ORDER BY L.id_layer
         ) tmp;";
