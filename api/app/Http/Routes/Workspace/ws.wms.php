@@ -34,9 +34,9 @@ Route::get('/ws_wms', ['middleware' => 'oauth', function() {
             SELECT
               D.gid,
               '['
-              || '{nom_estab:\"'|| D.nom_estab ||'\"},' ||
-              || '{nombre_act:\"'|| D.nombre_act ||'\"}' ||
-              ']' data_values,
+              || '{nom_estab:\"'|| D.nom_estab ||'\"},'
+              || '{nombre_act:\"'|| D.nombre_act ||'\"}'
+              || ']' data_values,
               D.geom
             from inegi.denue_2016 D,
                  inegi.mgn_estados E

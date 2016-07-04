@@ -17,7 +17,7 @@
         ]
       },
       "properties": {
-        "description": "[item name="data_values" format="$value" escape=none]"
+        "description": [item name="data_values" format="$value" escape=none]
       }
     },
     [/feature]
