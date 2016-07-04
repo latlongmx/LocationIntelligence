@@ -27,10 +27,10 @@ MAP
   END
 
   OUTPUTFORMAT
-  NAME "geojson"
-  DRIVER "TEMPLATE"
-  FORMATOPTION "FILE=../userInfo.js"
-END
+    NAME "geojson"
+    DRIVER "TEMPLATE"
+    FORMATOPTION "FILE=../userInfo.js"
+  END
 
   SYMBOL
     NAME "point"
@@ -99,7 +99,7 @@ END
       "wms_include_items" "all"
     END # METADATA
     NAME "U&ID&"
-    TEMPLATE "../userInfo.ftl"
+    TEMPLATE "geojson"
     PROCESSING "CLOSE_CONNECTION=DEFER"
     STATUS ON
     TYPE POINT
