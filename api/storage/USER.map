@@ -26,6 +26,12 @@ MAP
     TRANSPARENT 0
   END
 
+  OUTPUTFORMAT
+  NAME "geojson"
+  DRIVER "TEMPLATE"
+  FORMATOPTION "FILE=../userInfo.js"
+END
+
   SYMBOL
     NAME "point"
     TYPE ellipse
@@ -76,6 +82,7 @@ MAP
       "wms_title"	"WMS Dynamic LatLong.mx"
       "ows_enable_request"   "*"
       "wms_enable_request"   "*"
+      "wms_feature_info_mime_type" "text/plain,geojson"
     END # METADATA
   END # WEB
 
@@ -89,8 +96,10 @@ MAP
       "wms_title"	"U&ID&"
       "ows_enable_request"   "*"
       "wms_enable_request"   "*"
+      "wms_include_items" "all"
     END # METADATA
     NAME "U&ID&"
+    TEMPLATE "../userInfo.ftl"
     PROCESSING "CLOSE_CONNECTION=DEFER"
     STATUS ON
     TYPE POINT

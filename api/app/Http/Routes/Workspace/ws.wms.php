@@ -16,10 +16,10 @@ Route::get('/ws_wms', ['middleware' => 'oauth', function() {
   $rs = DB::select($q,[]);
   foreach($rs as $r){
     $qry_data = "geom from (".
-      "select id_data, geom ".
+      "select id_data gid, data_values, geom ".
       "from users_layers_data ".
       "where id_layer=".$idLayer.
-      ") as T using unique id_data using srid=4326";
+      ") as T using unique gid using srid=4326";
     if($r->is_competence=="t"){
       Log::info("competencia");
       $qf = $r->query_filter;
@@ -31,7 +31,12 @@ Route::get('/ws_wms', ['middleware' => 'oauth', function() {
       }
       $qry_data = "geom from (
             SELECT
-              D.gid, D.nom_estab, D.nombre_act, D.geom
+              D.gid,
+              '['
+              || '{nom_estab:\"'|| D.nom_estab ||'\"},' ||
+              || '{nombre_act:\"'|| D.nombre_act ||'\"}' ||
+              ']' data_values,
+              D.geom
             from inegi.denue_2016 D,
                  inegi.mgn_estados E
             where
