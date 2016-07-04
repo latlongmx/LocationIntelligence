@@ -33,7 +33,7 @@ Route::get('/ws_wms', ['middleware' => 'oauth', function() {
       $qry_data = "geom from (
             SELECT
               D.gid,
-              ()'['
+              ('['
               || '{\\\"nom_estab\\\":\\\"'|| D.nom_estab ||'\\\"},'
               || '{\\\"nombre_act\\\":\\\"'|| D.nombre_act ||'\\\"}'
               || ']')::json data_values,
