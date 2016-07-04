@@ -93,13 +93,13 @@ MAP
     METADATA
       "wms_srs"	"EPSG:4326"
       "wms_extent"	"-118.407653808594 14.532097816008417 -86.7086486816406 32.71865463170993"
-      "wms_title"	"U&ID&"
+      "wms_title"	"usermap"
       "ows_enable_request"   "*"
       "wms_enable_request"   "*"
       "wms_include_items" "all"
       "wms_getfeatureinfo_formatlist" "text/plain,text/html,application/json,geojson"
     END # METADATA
-    NAME "userMap"
+    NAME "usermap"
     TEMPLATE "geojson"
     TOLERANCEUNITS 15
     PROCESSING "CLOSE_CONNECTION=DEFER"
