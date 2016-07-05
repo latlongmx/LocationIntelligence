@@ -113,6 +113,43 @@ Route::post('/places', ['middleware' => 'oauth', function() {
       'bbox_filter'=> $BBOX
     ];
     $idLayer = DB::table('users_layers')->insertGetId( $data, 'id_layer' );
+
+    $fl = "";
+    if (strpos($FILTER, "cod:") !== false) {
+      $fl .= "and D.codigo_act like '".str_replace("cod:","",$FILTER)."%'";
+    }else{
+      $fl .= "and D.tsv @@ to_tsquery(unaccent('$FILTER'))";
+    }
+    $qden_extend = "(SELECT
+      ST_Extent(D.geom)::varchar extend
+    from inegi.denue_2016 D,
+         inegi.mgn_estados E
+    where
+        ST_Intersects(E.geom,
+            ST_MakeEnvelope(".$BBOX.", 4326)
+        )
+        and E.cve_ent = D.cve_ent
+        ".$fl.")";
+
+    $qden_count = "(SELECT
+      count(D.*)
+    from inegi.denue_2016 D,
+         inegi.mgn_estados E
+    where
+        ST_Intersects(E.geom,
+            ST_MakeEnvelope(".$BBOX.", 4326)
+        )
+        and E.cve_ent = D.cve_ent
+        ".$fl.")";
+
+    DB::table('users_layers')
+        ->where('id_layer', $idLayer)
+        ->update([
+          'extend' => DB::raw($qden_extend),
+          'num_features' => DB::raw($qden_count)
+        ]);
+
+
     return Response::json([ "res" => "correcto", "id_layer"=>$idLayer]);
 
   }else{
@@ -157,44 +194,14 @@ Route::post('/places', ['middleware' => 'oauth', function() {
                 'name_layer' => $NAME,
                 'pin_url' => $pinURL
               ];
-
+              
               //es competencia
               $competence = Input::get('competence','');
               if($competence == "1"){
                 $data = array_merge($data, array("is_competence"=>true));
-                $qdenue = '(select ST_Extent(geom)::varchar extend from users_layers_data '.
-                 'where id_layer=users_layers.id_alyer ';
-                $fl = "";
-                if (strpos($FILTER, "cod:") !== false) {
-                  $fl .= "and D.codigo_act like '".str_replace("cod:","",$FILTER)."%'";
-                }else{
-                  $fl .= "and D.tsv @@ to_tsquery(unaccent('$FILTER'))";
-                }
-                $qdenue = "(SELECT
-                  ST_Extent(D.geom)::varchar extend
-                from inegi.denue_2016 D,
-                     inegi.mgn_estados E
-                where
-                    ST_Intersects(E.geom,
-                        ST_MakeEnvelope(".$BBOX.", 4326)
-                    )
-                    and E.cve_ent = D.cve_ent
-                    ".$fl.")";
-                $data = array_merge($data, array('extend' => DB::raw( $qdenue )));
-
-                $qdenue = "(SELECT
-                  count(D.*)
-                from inegi.denue_2016 D,
-                     inegi.mgn_estados E
-                where
-                    ST_Intersects(E.geom,
-                        ST_MakeEnvelope(".$BBOX.", 4326)
-                    )
-                    and E.cve_ent = D.cve_ent
-                    ".$fl.")";
-                $data = array_merge($data, array('num_features' => DB::raw( $qdenue )));
               }
               $idLayer = DB::table('users_layers')->insertGetId( $data, 'id_layer' );
+
             }else{
               $la = $row[$latF];
               $ln = $row[$lngF];
