@@ -181,6 +181,18 @@ Route::post('/places', ['middleware' => 'oauth', function() {
                     and E.cve_ent = D.cve_ent
                     ".$fl.")";
                 $data = array_merge($data, array('extend' => DB::raw( $qdenue )));
+
+                $qdenue = "(SELECT
+                  count(D.*)
+                from inegi.denue_2016 D,
+                     inegi.mgn_estados E
+                where
+                    ST_Intersects(E.geom,
+                        ST_MakeEnvelope(".$BBOX.", 4326)
+                    )
+                    and E.cve_ent = D.cve_ent
+                    ".$fl.")";
+                $data = array_merge($data, array('num_features' => DB::raw( $qdenue )));
               }
               $idLayer = DB::table('users_layers')->insertGetId( $data, 'id_layer' );
             }else{
@@ -200,7 +212,8 @@ Route::post('/places', ['middleware' => 'oauth', function() {
               DB::table('users_layers')
                   ->where('id_layer', $idLayer)
                   ->update([
-                    'extend' => DB::raw("(select ST_Extent(geom)::varchar extend from users_layers_data where id_layer = $idLayer)")
+                    'extend' => DB::raw("(select ST_Extent(geom)::varchar extend from users_layers_data where id_layer = $idLayer)"),
+                    'num_features' => DB::raw("(select count(*) from users_layers_data where id_layer = $idLayer)")
                   ]);
 
             }
