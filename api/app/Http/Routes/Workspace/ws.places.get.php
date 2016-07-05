@@ -49,6 +49,7 @@ Route::get('/places', ['middleware' => 'oauth', function() {
   $competence = Input::get('competence', '');
 
   $sql = "";
+  $places = array();
 
   if($competence===""){
     $sql = "SELECT row_to_json(tmp) json
@@ -64,7 +65,6 @@ Route::get('/places', ['middleware' => 'oauth', function() {
           ORDER BY id_layer
         ) tmp;";
     $rs = DB::select($sql,[]);
-    $places = array();
     foreach($rs as $r){
       $places[] = json_decode($r->json);
     }
