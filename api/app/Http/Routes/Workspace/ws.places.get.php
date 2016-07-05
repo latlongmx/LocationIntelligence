@@ -51,7 +51,7 @@ Route::get('/places', ['middleware' => 'oauth', function() {
   $sql = "";
   $places = array();
 
-  if($competence===""){
+  //if($competence===""){
     $sql = "SELECT row_to_json(tmp) json
         FROM
         (
@@ -68,7 +68,7 @@ Route::get('/places', ['middleware' => 'oauth', function() {
     foreach($rs as $r){
       $places[] = json_decode($r->json);
     }
-  }else
+  /*}else
   if($competence!==""){
 
     $sql_denue = "SELECT
@@ -99,7 +99,7 @@ Route::get('/places', ['middleware' => 'oauth', function() {
     foreach($rs as $r){
       $places[] = json_decode($r->json);
     }
-  }
+  }*/
 
   return Response::json(["places"=>$places, "sql" => $sql]);
 }]);
