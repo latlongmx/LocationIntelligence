@@ -50,7 +50,7 @@ Route::get('/places', ['middleware' => 'oauth', function() {
   $sql = "SELECT row_to_json(tmp) json
       FROM
       (
-        SELECT id_layer, name_layer, creation_dt, pin_url,
+        SELECT id_layer, name_layer, creation_dt, pin_url, extend,
           '{}' as data
         FROM users_layers L
         WHERE id_user=$userId
@@ -137,7 +137,7 @@ FROM
     $sql = "SELECT row_to_json(tmp) json
         FROM
         (
-          SELECT id_layer, name_layer, creation_dt, pin_url,
+          SELECT id_layer, name_layer, creation_dt, pin_url, extend,
             '{}' as data
           FROM (
             SELECT *, regexp_split_to_array(bbox_filter,',') bbox

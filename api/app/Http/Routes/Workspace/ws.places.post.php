@@ -100,8 +100,8 @@ Route::post('/places', ['middleware' => 'oauth', function() {
     /*LAYER BY QUERY*/
     /*LAYER BY QUERY*/
     /*LAYER BY QUERY*/
-    $BBOX = Input::get('qb');
-    $FILTER = Input::get('qf');
+    $BBOX = Input::get('qb','');
+    $FILTER = Input::get('qf','');
 
     $data = [
       'id_user' => $userId,
@@ -152,12 +152,41 @@ Route::post('/places', ['middleware' => 'oauth', function() {
               unset($row[$latF]);
               unset($row[$lngF]);
               $HEAD = $row;
-              $data = ['id_user' => $userId, 'name_layer' => $NAME, 'pin_url' => $pinURL];
+              $data = [
+                'id_user' => $userId,
+                'name_layer' => $NAME,
+                'pin_url' => $pinURL
+              ];
 
               //es competencia
               $competence = Input::get('competence','');
               if($competence == "1"){
                 $data = array_merge($data, array("is_competence"=>true));
+                $qdenue = '(select ST_Extent(geom)::varchar extend from users_layers_data '.
+                 'where id_layer=users_layers.id_alyer ';
+                $fl = "";
+                if (strpos($FILTER, "cod:") !== false) {
+                  $fl .= "and D.codigo_act like '".str_replace("cod:","",$FILTER)."%'";
+                }else{
+                  $fl .= "and D.tsv @@ to_tsquery(unaccent('$FILTER'))";
+                }
+                $qdenue = "(SELECT
+                  ST_Extent(D.geom)::varchar extend
+                from inegi.denue_2016 D,
+                     inegi.mgn_estados E
+                where
+                    ST_Intersects(E.geom,
+                        ST_MakeEnvelope(".$BBOX.", 4326)
+                    )
+                    and E.cve_ent = D.cve_ent
+                    ".$fl.")";
+                $data = array_merge($data, array('extend' => DB::raw( $qdenue )));
+              }else{
+                $data = array_merge($data,
+                  array('extend' =>
+                    DB::raw(
+                      '(select ST_Extent(geom)::varchar extend from users_layers_data where id_layer=users_layers.id_alyer)'
+                    )));
               }
               $idLayer = DB::table('users_layers')->insertGetId( $data, 'id_layer' );
             }else{
