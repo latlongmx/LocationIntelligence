@@ -181,12 +181,6 @@ Route::post('/places', ['middleware' => 'oauth', function() {
                     and E.cve_ent = D.cve_ent
                     ".$fl.")";
                 $data = array_merge($data, array('extend' => DB::raw( $qdenue )));
-              }else{
-                $data = array_merge($data,
-                  array('extend' =>
-                    DB::raw(
-                      '(select ST_Extent(geom)::varchar extend from users_layers_data where id_layer=users_layers.id_alyer)'
-                    )));
               }
               $idLayer = DB::table('users_layers')->insertGetId( $data, 'id_layer' );
             }else{
@@ -202,6 +196,13 @@ Route::post('/places', ['middleware' => 'oauth', function() {
                 ['id_layer' => $idLayer, 'data_values' => json_encode($desc),
                  'geom' => DB::raw("ST_SetSRID(ST_Point($ln, $la),4326)::geometry")]
               );
+
+              DB::table('users_layers')
+                  ->where('id_layer', $idLayer)
+                  ->update([
+                    'extend' => DB::raw("(select ST_Extent(geom)::varchar extend from users_layers_data where id_layer = $idLayer)")
+                  ]);
+
             }
           }
         }
