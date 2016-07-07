@@ -21,7 +21,7 @@ Route::get('/ws_wms', ['middleware' => 'oauth', function() {
       "from users_layers_data ".
       "where id_layer=".$idLayer.
       ") as T using unique gid using srid=4326";
-    if($r->is_competence=="t"){
+    if($r->is_competence=="t" && $r->is_query=="t"){
       Log::info("competencia");
       $qf = $r->query_filter;
       $filter = "";
