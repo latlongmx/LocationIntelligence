@@ -1,0 +1,27 @@
+Autopista
+Carretera
+
+Periférico
+Avenida
+Viaducto
+Eje vial
+Circunvalación
+
+Continuación
+Prolongación
+Pasaje
+Diagonal
+Circuito
+Boulevard
+
+Plaza
+Calle
+Peatonal
+Privada
+Ampliación
+Callejón
+Andador
+Calzada
+Cerrada
+Retorno
+Corredor

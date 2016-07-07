@@ -1,0 +1,109 @@
+MAP
+  NAME "WMS LATLNG"
+  EXTENT -180 -90 180 90
+  UNITS DD
+  #FONTSET "%APP-PATH%/data/MAP/fonts.txt"
+  #CONFIG "MS_ERRORFILE" "%APP-PATH%/data/MAP/err.txt"
+  #DEBUG 5
+  SIZE 800 600
+  IMAGETYPE PNG24
+  PROJECTION
+    "init=EPSG:4326"
+  END
+
+  WEB
+    METADATA
+      "ows_enable_request" "*"
+	    "wms_srs" "EPSG:4326"
+    END
+  END
+
+
+## VIAS INICIO ##
+  LAYER
+    CONNECTION "user=walmexusr dbname=db_walmex host=127.0.0.1 port=5433 password=N98Fdt?^C#mp{B6p"
+    CONNECTIONTYPE POSTGIS
+    NAME "VIAS"
+    #STATUS ON
+    TYPE POLYGON
+    DATA "geom from ( SELECT * FROM inegi.inter15_vias ) as T using unique gid using srid=4326"
+    PROCESSING "CLOSE_CONNECTION=DEFER"
+    PROJECTION
+      "init=EPSG:4326"
+    END
+    METADATA
+      "wms_title" "VIAS"
+      "wms_srs" "EPSG:4326"
+      "wms_abstract" "No abstract"
+      "wms_server_version" "1.1.1"
+      "wms_format" "image/png"
+      "wms_include_items" "all"
+      "gml_include_items" "all"
+      "wms_getfeatureinfo_formatlist" "text/plain,text/html,application/json"
+    END
+    VALIDATION
+      "qstring" "."
+      "wkt" "."
+    END
+    TEMPLATE "vias.txt"
+
+    CLASS  # Primarias
+      EXPRESSION ("[tipovial]" IN "Carretera,Autopista")
+      STYLE
+        WIDTH 12
+        COLOR 255 0 0
+        OUTLINEWIDTH 2
+        OUTLINECOLOR 153 111 57
+      END
+      STYLE
+        WIDTH 11
+        COLOR 223 197 124
+      END
+    END
+
+    CLASS  # Secundarias
+      EXPRESSION ("[tipovial]" IN "Periférico,Avenida,Viaducto,Eje vial,Circunvalación")
+      STYLE
+        WIDTH 12
+        COLOR 255 0 0 # rouge
+        OUTLINEWIDTH 2
+        OUTLINECOLOR 153 111 57
+      END
+      STYLE
+        WIDTH 11
+        COLOR 223 197 124
+      END
+    END
+
+    CLASS # Terciarias
+      EXPRESSION ("[tipovial]" IN "Continuación,Prolongació,Pasaje,Diagonal,Circuito,Boulevard")
+      STYLE
+        WIDTH 11
+        OUTLINEWIDTH 1
+        OUTLINECOLOR 193 188
+      END
+      STYLE
+        WIDTH 11
+        COLOR 255 253 139
+      END
+    END
+
+    CLASS # demas
+      STYLE
+        WIDTH 11
+        OUTLINEWIDTH 1
+        OUTLINECOLOR 103 181 157
+      END
+      STYLE
+        WIDTH 11
+        COLOR  238 225 226
+      END
+    END
+
+
+  END
+## VIAS FIN ##
+
+
+
+END
