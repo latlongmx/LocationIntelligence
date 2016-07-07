@@ -2,19 +2,20 @@ MAP
   NAME "WMS LATLNG"
   EXTENT -180 -90 180 90
   UNITS DD
+  CONFIG "PROJ_LIB" "/usr/share/proj/"
   #FONTSET "%APP-PATH%/data/MAP/fonts.txt"
   #CONFIG "MS_ERRORFILE" "%APP-PATH%/data/MAP/err.txt"
   #DEBUG 5
   SIZE 800 600
   IMAGETYPE PNG24
   PROJECTION
-    "init=EPSG:4326"
+    "init=epsg:4326"
   END
 
   WEB
     METADATA
       "ows_enable_request" "*"
-	    "wms_srs" "EPSG:4326"
+	    "wms_srs" "epsg:4326"
     END
   END
 
@@ -29,11 +30,11 @@ MAP
     DATA "geom from ( SELECT * FROM inegi.inter15_vias ) as T using unique gid using srid=4326"
     PROCESSING "CLOSE_CONNECTION=DEFER"
     PROJECTION
-      "init=EPSG:4326"
+      "init=epsg:4326"
     END
     METADATA
       "wms_title" "VIAS"
-      "wms_srs" "EPSG:4326"
+      "wms_srs" "epsg:4326"
       "wms_abstract" "No abstract"
       "wms_server_version" "1.1.1"
       "wms_format" "image/png"
@@ -80,7 +81,7 @@ MAP
       STYLE
         WIDTH 11
         OUTLINEWIDTH 1
-        OUTLINECOLOR 193 188
+        OUTLINECOLOR 193 188 157
       END
       STYLE
         WIDTH 11
