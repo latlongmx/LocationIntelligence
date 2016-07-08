@@ -41,6 +41,10 @@ Route::get('/icon', ['middleware' => 'oauth', function() {
   $icoName = Input::get('nm', '');
   $path = '/var/www/laravel-storage/pins/'.$userId.'/'.$icoName;
 
+  if($icoName===""){
+    $path = storage_path("MAPS/default.png");
+  }
+
   if(!File::exists($path)) abort(404);
 
   $file = File::get($path);

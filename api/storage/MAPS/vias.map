@@ -4,8 +4,8 @@ MAP
   UNITS DD
   CONFIG "PROJ_LIB" "/usr/share/proj/"
   #FONTSET "%APP-PATH%/data/MAP/fonts.txt"
-  #CONFIG "MS_ERRORFILE" "%APP-PATH%/data/MAP/err.txt"
-  #DEBUG 5
+  CONFIG "MS_ERRORFILE" "ms_error.log"
+  DEBUG 5
   SIZE 800 600
   IMAGETYPE PNG24
   PROJECTION
@@ -22,12 +22,16 @@ MAP
 
 ## VIAS INICIO ##
   LAYER
-    CONNECTION "user=walmexusr dbname=db_walmex host=127.0.0.1 port=5433 password=N98Fdt?^C#mp{B6p"
     CONNECTIONTYPE POSTGIS
+    CONNECTION "user=walmexusr dbname=db_walmex host=127.0.0.1 port=5433 password=N98Fdt?^C#mp{B6p"
+    DATA "geom from (
+          SELECT *
+          FROM inegi.inter15_vias
+          WHERE ST_Intersects(geom,!BOX!)
+        ) as T using unique gid using srid=4326"
     NAME "VIAS"
     #STATUS ON
-    TYPE POLYGON
-    DATA "geom from ( SELECT * FROM inegi.inter15_vias ) as T using unique gid using srid=4326"
+    TYPE LINE
     PROCESSING "CLOSE_CONNECTION=DEFER"
     PROJECTION
       "init=epsg:4326"
@@ -35,7 +39,7 @@ MAP
     METADATA
       "wms_title" "VIAS"
       "wms_srs" "epsg:4326"
-      "wms_abstract" "No abstract"
+      "wms_abstract" "Vias "
       "wms_server_version" "1.1.1"
       "wms_format" "image/png"
       "wms_include_items" "all"
@@ -51,13 +55,13 @@ MAP
     CLASS  # Primarias
       EXPRESSION ("[tipovial]" IN "Carretera,Autopista")
       STYLE
-        WIDTH 12
+        WIDTH 6
         COLOR 255 0 0
         OUTLINEWIDTH 2
         OUTLINECOLOR 153 111 57
       END
       STYLE
-        WIDTH 11
+        WIDTH 5
         COLOR 223 197 124
       END
     END
@@ -65,13 +69,13 @@ MAP
     CLASS  # Secundarias
       EXPRESSION ("[tipovial]" IN "Periférico,Avenida,Viaducto,Eje vial,Circunvalación")
       STYLE
-        WIDTH 12
+        WIDTH 5
         COLOR 255 0 0 # rouge
         OUTLINEWIDTH 2
         OUTLINECOLOR 153 111 57
       END
       STYLE
-        WIDTH 11
+        WIDTH 4
         COLOR 223 197 124
       END
     END
@@ -79,24 +83,24 @@ MAP
     CLASS # Terciarias
       EXPRESSION ("[tipovial]" IN "Continuación,Prolongació,Pasaje,Diagonal,Circuito,Boulevard")
       STYLE
-        WIDTH 11
+        WIDTH 4
         OUTLINEWIDTH 1
         OUTLINECOLOR 193 188 157
       END
       STYLE
-        WIDTH 11
+        WIDTH 3
         COLOR 255 253 139
       END
     END
 
     CLASS # demas
       STYLE
-        WIDTH 11
+        WIDTH 3
         OUTLINEWIDTH 1
         OUTLINECOLOR 103 181 157
       END
       STYLE
-        WIDTH 11
+        WIDTH 2
         COLOR  238 225 226
       END
     END
@@ -104,6 +108,98 @@ MAP
 
   END
 ## VIAS FIN ##
+
+
+
+
+## VIAS CUT INICIO ##
+  LAYER
+    CONNECTIONTYPE POSTGIS
+    CONNECTION "user=walmexusr dbname=db_walmex host=127.0.0.1 port=5433 password=N98Fdt?^C#mp{B6p"
+    DATA "geom from (
+          SELECT gid, (ST_Dump(ST_Intersection(S.geom, A.geom))).geom )::geometry geom
+          FROM inegi.inter15_vias
+          WHERE ST_Intersects(geom, ST_GeomFromText( '%WKT%', 4326 ) )
+        ) as T using unique gid using srid=4326"
+    NAME "VIAS_USR"
+    #STATUS ON
+    TYPE LINE
+    PROCESSING "CLOSE_CONNECTION=DEFER"
+    PROJECTION
+      "init=epsg:4326"
+    END
+    METADATA
+      "wms_title" "VIAS_USR"
+      "wms_srs" "epsg:4326"
+      "wms_abstract" "Vias intersectadas por el usuario"
+      "wms_server_version" "1.1.1"
+      "wms_format" "image/png"
+      "wms_include_items" "all"
+      "gml_include_items" "all"
+      "wms_getfeatureinfo_formatlist" "text/plain,text/html,application/json"
+    END
+    VALIDATION
+      "qstring" "."
+      "wkt" "."
+    END
+    TEMPLATE "vias.txt"
+
+    CLASS  # Primarias
+      EXPRESSION ("[tipovial]" IN "Carretera,Autopista")
+      STYLE
+        WIDTH 6
+        COLOR 255 0 0
+        OUTLINEWIDTH 2
+        OUTLINECOLOR 153 111 57
+      END
+      STYLE
+        WIDTH 5
+        COLOR 223 197 124
+      END
+    END
+
+    CLASS  # Secundarias
+      EXPRESSION ("[tipovial]" IN "Periférico,Avenida,Viaducto,Eje vial,Circunvalación")
+      STYLE
+        WIDTH 5
+        COLOR 255 0 0 # rouge
+        OUTLINEWIDTH 2
+        OUTLINECOLOR 153 111 57
+      END
+      STYLE
+        WIDTH 4
+        COLOR 223 197 124
+      END
+    END
+
+    CLASS # Terciarias
+      EXPRESSION ("[tipovial]" IN "Continuación,Prolongació,Pasaje,Diagonal,Circuito,Boulevard")
+      STYLE
+        WIDTH 4
+        OUTLINEWIDTH 1
+        OUTLINECOLOR 193 188 157
+      END
+      STYLE
+        WIDTH 3
+        COLOR 255 253 139
+      END
+    END
+
+    CLASS # demas
+      STYLE
+        WIDTH 3
+        OUTLINEWIDTH 1
+        OUTLINECOLOR 103 181 157
+      END
+      STYLE
+        WIDTH 2
+        COLOR  238 225 226
+      END
+    END
+
+
+  END
+## VIAS CUT FIN ##
 
 
 
