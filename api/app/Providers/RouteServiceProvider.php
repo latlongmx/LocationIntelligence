@@ -69,6 +69,7 @@ class RouteServiceProvider extends ServiceProvider
         ], function ($router) {
             require app_path('Http/Routes/GeoDynamic/dyn.php');
             require app_path('Http/Routes/Workspace/ws.php');
+            require app_path('Http/Routes/WMS/wms.php');
         });
     }
 }
