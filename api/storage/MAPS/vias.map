@@ -117,7 +117,7 @@ MAP
     CONNECTIONTYPE POSTGIS
     CONNECTION "user=walmexusr dbname=db_walmex host=127.0.0.1 port=5433 password=N98Fdt?^C#mp{B6p"
     DATA "geom from (
-          SELECT gid, (ST_Dump(ST_Intersection(U.geom, V.geom))).geom )::geometry geom
+          SELECT gid, ((ST_Dump(ST_Intersection(U.geom, V.geom))).geom )::geometry geom
           FROM inegi.inter15_vias V,
            ( SELECT ST_GeomFromText( '%WKT%', 4326 ) geom ) U
           WHERE ST_Intersects(V.geom, U.geom )
