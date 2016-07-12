@@ -17,6 +17,6 @@ Route::get('/ws_wms', ['middleware' => 'oauth', function() {
   file_put_contents($userMapFile, $viasUsr);
 
   $img = file_get_contents( $MAPSERV . "?map=".$userMapFile. "&" .$QUERY);
-  //header("content-type: image/png");
+  header("content-type: image/png");
   echo $img;
 }]);
