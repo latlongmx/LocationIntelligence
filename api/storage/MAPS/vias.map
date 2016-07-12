@@ -146,7 +146,7 @@ MAP
     TEMPLATE "vias.txt"
 
     CLASS  # Primarias
-      EXPRESSION ("[tipovial]" IN "Carretera,Autopista")
+      EXPRESSION ("[tipovial]" IN "Carretera,Autopista,Periférico,Circuito")
       STYLE
         WIDTH 6
         COLOR 255 0 0
@@ -160,7 +160,7 @@ MAP
     END
 
     CLASS  # Secundarias
-      EXPRESSION ("[tipovial]" IN "Periférico,Avenida,Viaducto,Eje vial,Circunvalación")
+      EXPRESSION ("[tipovial]" IN "Avenida,Viaducto,Eje vial,Circunvalación,Boulevard,Calzada")
       STYLE
         WIDTH 5
         COLOR 255 0 0 # rouge
@@ -174,7 +174,7 @@ MAP
     END
 
     CLASS # Terciarias
-      EXPRESSION ("[tipovial]" IN "Continuación,Prolongació,Pasaje,Diagonal,Circuito,Boulevard")
+      EXPRESSION ("[tipovial]" IN "Calle,Continuación,Corredor,Prolongación,Pasaje,Diagonal,Retorno,Andador,Cerrada,Privada,Plaza,Ampliación,Callejón")
       STYLE
         WIDTH 4
         OUTLINEWIDTH 1
@@ -187,6 +187,7 @@ MAP
     END
 
     CLASS # demas
+      EXPRESSION ("[tipovial]" IN "Peatonal")
       STYLE
         WIDTH 3
         OUTLINEWIDTH 1
