@@ -18,7 +18,7 @@ Route::get('/ws_wms', ['middleware' => 'oauth', function() {
   $GEOM_WKT_SPLIT = " ST_GeomFromText( '$WKT', 4326 ) ";
   //$GEOM_WKT_WHERE = " ST_Intersects( A.geom, S.geom )";
   if (strpos( strtolower($WKT), 'point') !== false) {
-    $GEOM_WKT_SPLIT = " ST_buffer( '$WKT' , $mts)";
+    $GEOM_WKT_SPLIT = " ST_buffer( '$WKT' , $MTS)";
     //$GEOM_WKT_WHERE = "ST_DWithin( A.geom, $GEOM_WKT_SPLIT, $mts)";
   }
 
