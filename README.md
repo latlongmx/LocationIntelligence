@@ -69,3 +69,12 @@ php artisan l5-swagger:generate
 |   `-- logs
 `-- tests
 ```
+
+
+
+## Deploy to Server
+PROD
+curl -X POST -d "b=feature/api&f=api&w=prod" http://52.8.211.37/deploy/d.php
+
+DEV
+curl -X POST -d "b=feature/api&f=api&w=dev" http://52.8.211.37/deploy/d.php

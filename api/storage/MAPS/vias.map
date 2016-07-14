@@ -119,7 +119,7 @@ MAP
     DATA "geom from (
           SELECT gid, tipovial, ((ST_Dump(ST_Intersection(U.geom, V.geom))).geom )::geometry geom
           FROM inegi.inter15_vias V,
-           ( SELECT ST_GeomFromText( '%WKT%', 4326 ) geom ) U
+           ( SELECT %GEOM_WKT_SPLIT% geom ) U
           WHERE ST_Intersects(V.geom, U.geom )
         ) as T using unique gid using srid=4326"
     NAME "VIAS_USR"
