@@ -44,4 +44,4 @@ Route::post('/heat', ['middleware' => 'oauth', function() {
   ], 'id_heat' );
 
   return Response::json([ "res" => "correcto", "id_heat"=>$id_heat]);
-});
+}]);

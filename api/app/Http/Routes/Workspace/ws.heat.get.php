@@ -45,7 +45,7 @@ Route::get('/heat', ['middleware' => 'oauth', function() {
 
   return Response::json(["heats"=>$heats]);
 
-});
+}]);
 
 
 /*CREATE TABLE users_heatmaps
