@@ -36,7 +36,7 @@ Route::get('/heat', ['middleware' => 'oauth', function() {
             ->where('id_user', '=', $userId)->get();
   $heats = array();
   foreach($rs as $r){
-    $rr = $r;
+    $rr = (array)$r;
     if (strpos($r->cods, ',') !== false) {
       $rr = array_merge($rr, array("compuest"=>true));
     }else{
