@@ -39,6 +39,8 @@ Route::get('/heat', ['middleware' => 'oauth', function() {
     $rr = $r;
     if (strpos($r->cods, ',') !== false) {
       $rr = array_merge($rr, array("compuest"=>true));
+    }else{
+      $rr = array_merge($rr, array("compuest"=>false));
     }
     $heats[] = $rr;
   }
