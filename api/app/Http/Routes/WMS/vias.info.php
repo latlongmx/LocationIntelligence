@@ -20,5 +20,5 @@ Route::get('/vias', ['middleware' => 'oauth', function() {
       ) T
       GROUP BY nomvial, tipovial";
   $rs = DB::select($sql,[]);
-  return Response::json(["info"=>$rs, "sql" => $sql]);
+  return Response::json(["info"=>$rs]);
 }]);

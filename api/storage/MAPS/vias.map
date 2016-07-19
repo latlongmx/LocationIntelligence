@@ -117,10 +117,19 @@ MAP
     CONNECTIONTYPE POSTGIS
     CONNECTION "user=walmexusr dbname=db_walmex host=127.0.0.1 port=5433 password=N98Fdt?^C#mp{B6p"
     DATA "geom from (
-          SELECT gid, tipovial, ((ST_Dump(ST_Intersection(U.geom, V.geom))).geom )::geometry geom
-          FROM inegi.inter15_vias V,
-           ( SELECT %GEOM_WKT_SPLIT% geom ) U
-          WHERE ST_Intersects(V.geom, U.geom )
+          SELECT * FROM (
+            SELECT gid, tipovial, ((ST_Dump(ST_Intersection(U.geom, V.geom))).geom )::geometry geom
+              FROM inegi.inter15_vias V,
+               ( SELECT %GEOM_WKT_SPLIT% geom ) U
+              WHERE ST_Intersects(V.geom, U.geom )
+
+            UNION
+
+            SELECT (gid+100000000) gid, tipo_vial, ((ST_Dump(ST_Intersection(U.geom, V.geom))).geom )::geometry geom
+              FROM inegi.rnc_red_vial_2015 V,
+               ( SELECT %GEOM_WKT_SPLIT% geom ) U
+              WHERE ST_Intersects(V.geom, U.geom )
+          )T
         ) as T using unique gid using srid=4326"
     NAME "VIAS_USR"
     #STATUS ON
