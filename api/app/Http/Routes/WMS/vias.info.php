@@ -2,14 +2,14 @@
 
 Route::get('/vias', ['middleware' => 'oauth', function() {
   $userId = Authorizer::getResourceOwnerId();
-
   $WKT = Input::get('WKT', '' );
   $MTS = Input::get('MTS', 0 );
-  $W = "";
 
   $W = " ST_GeomFromText( '$WKT', 4326 ) ";
   if($MTS > 0){
     $W = "ST_DWithin( geom, $W, $MTS)";
+  }else{
+    $W = "ST_Intersects(geom, $W)"
   }
 
   $sql = "SELECT * FROM (
