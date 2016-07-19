@@ -9,7 +9,7 @@ Route::get('/vias', ['middleware' => 'oauth', function() {
   if($MTS > 0){
     $W = "ST_DWithin( geom, $W, $MTS)";
   }else{
-    $W = "ST_Intersects(geom, $W)"
+    $W = "ST_Intersects(geom, $W)";
   }
 
   $sql = "SELECT * FROM (
