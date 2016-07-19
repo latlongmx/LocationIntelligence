@@ -1,4 +1,9 @@
 <?php
+
+Route::group(['middleware' => 'cors'], function(){
+  require app_path('Http/Routes/WMS/vias.info.php');
+}]);
+
 Route::get('/ws_wms', ['middleware' => 'oauth', function() {
   $userId = Authorizer::getResourceOwnerId();
 
