@@ -23,7 +23,8 @@ Route::get('/vias', ['middleware' => 'oauth', function() {
 
   $sql = "SELECT agency_id, route_long_name
   FROM df_gtfs.vw_lineas
-  WHERE $W";
+  WHERE $W
+  GROUP BY agency_id, route_long_name";
   $rsT = DB::select($sql,[]);
   return Response::json(["info"=>$rs, "transp"=>$rsT]);
 }]);
