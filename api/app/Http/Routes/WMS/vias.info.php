@@ -20,5 +20,10 @@ Route::get('/vias', ['middleware' => 'oauth', function() {
       ) T
       GROUP BY nomvial, tipovial";
   $rs = DB::select($sql,[]);
-  return Response::json(["info"=>$rs]);
+
+  $sql = "SELECT agency_id, route_long_name
+  FROM df_gtfs.vw_lineas
+  WHERE $W";
+  $rsT = DB::select($sql,[]);
+  return Response::json(["info"=>$rs, "transp"=>$rsT]);
 }]);
