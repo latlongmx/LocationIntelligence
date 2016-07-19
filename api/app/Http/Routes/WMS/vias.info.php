@@ -4,6 +4,7 @@ Route::get('/vias', ['middleware' => 'oauth', function() {
   $userId = Authorizer::getResourceOwnerId();
   $WKT = Input::get('WKT', '' );
   $MTS = Input::get('MTS', 0 );
+  $MTS = meters2dec($MTS);
 
   $W = " ST_GeomFromText( '$WKT', 4326 ) ";
   if($MTS > 0){
