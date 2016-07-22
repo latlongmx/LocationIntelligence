@@ -91,6 +91,7 @@ function getLayerObjConfig(&$map, $layerName){
   $layer->setProcessing('CLOSE_CONNECTION=DEFER');
   $layer->setMetaData('wms_extent', "-118.407653808594 14.532097816008417 -86.7086486816406 32.71865463170993");
   $layer->setMetaData('wms_srs', "EPSG:4326");
+  $layer->setMetaData("wms_include_items", "all");
   $layer->setMetaData("wms_feature_info_mime_type", "text/plain,text/html");
   $layer->setMetaData('wms_title', $layerName);
   return $layer;
