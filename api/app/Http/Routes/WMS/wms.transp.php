@@ -48,7 +48,7 @@ Route::get('/ws_transp', ['middleware' => 'oauth', function() {
         ) as T using unique gid using srid=4326";
     $LAYMAP->set('data', $qry_data);
     $LAYMAP->set('type', $tiplay);
-    $LAYMAP->set('template', storage_path('MAPS/vias.txt');
+    $LAYMAP->set('template', storage_path('MAPS/vias.txt'));
 
     $class = new \ClassObj( $LAYMAP );
     $style = new \StyleObj( $class );
