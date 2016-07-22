@@ -30,7 +30,7 @@ Route::get('/ws_transp', ['middleware' => 'oauth', function() {
       $tbl = "df_gtfs.vw_paradas";
       $tiplay = MS_LAYER_POINT;
 
-      $img_path = storage_path('MAPS/imgs/'.$layer.'.png');
+      $img_path = storage_path('MAPS/imgs/'.$filter_val.'.png');
       $nId = ms_newsymbolobj($MAP, $symName);
       $sym = $MAP->getsymbolobjectbyid($nId);
       $sym->setImagePath( $img_path );
