@@ -1,6 +1,7 @@
 <?php
 
 require app_path('Http/Routes/WMS/vias.info.php');
+require app_path('Http/Routes/WMS/wms.transp.php');
 
 Route::get('/ws_wms', ['middleware' => 'oauth', function() {
   $userId = Authorizer::getResourceOwnerId();

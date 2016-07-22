@@ -1,0 +1,34 @@
+MAP
+  NAME "WMS LATLNG"
+  EXTENT -180 -90 180 90
+  UNITS DD
+  CONFIG "PROJ_LIB" "/usr/share/proj/"
+  #FONTSET "%APP-PATH%/data/MAP/fonts.txt"
+  CONFIG "MS_ERRORFILE" "ms_error.log"
+  DEBUG 5
+  SIZE 800 600
+  IMAGETYPE PNG24
+  PROJECTION
+    "init=epsg:4326"
+  END
+
+  WEB
+    METADATA
+      "ows_enable_request" "*"
+	    "wms_srs" "epsg:4326"
+    END
+  END
+
+  SYMBOL
+    NAME "point"
+    TYPE ellipse
+    FILLED true
+    POINTS
+      1 1
+    END
+  END
+
+
+
+
+END
