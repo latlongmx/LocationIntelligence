@@ -17,16 +17,17 @@ Route::get('/ws_transp', ['middleware' => 'oauth', function() {
     if (strpos($layer, '_p') !== false) {
       $is_point = true;
     }
+    $filter_val = explode("_", $layer);
+    $filter_val = $filter_val[0];
+    $filter = " and agency_id='".$filter_val."'";
 
     $tbl = "df_gtfs.vw_lineas";
-    $id = "shape_id";
     $tiplay = MS_LAYER_LINE;
 
     $symName = "sym_".$layer;
 
     if($is_point){
       $tbl = "df_gtfs.vw_paradas";
-      $id = "stop_sequence";
       $tiplay = MS_LAYER_POINT;
 
       $img_path = storage_path('MAPS/imgs/'.$layer.'.png');
@@ -40,7 +41,11 @@ Route::get('/ws_transp', ['middleware' => 'oauth', function() {
 
     $LAYMAP = getLayerObjConfig($MAP, $layer);
 
-    $qry_data = "geom from ( select * from $tbl where ST_Intersects(geom,!BOX!) ) as T using unique $id using srid=4326";
+    $qry_data = "geom from (
+          select row_number() over() gid,* from $tbl
+          where ST_Intersects(geom,!BOX!)
+              $filter
+        ) as T using unique gid using srid=4326";
     $LAYMAP->set('data', $qry_data);
     $LAYMAP->set('type', $tiplay);
 
