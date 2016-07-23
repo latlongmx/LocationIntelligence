@@ -118,7 +118,7 @@ Route::post('/places', ['middleware' => 'oauth', function() {
     if (strpos($FILTER, "cod:") !== false) {
       $fl .= "and D.codigo_act like '".str_replace("cod:","",$FILTER)."%'";
     }else{
-      $fl .= "and D.tsv @@ to_tsquery(unaccent('$FILTER'))";
+      $fl .= "and D.tsv @@ plainto_tsquery(unaccent(lower('$FILTER')))";
     }
     $qden_extend = "(SELECT
       ST_Extent(D.geom)::varchar extend
