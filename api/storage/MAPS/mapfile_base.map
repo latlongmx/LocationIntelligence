@@ -4,8 +4,8 @@ MAP
   UNITS DD
   CONFIG "PROJ_LIB" "/usr/share/proj/"
   #FONTSET "%APP-PATH%/data/MAP/fonts.txt"
-  CONFIG "MS_ERRORFILE" "ms_error.log"
-  DEBUG 5
+  #CONFIG "MS_ERRORFILE" "ms_error.log"
+  #DEBUG 5
   SIZE 800 600
   IMAGETYPE PNG24
   PROJECTION

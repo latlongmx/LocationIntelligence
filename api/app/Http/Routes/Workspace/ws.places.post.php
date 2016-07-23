@@ -131,8 +131,8 @@ Route::post('/places', ['middleware' => 'oauth', function() {
         and E.cve_ent = D.cve_ent
         ".$fl.")";
 
-    $qden_count = "(SELECT
-      count(D.*)
+    $qden_count = "SELECT
+      count(D.*) cnts
     from inegi.denue_2016 D,
          inegi.mgn_estados E
     where
@@ -140,17 +140,25 @@ Route::post('/places', ['middleware' => 'oauth', function() {
             ST_MakeEnvelope(".$BBOX.", 4326)
         )
         and E.cve_ent = D.cve_ent
-        ".$fl.")";
+        ".$fl."";
 
-    DB::table('users_layers')
-        ->where('id_layer', $idLayer)
-        ->update([
-          'extend' => DB::raw($qden_extend),
-          'num_features' => DB::raw($qden_count)
-        ]);
+    $rs = DB::select($qden_count,[]);
+    $counted = 0;
+    foreach($rs as $r){
+      $counted =$r->cnts;
+    }
 
-
-    return Response::json([ "res" => "correcto", "id_layer"=>$idLayer]);
+    if($counted!=0){
+      DB::table('users_layers')
+          ->where('id_layer', $idLayer)
+          ->update([
+            'extend' => DB::raw($qden_extend),
+            'num_features' => $counted //DB::raw($qden_count)
+          ]);
+      return Response::json([ "res" => "correcto", "id_layer"=>$idLayer]);
+    }else{
+      return Response::json([ "error" => "Sin registros", "found"=>$counted]);
+    }
 
   }else{
     /*LAYER BY FILE*/
@@ -194,7 +202,7 @@ Route::post('/places', ['middleware' => 'oauth', function() {
                 'name_layer' => $NAME,
                 'pin_url' => $pinURL
               ];
-              
+
               //es competencia
               $competence = Input::get('competence','');
               if($competence == "1"){
