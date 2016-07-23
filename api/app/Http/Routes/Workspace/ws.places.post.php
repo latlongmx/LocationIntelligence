@@ -157,6 +157,7 @@ Route::post('/places', ['middleware' => 'oauth', function() {
           ]);
       return Response::json([ "res" => "correcto", "id_layer"=>$idLayer]);
     }else{
+      DB::table('users_layers')->where('id_layer', $idLayer)->delete();
       return Response::json([ "error" => "Sin registros", "found"=>$counted]);
     }
 
