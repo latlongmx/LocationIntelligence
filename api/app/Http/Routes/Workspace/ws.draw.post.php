@@ -11,7 +11,7 @@ Route::post('/draw', ['middleware' => 'oauth', function() {
     'id_user'=> $userId,
     'name_draw'=> $nm,
     'type_draw'=> $typ,
-    'gjson'=> $bnd
+    'gjson'=> $geo
   ], 'id_draw' );
 
   return Response::json([ "res" => "correcto", "id_draw"=>$id_draw]);
