@@ -10,7 +10,7 @@ Route::get('/draw', ['middleware' => 'oauth', function() {
   $sql = "SELECT row_to_json(tmp) json
       FROM
       ( SELECT *
-        FROM users_layersdraws L
+        FROM users_draws L
         WHERE id_user=$userId $filter
         ORDER BY id_draw
       ) tmp;";
