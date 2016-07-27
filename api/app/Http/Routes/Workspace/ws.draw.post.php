@@ -10,7 +10,7 @@ Route::post('/draw', ['middleware' => 'oauth', function() {
   $id_draw = DB::table('users_draws')->insertGetId( [
     'id_user'=> $userId,
     'name_draw'=> $nm,
-    'type_draw'=> $cod,
+    'type_draw'=> $typ,
     'gjson'=> $bnd
   ], 'id_draw' );
 
