@@ -28,7 +28,7 @@ Route::get('/ws_wms', ['middleware' => 'oauth', function() {
       if (strpos($qf, "cod:") !== false) {
         $filter = "and D.codigo_act like '".str_replace("cod:","",$qf)."%'";
       }else{
-        $filter = "and D.tsv @@ to_tsquery(unaccent('$qf'))";
+        $filter = "and D.tsv @@ plainto_tsquery(unaccent(lower('$qf')))";
       }
       $qry_data = "geom from (
             SELECT
