@@ -1,7 +1,7 @@
 CC, Corredores Concesionados
-MB, Metrobús
-METRO, Sistema de Transporte Colectivo Metro
-NCC, NOCHEBÚS Corredores concesionados   <-- microbus
-RTP, Red de Transporte de Pasajeros  <-- ecobici
-STE, Servicio de Transportes Eléctricos  <--- por trolebus
-SUB, Ferrocarriles Suburbanos
+*MB, Metrobús
+*METRO, Sistema de Transporte Colectivo Metro
+*NCC, NOCHEBÚS Corredores concesionados   <-- microbus
+*RTP, Red de Transporte de Pasajeros  <-- ecobici
+*STE, Servicio de Transportes Eléctricos  <--- por trolebus
+*SUB, Ferrocarriles Suburbanos
