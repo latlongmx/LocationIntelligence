@@ -50,7 +50,14 @@ Route::post('oa/register',function(){
 });
 
 Route::post('oa/accesstk', function() {
-    return Response::json(Authorizer::issueAccessToken());
+  $a1 = json_decode( Response::json(Authorizer::issueAccessToken()), true );
+  //$rs = DB::select(,[]);
+  $userId = Authorizer::getResourceOwnerId();
+
+  $a2 = json_decode( ["userType"=>"$userId"], true );
+  $res = array_merge_recursive( $a1, $a2 );
+  $resJson = json_encode( $res );
+  return $resJson;
 });
 
 

@@ -20,9 +20,9 @@ Route::get('/vias', ['middleware' => 'oauth', function() {
       ) T
       GROUP BY nomvial, tipovial";
   $rs = DB::select($sql,[]);
-
+//vw_lineas
   $sql = "SELECT agency_id, route_long_name
-  FROM df_gtfs.vw_lineas
+  FROM df_gtfs.vw_paradas
   WHERE $W
   GROUP BY agency_id, route_long_name";
   $rsT = DB::select($sql,[]);
