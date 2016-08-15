@@ -50,18 +50,16 @@ Route::post('oa/register',function(){
 });
 
 Route::post('oa/accesstk', function() {
-  $a1 = json_decode( Response::json(Authorizer::issueAccessToken()), true );
   $usr = Input::get("username", "");
   $rs = DB::select("select user_type from users where user='".$usr."'",[]);
   $user_type = "";
   foreach($rs as $r){
     $user_type = $r->user_type;
   }
-
-  $a2 = json_decode( ["userType"=>"$user_type"], true );
-  $res = array_merge_recursive( $a1, $a2 );
-  $resJson = json_encode( $res );
-  return $resJson;
+  $auth = Authorizer::issueAccessToken();
+  $res = array_merge_recursive( $auth , ["userType"=>"$user_type"] );
+  //$resJson = json_encode( $res );
+  return Response::json($res);
 });
 
 
