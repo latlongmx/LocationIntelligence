@@ -45,7 +45,7 @@ Route::post('oa/register',function(){
         'secret' => substr(hash("sha256",$pwd),0,40),
         'name' => $usr,
         'created_at' => date('Y-m-d H:i:s'),
-        'user_type' => $tu
+        'user_type' => "$tu"
       )
   );
   return Response::json(["id" => $id]);
