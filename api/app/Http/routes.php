@@ -35,6 +35,7 @@ Route::post('oa/register',function(){
   $user = new App\User();
   $user->username=$usr;
   $user->email=$mail;
+  $user->user_type=$tu;
   $user->password = \Illuminate\Support\Facades\Hash::make($pwd);
   //$pwd; //\Illuminate\Support\Facades\Hash::make(“password”);
   $user->save();
@@ -44,8 +45,7 @@ Route::post('oa/register',function(){
         'id' => hash("md5",$usr),
         'secret' => substr(hash("sha256",$pwd),0,40),
         'name' => $usr,
-        'created_at' => date('Y-m-d H:i:s'),
-        'user_type' => "$tu"
+        'created_at' => date('Y-m-d H:i:s')
       )
   );
   return Response::json(["id" => $id]);
