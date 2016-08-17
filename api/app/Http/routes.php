@@ -30,6 +30,7 @@ Route::post('oa/register',function(){
   $usr = Request::input('u');
   $pwd = Request::input('p');
   $mail = Request::input('ml');
+  $tu = Request::input('tu');
 
   $user = new App\User();
   $user->username=$usr;
@@ -43,7 +44,8 @@ Route::post('oa/register',function(){
         'id' => hash("md5",$usr),
         'secret' => substr(hash("sha256",$pwd),0,40),
         'name' => $usr,
-        'created_at' => date('Y-m-d H:i:s')
+        'created_at' => date('Y-m-d H:i:s'),
+        'user_type' => $tu
       )
   );
   return Response::json(["id" => $id]);
