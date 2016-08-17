@@ -18,7 +18,7 @@ PASS=$2
 MAIL=$3
 TYPE=$4
 
-PWD=`echo $PASS | md5sum`
+PWD=`echo -n "$PASS" | md5sum`
 PWD=${PWD%-}
 PWD=`echo $PWD | xargs`
 
