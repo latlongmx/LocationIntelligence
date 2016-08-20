@@ -30,10 +30,12 @@ Route::post('oa/register',function(){
   $usr = Request::input('u');
   $pwd = Request::input('p');
   $mail = Request::input('ml');
+  $tu = Request::input('tu');
 
   $user = new App\User();
   $user->username=$usr;
   $user->email=$mail;
+  $user->user_type=$tu;
   $user->password = \Illuminate\Support\Facades\Hash::make($pwd);
   //$pwd; //\Illuminate\Support\Facades\Hash::make(“password”);
   $user->save();
@@ -50,7 +52,17 @@ Route::post('oa/register',function(){
 });
 
 Route::post('oa/accesstk', function() {
-    return Response::json(Authorizer::issueAccessToken());
+  $auth = Authorizer::issueAccessToken();
+  $usr = Input::get("username", "");
+  $rs = DB::select("select user_type from users where username='".$usr."'",[]);
+  $user_type = "";
+  foreach($rs as $r){
+    $user_type = $r->user_type;
+  }
+
+  $res = array_merge_recursive( $auth , ["userType"=>"$user_type"] );
+  //$resJson = json_encode( $res );
+  return Response::json($res);
 });
 
 
