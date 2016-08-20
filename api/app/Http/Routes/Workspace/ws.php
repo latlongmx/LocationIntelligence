@@ -18,4 +18,9 @@ Route::group(['prefix'=>'ws', 'middleware' => 'cors'], function(){
   require app_path('Http/Routes/Workspace/ws.draw.put.php');
   require app_path('Http/Routes/Workspace/ws.draw.get.php');
   require app_path('Http/Routes/Workspace/ws.draw.del.php');
+
+  require app_path('Http/Routes/Workspace/ws.rings.post.php');
+  require app_path('Http/Routes/Workspace/ws.rings.put.php');
+  require app_path('Http/Routes/Workspace/ws.rings.get.php');
+  require app_path('Http/Routes/Workspace/ws.rings.del.php');
 });
