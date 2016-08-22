@@ -9,15 +9,15 @@ Route::get('/rings', ['middleware' => 'oauth', function() {
   }
   $sql = "SELECT row_to_json(tmp) json
       FROM
-      ( SELECT *
+      ( SELECT id_ring, name_ring, type_ring, time_ring, st_xmax(geom) x, st_ymax(geom) y
         FROM users_rings L
         WHERE id_user=$userId $filter
         ORDER BY id_ring
       ) tmp;";
   $rs = DB::select($sql,[]);
-  $draws = [];
+  $rings = [];
   foreach($rs as $r){
-    $draws[] = json_decode($r->json);
+    $rings[] = json_decode($r->json);
   }
-  return Response::json(["rings"=>$draws]);
+  return Response::json(["rings"=>$rings]);
 }]);
