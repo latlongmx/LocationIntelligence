@@ -11,8 +11,8 @@ Route::post('/rings', ['middleware' => 'oauth', function() {
   $id_ring = DB::table('users_rings')->insertGetId( [
     'id_user'=> $userId,
     'name_ring'=> $nm,
-    'type_ring'=> $typ,
-    'time_ring'=> $typ,
+    'type_ring'=> $type,
+    'time_ring'=> $time,
     'geo'=> DB::raw("ST_GeomFromText( '$geo', 4326 )")
   ], 'id_ring' );
 
