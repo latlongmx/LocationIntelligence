@@ -13,7 +13,7 @@ Route::post('/rings', ['middleware' => 'oauth', function() {
     'name_ring'=> $nm,
     'type_ring'=> $type,
     'time_ring'=> $time,
-    'geo'=> DB::raw("ST_GeomFromText( '$geo', 4326 )")
+    'geom'=> DB::raw("ST_GeomFromText( '$geo', 4326 )")
   ], 'id_ring' );
 
   return Response::json([ "res" => "correcto", "id_ring"=>$id_ring]);
