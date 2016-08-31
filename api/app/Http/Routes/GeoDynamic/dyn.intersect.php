@@ -157,8 +157,7 @@ Route::get('/intersect', function(){
 
   return Response::json([
     "info" => $INFO,
-    "geojson" => $geo,
-    "sql"=>$sql
+    "geojson" => $geo
   ]);
 
 });

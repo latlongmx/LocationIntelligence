@@ -68,5 +68,5 @@ Route::get('/places', ['middleware' => 'oauth', function() {
       $places[] = json_decode($r->json);
     }
 
-  return Response::json(["places"=>$places, "sql" => $sql]);
+  return Response::json(["places"=>$places]);
 }]);
