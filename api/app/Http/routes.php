@@ -30,7 +30,7 @@ Route::post('oa/register',function(){
   $usr = Request::input('u');
   $pwd = Request::input('p');
   $mail = Request::input('ml');
-  $tu = Request::input('tu');
+  $tu = Request::input('tu','uC');
 
   $user = new App\User();
   $user->username=$usr;

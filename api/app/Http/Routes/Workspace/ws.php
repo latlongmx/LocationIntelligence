@@ -27,4 +27,6 @@ Route::group(['prefix'=>'ws', 'middleware' => 'cors'], function(){
 
   require app_path('Http/Routes/Workspace/options/ws.options.get.php');
   require app_path('Http/Routes/Workspace/options/ws.options.put.php');
+
+  require app_path('Http/Routes/Workspace/FTUE/ws.ftue.post.php');
 });
