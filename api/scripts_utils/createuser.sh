@@ -1,4 +1,4 @@
-#!/usr/bin/bash
+#!/bin/bash
 
 # ./createuser.sh  joys_a joys joys.tower@gmail.com uA
 # ./createuser.sh  mario_a flores mario@latlong.mx uA
