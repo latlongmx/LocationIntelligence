@@ -30,7 +30,21 @@ Route::post('oa/register',function(){
   $usr = Request::input('u');
   $pwd = Request::input('p');
   $mail = Request::input('ml');
-  $tu = Request::input('tu','uC');
+  $tu = "uA";
+  try {
+    $tu = Request::input('tu','uA');
+  } catch (Exception $e) {
+  }
+
+
+  $usrMD5 = hash("md5",$usr);
+
+  $existUser = DB::table('users')->where("username","=","$usr")->count();
+  $existUseroAuth = DB::table('oauth_clients')->where("id","=","$usrMD5")->count();
+  if($existUser > 0 || $existUseroAuth > 0){
+    return Response::json(["user_exist" => 1]);
+  }
+
 
   $user = new App\User();
   $user->username=$usr;
@@ -42,13 +56,13 @@ Route::post('oa/register',function(){
 
   $id = DB::table('oauth_clients')->insertGetId(
       array(
-        'id' => hash("md5",$usr),
+        'id' => $usrMD5,
         'secret' => substr(hash("sha256",$pwd),0,40),
         'name' => $usr,
         'created_at' => date('Y-m-d H:i:s')
       )
   );
-  return Response::json(["id" => $id]);
+  return Response::json(["id" => $id, "user_exist" => 0]);
 });
 
 Route::post('oa/accesstk', function() {
