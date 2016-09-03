@@ -39,7 +39,10 @@ Route::post('oa/register',function(){
 
   $usrMD5 = hash("md5",$usr);
 
-  $existUser = DB::table('users')->where("username","=","$usr")->count();
+  $existUser = DB::table('users')
+                  ->where("username","=","$usr")
+                  ->orWhere("email","=","$mail")
+                  ->count();
   $existUseroAuth = DB::table('oauth_clients')->where("id","=","$usrMD5")->count();
   if($existUser > 0 || $existUseroAuth > 0){
     return Response::json(["user_exist" => 1]);
