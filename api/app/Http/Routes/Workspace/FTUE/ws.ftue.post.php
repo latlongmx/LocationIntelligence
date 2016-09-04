@@ -10,6 +10,7 @@ Route::post('/ftue', ['middleware' => 'oauth', function() {
       $upd = array_merge($upd, array("$p"=>$opt));
     }
   }
+  $upd = array_merge($upd, array("ftue_showed"=>"1"));
   $updated = 0;
   if(sizeof($upd)>0){
     $updated = DB::table('users')->where('id', '=', $userId)->update($upd);

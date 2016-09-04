@@ -71,13 +71,15 @@ Route::post('oa/register',function(){
 Route::post('oa/accesstk', function() {
   $auth = Authorizer::issueAccessToken();
   $usr = Input::get("username", "");
-  $rs = DB::select("select user_type from users where username='".$usr."'",[]);
+  $rs = DB::select("select user_type, ftue_showed from users where username='".$usr."'",[]);
   $user_type = "";
+  $ftue_showed = "";
   foreach($rs as $r){
     $user_type = $r->user_type;
+    $ftue_showed = $r->ftue_showed;
   }
 
-  $res = array_merge_recursive( $auth , ["userType"=>"$user_type"] );
+  $res = array_merge_recursive( $auth , ["userType"=>"$user_type", "ftueShowed" => "$ftue_showed"] );
   //$resJson = json_encode( $res );
   return Response::json($res);
 });
