@@ -84,7 +84,7 @@ Route::post('/places.ftue', ['middleware' => 'oauth', function() {
     $ents_org = str_split($ents_org, ",");
   }
   $ents = "";
-  for( $ents_org as $ent ){
+  foreach( $ents_org as $ent ){
     $ents .= "'".trim($ent)."',";
   }
   $ents = substr($ents,0,-1);

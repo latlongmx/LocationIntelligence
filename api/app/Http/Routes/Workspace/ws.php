@@ -3,6 +3,7 @@
 Route::group(['prefix'=>'ws', 'middleware' => 'cors'], function(){
   require app_path('Http/Routes/Workspace/places/ws.places.get.php');
   require app_path('Http/Routes/Workspace/places/ws.places.post.php');
+  require app_path('Http/Routes/Workspace/places/ws.places.ftue.post.php');
   require app_path('Http/Routes/Workspace/places/ws.places.length.php');
   require app_path('Http/Routes/Workspace/places/ws.places.delete.php');
   require app_path('Http/Routes/Workspace/places/ws.places.put.php');
