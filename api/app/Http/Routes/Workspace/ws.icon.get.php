@@ -45,6 +45,10 @@ Route::get('/icon', ['middleware' => 'oauth', function() {
     $path = storage_path("MAPS/default.png");
   }
 
+  if($icoName==="POINT.FTUE"){
+    $path = storage_path("MAPS/re_point.png");
+  }
+
   if(!File::exists($path)) abort(404);
 
   $file = File::get($path);
